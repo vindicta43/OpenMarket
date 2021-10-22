@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Open Market</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Login Page -->
+    <string name="login_page_email">E-Posta</string>
+    <string name="login_page_password">Parola</string>
+    <string name="login_page_login">Giriş</string>
+    <string name="login_page_register">Kayıt Ol</string>
+    <string name="login_page_forgot_password">Şifremi unuttum</string>
+
+    <!-- Register Page -->
+    <string name="register_page_email">E-Posta</string>
+    <string name="register_page_name">Ad</string>
+    <string name="register_page_surname">Soyad</string>
+    <string name="register_page_password">Parola</string>
+    <string name="register_page_password_apply">Parolayı Onayla</string>
+    <string name="register_page_register_button">kayıt ol</string>
 </resources>
