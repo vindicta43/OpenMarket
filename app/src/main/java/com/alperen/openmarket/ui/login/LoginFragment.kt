@@ -43,6 +43,11 @@ class LoginFragment : Fragment() {
                 root.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
 
+            btnLogin.setOnClickListener {
+                root.findNavController().navigate(R.id.action_loginFragment_to_mainActivity)
+                activity?.finish()
+            }
+
             btnForgotPassword.setOnClickListener {
                 // TODO: database baglantisi ardindan servis olusturulacak
             }

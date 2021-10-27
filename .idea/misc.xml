@@ -14,10 +14,15 @@
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/drawable/welcome.xml" value="0.2078125" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/activity_login.xml" value="0.15489130434782608" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_add_product.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_homepage.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_login.xml" value="0.38333333333333336" />
-        <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_register.xml" value="0.33" />
+        <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_onboarding.xml" value="0.1" />
+        <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_profile.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_register.xml" value="0.5" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_splash.xml" value="0.25" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/welcome.xml" value="0.1381340579710145" />
+        <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/menu/bottom_nav_bar_menu.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/raw/welcome.xml" value="0.12" />
       </map>
     </option>

@@ -1,8 +1,9 @@
-package com.alperen.openmarket
+package com.alperen.openmarket.ui.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
+import com.alperen.openmarket.R
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

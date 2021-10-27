@@ -20,7 +20,7 @@ class SplashFragment : Fragment() {
         with(binding) {
             splashAnimationView.addAnimatorListener(object : Animator.AnimatorListener{
                 override fun onAnimationEnd(animation: Animator?) {
-                    root.findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+                    root.findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
                 }
 
                 override fun onAnimationStart(animation: Animator?) {
