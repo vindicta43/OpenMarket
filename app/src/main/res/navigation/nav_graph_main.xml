@@ -8,7 +8,17 @@
         android:id="@+id/homepageFragment"
         android:name="com.alperen.openmarket.ui.main.homepage.HomepageFragment"
         android:label="fragment_homepage"
-        tools:layout="@layout/fragment_homepage" />
+        tools:layout="@layout/fragment_homepage" >
+        <action
+            android:id="@+id/action_homepageFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homepageFragment_to_notificationsFragment"
+            app:destination="@id/notificationsFragment" />
+        <action
+            android:id="@+id/action_homepageFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addProductFragment"
         android:name="com.alperen.openmarket.ui.main.addproduct.AddProductFragment"
@@ -19,4 +29,14 @@
         android:name="com.alperen.openmarket.ui.main.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.alperen.openmarket.ui.notifications.NotificationsFragment"
+        android:label="fragment_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.alperen.openmarket.ui.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 </navigation>

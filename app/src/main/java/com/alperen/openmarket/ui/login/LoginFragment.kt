@@ -10,7 +10,6 @@ import androidx.navigation.findNavController
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentLoginBinding
 import com.alperen.openmarket.utils.Constants
-import com.google.android.material.textfield.TextInputEditText
 
 class LoginFragment : Fragment() {
     override fun onCreateView(
@@ -20,13 +19,13 @@ class LoginFragment : Fragment() {
         val binding = FragmentLoginBinding.inflate(inflater)
 
         with(binding) {
-            addListenerForText(this)
-            addSetOnClickListeners(this)
+            setListenersForText(this)
+            setOnClickListeners(this)
             return root
         }
     }
 
-    private fun addSetOnClickListeners(binding: FragmentLoginBinding) {
+    private fun setOnClickListeners(binding: FragmentLoginBinding) {
         with(binding) {
             val email = etEmail.text
             val password = etPassword.text
@@ -54,7 +53,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun addListenerForText(binding: FragmentLoginBinding) {
+    private fun setListenersForText(binding: FragmentLoginBinding) {
         with(binding) {
             etEmail.addTextChangedListener {
                 if (!it.isNullOrEmpty()) {
