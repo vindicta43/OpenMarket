@@ -20,7 +20,6 @@ class HomepageRecyclerViewAdapter(private val items: ArrayList<String>) :
     }
 
     inner class ViewHolderHomepageItems(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
     }
 
     override fun getItemViewType(position: Int): Int {
