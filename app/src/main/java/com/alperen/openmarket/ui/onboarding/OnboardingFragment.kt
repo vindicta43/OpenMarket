@@ -8,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import com.alperen.openmarket.R
-import com.alperen.openmarket.databinding.FragmentOnboardingBinding
 import com.ramotion.paperonboarding.PaperOnboardingPage
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
+import com.alperen.openmarket.databinding.FragmentOnboardingBinding
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 
 
@@ -40,29 +40,18 @@ class OnboardingFragment : Fragment() {
     }
 
     private fun implementPages(): ArrayList<PaperOnboardingPage> {
-        val scr1 = PaperOnboardingPage(
-            "Sayfa 1",
-            "Sayfa 1 açıklama",
-            Color.RED,
-            android.R.drawable.ic_dialog_dialer,
-            android.R.drawable.ic_lock_power_off
-        )
+        val scr1 = PaperOnboardingPage()
+        scr1.descriptionText = "Sayfa 1 description"
+        scr1.titleText = "Sayfa 1 title"
 
-        val scr2 = PaperOnboardingPage(
-            "Sayfa 2",
-            "Sayfa 2 açıklama",
-            Color.GREEN,
-            android.R.drawable.ic_menu_week,
-            android.R.drawable.dialog_frame
-        )
+        val scr2 = PaperOnboardingPage()
+        scr2.descriptionText = "Sayfa 2 description"
+        scr2.titleText = "Sayfa 2 title"
 
-        val scr3 = PaperOnboardingPage(
-            "Sayfa 3",
-            "Sayfa 3 açıklama",
-            Color.BLUE,
-            android.R.drawable.presence_online,
-            android.R.drawable.zoom_plate
-        )
+        val scr3 = PaperOnboardingPage()
+        scr3.descriptionText = "Sayfa 3 description"
+        scr3.titleText = "Sayfa 3 title"
+
         return arrayListOf(scr1, scr2, scr3)
     }
 }
