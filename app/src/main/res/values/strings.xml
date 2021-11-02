@@ -21,4 +21,9 @@
 
     <!-- Homepage -->
     <string name="homepage_clear"><u>Temizle</u></string>
+
+    <!-- Add Product Page -->
+    <string name="add_product_product_name">Ürün ismi</string>
+    <string name="add_product_add_button">Ekle</string>
+    <string name="add_product_product_description">Ürün açıklaması</string>
 </resources>

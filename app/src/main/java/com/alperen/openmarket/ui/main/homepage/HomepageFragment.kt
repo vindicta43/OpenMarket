@@ -50,7 +50,7 @@ class HomepageFragment : Fragment() {
     private fun setOnClickListeners(binding: FragmentHomepageBinding) {
         with(binding) {
             ivProfile.setOnClickListener {
-                root.findNavController().navigate(R.id.action_homepageFragment_to_profileFragment)
+                root.findNavController().navigate(R.id.action_homepageFragment_to_productDetailFragment)
             }
 
             ibSearch.setOnClickListener {

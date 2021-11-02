@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_homepageFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homepageFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/addProductFragment"
@@ -38,5 +41,13 @@
         android:id="@+id/searchFragment"
         android:name="com.alperen.openmarket.ui.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.alperen.openmarket.ui.main.productdetail.ProductDetailFragment"
+        android:label="ProductDetailFragment" />
 </navigation>
