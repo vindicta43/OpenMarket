@@ -5,17 +5,19 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        tools:context=".ui.login.LoginActivity">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context=".ui.login.LoginActivity">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="160dp"
+                android:contentDescription="@string/app_name"
                 android:src="@drawable/login_page_welcome"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -27,13 +29,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:hint="@string/login_page_email"
-                app:errorEnabled="true"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
+                app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/imageView1">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -49,13 +51,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:hint="@string/login_page_password"
-                app:errorEnabled="true"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp"
+                app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/textInputLayoutEmail"
                 app:passwordToggleEnabled="true">
 
@@ -66,6 +68,17 @@
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <CheckBox
+                android:id="@+id/btnForgetMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto_light"
+                android:text="@string/login_page_forget_me"
+                app:layout_constraintBottom_toTopOf="@id/btnRegister"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayoutPassword"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutPassword" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnLogin"
                 android:layout_width="97dp"
@@ -75,31 +88,33 @@
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/login_page_login"
                 android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/btnRegister"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btnRegister"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayoutPassword" />
+                app:layout_constraintTop_toTopOf="@+id/btnRegister" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnRegister"
                 android:layout_width="97dp"
                 android:layout_height="40dp"
-                android:layout_margin="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="8dp"
                 android:background="@drawable/login_page_shape"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/login_page_register"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@id/btnLogin"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayoutPassword" />
+                app:layout_constraintTop_toBottomOf="@+id/btnForgetMe" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnForgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_margin="24dp"
+                android:background="@drawable/login_page_forgot_password"
                 android:text="@string/login_page_forgot_password"
                 android:textSize="10sp"
-                android:background="@drawable/login_page_forgot_password"
                 app:layout_constraintEnd_toEndOf="@id/btnLogin"
                 app:layout_constraintStart_toStartOf="@id/btnRegister"
                 app:layout_constraintTop_toBottomOf="@id/btnRegister"
@@ -109,6 +124,7 @@
                 android:id="@+id/line1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
                 android:src="@drawable/login_page_lines"
                 app:layout_constraintBottom_toBottomOf="@+id/btnForgotPassword"
                 app:layout_constraintStart_toEndOf="@+id/btnForgotPassword"
@@ -118,11 +134,11 @@
                 android:id="@+id/line2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
                 android:src="@drawable/login_page_lines"
                 app:layout_constraintBottom_toBottomOf="@+id/btnForgotPassword"
                 app:layout_constraintEnd_toStartOf="@+id/btnForgotPassword"
                 app:layout_constraintTop_toTopOf="@+id/btnForgotPassword" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

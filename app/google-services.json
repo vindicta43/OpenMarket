@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "923771147268",
+    "project_id": "open-market-336c9",
+    "storage_bucket": "open-market-336c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923771147268:android:dc9101af3a200d78831151",
+        "android_client_info": {
+          "package_name": "com.alperen.openmarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923771147268-3rm0ugi97mndkuemmrc84lll4opbofgp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alperen.openmarket",
+            "certificate_hash": "299095d3d34132420bcc7f450668a64b4412bd76"
+          }
+        },
+        {
+          "client_id": "923771147268-c6e8plelqk19nfj4jbjdkkbmgru9vp06.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd7TXDFabWriQKqav0Tl7HUI2P207my6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "923771147268-c6e8plelqk19nfj4jbjdkkbmgru9vp06.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
