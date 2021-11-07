@@ -14,21 +14,31 @@ import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentLoginBinding
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.viewmodels.BaseViewModel
+import com.alperen.openmarket.viewmodel.BaseViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class LoginFragment : Fragment() {
     private lateinit var viewModel: BaseViewModel
+    private lateinit var binding: FragmentLoginBinding
     val loading by lazy { LoadingFragment() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentLoginBinding.inflate(inflater)
+        binding = FragmentLoginBinding.inflate(inflater)
 
         with(binding) {
             setListenersForText(this)
             setOnClickListeners(this)
             return root
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        with(binding) {
+            setListenersForText(this)
+            setOnClickListeners(this)
         }
     }
 
@@ -38,16 +48,19 @@ class LoginFragment : Fragment() {
             val email = etEmail.text
             val password = etPassword.text
 
+            btnRegister.setOnClickListener {
+                root.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+            }
+
             btnLogin.setOnClickListener {
-                if (checkFields(email, password)) {
+                if (!email.isNullOrEmpty() && !password.isNullOrEmpty()) {
                     viewModel.login(email.toString(), password.toString(), viewLifecycleOwner)
                         .observe(viewLifecycleOwner) {
                             when (it) {
                                 Constants.PROCESSING -> {
-                                    loading.show(childFragmentManager, "loader")
+                                    loading.show(childFragmentManager, "loaderLogin")
                                 }
                                 Constants.SUCCESS -> {
-                                    AlertDialog.Builder(root.context).setMessage(it).show()
                                     loading.dismissAllowingStateLoss()
                                     root.findNavController()
                                         .navigate(R.id.action_loginFragment_to_mainActivity)
@@ -72,21 +85,20 @@ class LoginFragment : Fragment() {
                 }
             }
 
-            btnRegister.setOnClickListener {
-                root.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
-            }
-
             btnForgotPassword.setOnClickListener {
                 if (!email.isNullOrEmpty()) {
                     viewModel.sendResetEmail(email.toString(), viewLifecycleOwner)
                         .observe(viewLifecycleOwner) {
                             when (it) {
                                 Constants.PROCESSING -> {
-                                    loading.show(childFragmentManager, "loader")
+                                    loading.show(childFragmentManager, "loaderLogin")
                                 }
-                                Constants.SUCCESS -> {
+                                Constants.RESET_MAIL_SUCCESS -> {
                                     loading.dismissAllowingStateLoss()
-                                    AlertDialog.Builder(root.context).setMessage(it).show()
+                                    AlertDialog.Builder(root.context).setMessage(it)
+                                        .setPositiveButton(Constants.OK) { _, _ ->
+
+                                        }.show()
                                 }
                                 else -> {
                                     loading.dismissAllowingStateLoss()
@@ -102,10 +114,6 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun checkFields(email: Editable?, password: Editable?): Boolean {
-        return !email.isNullOrEmpty() && !password.isNullOrEmpty()
     }
 
     private fun setListenersForText(binding: FragmentLoginBinding) {

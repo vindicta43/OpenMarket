@@ -11,6 +11,7 @@
     <string name="login_page_forget_me">Beni unut</string>
 
     <!-- Register Page -->
+    <string name="register_page_username">Kullanıcı Adı</string>
     <string name="register_page_email">E-Posta</string>
     <string name="register_page_name">Ad</string>
     <string name="register_page_surname">Soyad</string>
