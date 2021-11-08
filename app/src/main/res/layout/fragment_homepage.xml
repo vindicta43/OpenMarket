@@ -17,49 +17,39 @@
                 android:layout_height="match_parent"
                 tools:context=".ui.main.homepage.HomepageFragment">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/toolbar"
-                        app:layout_constraintBottom_toTopOf="@id/textView1"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_constraintBottom_toTopOf="@id/textView1"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                        <ImageView
-                            android:id="@+id/ivProfile"
-                            android:layout_margin="16dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/homepage_profile_bg" />
+                    <ImageButton
+                        android:id="@+id/ibSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_search"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/ibNotifications"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageButton
-                            android:id="@+id/ibSearch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:layout_margin="12dp"
-                            app:layout_constraintEnd_toStartOf="@id/ibNotifications"
-                            android:background="@android:color/transparent"
-                            android:src="@drawable/ic_search"
-                            />
+                    <ImageView
+                        android:id="@+id/ibNotifications"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_notifications"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/ibNotifications"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_notifications"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:background="@android:color/transparent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/textView1"
@@ -67,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="En Son Görüntülenenler"
+                    android:text="@string/homepage_recently_shown"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
@@ -83,11 +73,41 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/textView1" />
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerRecentlyShown"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@id/recyclerRecentlyShown"
+                    app:layout_constraintEnd_toEndOf="@id/recyclerRecentlyShown"
+                    app:layout_constraintStart_toStartOf="@id/recyclerRecentlyShown"
+                    app:layout_constraintTop_toTopOf="@id/recyclerRecentlyShown">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <include layout="@layout/layout_homepage_product_shimmer" />
+
+                        <include layout="@layout/layout_homepage_product_shimmer" />
+
+                        <include layout="@layout/layout_homepage_product_shimmer" />
+
+                        <include layout="@layout/layout_homepage_product_shimmer" />
+
+                        <include layout="@layout/layout_homepage_product_shimmer" />
+
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerRecentlyShown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
+                    android:orientation="horizontal"
                     android:scrollbars="horizontal"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     app:layout_constraintTop_toBottomOf="@id/textView1">
@@ -101,22 +121,87 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="32dp"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="En Son Eklenenler"
+                    android:text="@string/homepage_recently_added"
                     app:layout_constraintBottom_toTopOf="@id/recyclerMain"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recyclerRecentlyShown" />
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerMain"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@id/recyclerMain"
+                    app:layout_constraintEnd_toEndOf="@id/recyclerMain"
+                    app:layout_constraintStart_toStartOf="@id/recyclerMain"
+                    app:layout_constraintTop_toTopOf="@id/recyclerMain">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="vertical">
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="vertical">
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerMain"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="8dp"
-                    android:scrollbars="vertical"
                     android:nestedScrollingEnabled="false"
+
+
+                    android:scrollbars="vertical"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView2"
-                    tools:layout_editor_absoluteX="63dp">
+
+
+                    >
 
                 </androidx.recyclerview.widget.RecyclerView>
 

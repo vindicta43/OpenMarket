@@ -23,12 +23,34 @@ class HomepageFragment : Fragment() {
         with(binding) {
             setOnClickListeners(binding)
             rootLayout.setOnRefreshListener {
-                val timer = object : CountDownTimer(3000, 1000) {
+                recyclerMain.visibility = View.INVISIBLE
+                recyclerRecentlyShown.visibility = View.INVISIBLE
+
+                shimmerMain.visibility = View.VISIBLE
+                shimmerRecentlyShown.visibility = View.VISIBLE
+
+                shimmerMain.startShimmer()
+                shimmerRecentlyShown.startShimmer()
+
+                val timer = object : CountDownTimer(4000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                 }
 
                 override fun onFinish() {
                     rootLayout.isRefreshing = false
+
+                    shimmerMain.apply {
+                        visibility = View.INVISIBLE
+                        stopShimmer()
+                    }
+
+                    recyclerMain.visibility = View.VISIBLE
+                    recyclerRecentlyShown.visibility = View.VISIBLE
+
+                    shimmerRecentlyShown.visibility = View.INVISIBLE
+
+                    shimmerRecentlyShown.stopShimmer()
+
                     Toast.makeText(activity, "Refreshed", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -49,10 +71,6 @@ class HomepageFragment : Fragment() {
 
     private fun setOnClickListeners(binding: FragmentHomepageBinding) {
         with(binding) {
-            ivProfile.setOnClickListener {
-                root.findNavController().navigate(R.id.action_homepageFragment_to_productDetailFragment)
-            }
-
             ibSearch.setOnClickListener {
                 root.findNavController().navigate(R.id.action_homepageFragment_to_searchFragment)
             }
