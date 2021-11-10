@@ -9,4 +9,9 @@ data class User(
     val name: String,
     val surname: String,
     val password: String,
-)
+    val added_product: Int = 0,
+    val comment_count: Int = 0,
+    val purchased_product: Int = 0
+) {
+    constructor() : this("", "", "", "", "", 0, 0, 0)
+}

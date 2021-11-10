@@ -31,7 +31,14 @@
         android:id="@+id/profileFragment"
         android:name="com.alperen.openmarket.ui.main.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_accountSettingsFragment"
+            app:destination="@id/accountSettingsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_creditCardsFragment"
+            app:destination="@id/creditCardsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
         android:name="com.alperen.openmarket.ui.notifications.NotificationsFragment"
@@ -50,4 +57,14 @@
         android:id="@+id/productDetailFragment"
         android:name="com.alperen.openmarket.ui.main.productdetail.ProductDetailFragment"
         android:label="ProductDetailFragment" />
+    <fragment
+        android:id="@+id/accountSettingsFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.accountsettings.AccountSettingsFragment"
+        android:label="fragment_account_settings"
+        tools:layout="@layout/fragment_account_settings" />
+    <fragment
+        android:id="@+id/creditCardsFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.cards.CreditCardsFragment"
+        android:label="fragment_credit_cards"
+        tools:layout="@layout/fragment_credit_cards" />
 </navigation>

@@ -11,11 +11,12 @@ import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment() {
+    private lateinit var binding: FragmentSearchBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentSearchBinding.inflate(inflater)
+        initLateinitVariables(inflater)
 
         with(binding) {
             searchView.setOnQueryTextFocusChangeListener { v, hasFocus ->
@@ -31,5 +32,9 @@ class SearchFragment : Fragment() {
 
             return root
         }
+    }
+
+    private fun initLateinitVariables(inflater: LayoutInflater) {
+        binding = FragmentSearchBinding.inflate(inflater)
     }
 }

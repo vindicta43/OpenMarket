@@ -7,18 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentHomepageBinding
+import com.alperen.openmarket.viewmodel.BaseViewModel
 
 class HomepageFragment : Fragment() {
+    private lateinit var binding: FragmentHomepageBinding
+    private lateinit var viewModel: BaseViewModel
+    private lateinit var navHostFragment: NavHostFragment
+    private lateinit var navController: NavController
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentHomepageBinding.inflate(inflater)
+        initLateinitVariables(inflater)
 
         with(binding) {
             setOnClickListeners(binding)
@@ -26,11 +35,15 @@ class HomepageFragment : Fragment() {
                 recyclerMain.visibility = View.INVISIBLE
                 recyclerRecentlyShown.visibility = View.INVISIBLE
 
-                shimmerMain.visibility = View.VISIBLE
-                shimmerRecentlyShown.visibility = View.VISIBLE
+                shimmerMain.apply {
+                    visibility = View.VISIBLE
+                    startShimmer()
+                }
 
-                shimmerMain.startShimmer()
-                shimmerRecentlyShown.startShimmer()
+                shimmerRecentlyShown.apply {
+                    visibility = View.VISIBLE
+                    startShimmer()
+                }
 
                 val timer = object : CountDownTimer(4000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -39,17 +52,18 @@ class HomepageFragment : Fragment() {
                 override fun onFinish() {
                     rootLayout.isRefreshing = false
 
+                    recyclerMain.visibility = View.VISIBLE
+                    recyclerRecentlyShown.visibility = View.VISIBLE
+
                     shimmerMain.apply {
                         visibility = View.INVISIBLE
                         stopShimmer()
                     }
 
-                    recyclerMain.visibility = View.VISIBLE
-                    recyclerRecentlyShown.visibility = View.VISIBLE
-
-                    shimmerRecentlyShown.visibility = View.INVISIBLE
-
-                    shimmerRecentlyShown.stopShimmer()
+                    shimmerRecentlyShown.apply {
+                        visibility = View.INVISIBLE
+                        stopShimmer()
+                    }
 
                     Toast.makeText(activity, "Refreshed", Toast.LENGTH_SHORT).show()
                 }
@@ -79,5 +93,22 @@ class HomepageFragment : Fragment() {
                 root.findNavController().navigate(R.id.action_homepageFragment_to_notificationsFragment)
             }
         }
+    }
+
+    private fun initLateinitVariables(inflater: LayoutInflater) {
+        binding = FragmentHomepageBinding.inflate(inflater)
+        viewModel =
+            ViewModelProvider(this, SavedStateViewModelFactory(activity?.application, this)).get(
+                BaseViewModel::class.java
+            )
+        navHostFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerMain) as NavHostFragment
+        navController = navHostFragment.navController
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        if (::viewModel.isInitialized)
+            viewModel.saveState()
+
+        super.onSaveInstanceState(outState)
     }
 }

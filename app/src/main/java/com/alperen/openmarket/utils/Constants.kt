@@ -4,6 +4,8 @@ package com.alperen.openmarket.utils
  * Created by Alperen on 22.10.2021.
  */
 object Constants {
+    const val APP_INIT = "isAppInitialized"
+
     const val FIELD_REQUIRED = "Bu alan doldurulmalı"
     const val EMAIL_REQUIRED = "Sıfırlama e-maili için lütfen bu alanı doldurunuz"
     const val FIELDS_BE_SAME = "Alanlar aynı değil"

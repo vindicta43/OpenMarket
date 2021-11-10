@@ -1,34 +1,34 @@
 package com.alperen.openmarket.ui.onboarding
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavController
 import com.alperen.openmarket.R
 import com.ramotion.paperonboarding.PaperOnboardingPage
-import androidx.fragment.app.FragmentTransaction
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.alperen.openmarket.databinding.FragmentOnboardingBinding
 import com.ramotion.paperonboarding.PaperOnboardingFragment
 
 
 class OnboardingFragment : Fragment() {
+    private lateinit var binding: FragmentOnboardingBinding
+    private lateinit var navHostFragment: NavHostFragment
+    private lateinit var navController: NavController
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentOnboardingBinding.inflate(inflater)
+        initLateinitVariables(inflater)
 
         with(binding) {
             val pageList = implementPages()
-
             val paperOnboardingFragment = PaperOnboardingFragment.newInstance(pageList)
 
             paperOnboardingFragment.setOnRightOutListener {
-                root.findNavController().navigate(R.id.action_onboardingFragment_to_loginFragment)
+                navController.navigate(R.id.action_onboardingFragment_to_loginFragment)
             }
 
             val manager = activity?.supportFragmentManager
@@ -37,6 +37,12 @@ class OnboardingFragment : Fragment() {
 
             return root
         }
+    }
+
+    private fun initLateinitVariables(inflater: LayoutInflater) {
+        binding = FragmentOnboardingBinding.inflate(inflater)
+        navHostFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerLogin) as NavHostFragment
+        navController = navHostFragment.navController
     }
 
     private fun implementPages(): ArrayList<PaperOnboardingPage> {

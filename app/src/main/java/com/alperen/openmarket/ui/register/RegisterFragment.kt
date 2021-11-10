@@ -8,8 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentRegisterBinding
 import com.alperen.openmarket.utils.Constants
@@ -19,18 +22,30 @@ import com.alperen.openmarket.viewmodel.BaseViewModel
 class RegisterFragment : Fragment() {
     private lateinit var viewModel: BaseViewModel
     private lateinit var binding: FragmentRegisterBinding
+    private lateinit var navHostFragment: NavHostFragment
+    private lateinit var navController: NavController
     private val loading by lazy { LoadingFragment() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentRegisterBinding.inflate(inflater)
+        initLateinitVariables(inflater)
 
         with(binding) {
             addListenerForText(this)
             addSetOnClickListeners(this)
             return root
         }
+    }
+
+    private fun initLateinitVariables(inflater: LayoutInflater) {
+        binding = FragmentRegisterBinding.inflate(inflater)
+        viewModel =
+            ViewModelProvider(this, SavedStateViewModelFactory(activity?.application, this)).get(
+                BaseViewModel::class.java
+            )
+        navHostFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerLogin) as NavHostFragment
+        navController = navHostFragment.navController
     }
 
     override fun onResume() {
@@ -42,7 +57,6 @@ class RegisterFragment : Fragment() {
     }
 
     private fun addSetOnClickListeners(binding: FragmentRegisterBinding) {
-        viewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
         with(binding) {
             val username = etUsername.text
             val email = etEmail.text
@@ -52,7 +66,7 @@ class RegisterFragment : Fragment() {
             val passwordApply = etPasswordApply.text
 
             btnBack.setOnClickListener {
-                root.findNavController().popBackStack()
+                navController.popBackStack()
             }
 
             btnRegister.setOnClickListener {
@@ -75,7 +89,7 @@ class RegisterFragment : Fragment() {
                                     AlertDialog.Builder(root.context)
                                         .setMessage(it)
                                         .setPositiveButton(Constants.OK) { _, _ ->
-                                            root.findNavController().popBackStack()
+                                            navController.popBackStack()
                                         }
                                         .show()
                                 }
@@ -171,5 +185,12 @@ class RegisterFragment : Fragment() {
                 !surname.isNullOrEmpty() &&
                 !password.isNullOrEmpty() &&
                 !passwordApply.isNullOrEmpty()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        if (::viewModel.isInitialized)
+            viewModel.saveState()
+
+        super.onSaveInstanceState(outState)
     }
 }

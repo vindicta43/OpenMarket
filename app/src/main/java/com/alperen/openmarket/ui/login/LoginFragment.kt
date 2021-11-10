@@ -2,30 +2,36 @@ package com.alperen.openmarket.ui.login
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentLoginBinding
 import com.alperen.openmarket.utils.Constants
+import com.alperen.openmarket.utils.FirebaseInstance
 import com.alperen.openmarket.utils.LoadingFragment
 import com.alperen.openmarket.viewmodel.BaseViewModel
-import com.google.android.material.snackbar.Snackbar
 
 class LoginFragment : Fragment() {
     private lateinit var viewModel: BaseViewModel
     private lateinit var binding: FragmentLoginBinding
+    private lateinit var navHostFragment: NavHostFragment
+    private lateinit var navController: NavController
     val loading by lazy { LoadingFragment() }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLoginBinding.inflate(inflater)
+        initLateinitVariables(inflater)
 
         with(binding) {
             setListenersForText(this)
@@ -43,13 +49,12 @@ class LoginFragment : Fragment() {
     }
 
     private fun setOnClickListeners(binding: FragmentLoginBinding) {
-        viewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
         with(binding) {
             val email = etEmail.text
             val password = etPassword.text
 
             btnRegister.setOnClickListener {
-                root.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+                navController.navigate(R.id.action_loginFragment_to_registerFragment)
             }
 
             btnLogin.setOnClickListener {
@@ -62,8 +67,7 @@ class LoginFragment : Fragment() {
                                 }
                                 Constants.SUCCESS -> {
                                     loading.dismissAllowingStateLoss()
-                                    root.findNavController()
-                                        .navigate(R.id.action_loginFragment_to_mainActivity)
+                                    navController.navigate(R.id.action_loginFragment_to_mainActivity)
                                     activity?.finish()
                                 }
                                 else -> {
@@ -130,6 +134,16 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun initLateinitVariables(inflater: LayoutInflater) {
+        binding = FragmentLoginBinding.inflate(inflater)
+        viewModel =
+            ViewModelProvider(this, SavedStateViewModelFactory(activity?.application, this)).get(
+                BaseViewModel::class.java
+            )
+        navHostFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerLogin) as NavHostFragment
+        navController = navHostFragment.navController
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

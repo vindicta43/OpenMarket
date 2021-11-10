@@ -25,8 +25,6 @@ class LoadingFragment : DialogFragment() {
             dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             isCancelable = false
 
-
-
             return root
         }
     }
