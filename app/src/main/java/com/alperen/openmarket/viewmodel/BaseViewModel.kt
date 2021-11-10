@@ -1,10 +1,7 @@
 package com.alperen.openmarket.viewmodel
 
-import android.view.LayoutInflater
 import androidx.lifecycle.*
-import androidx.navigation.fragment.NavHostFragment
-import com.alperen.openmarket.R
-import com.alperen.openmarket.databinding.FragmentProfileBinding
+import com.alperen.openmarket.model.Product
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.FirebaseInstance
 import kotlin.random.Random
@@ -59,9 +56,17 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         FirebaseInstance.logout()
     }
 
-    fun getUserProfile(viewLifecycleOwner: LifecycleOwner) : MutableLiveData<String> {
+    fun getUserProfile(viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
         val result = MutableLiveData(Constants.PROCESSING)
         FirebaseInstance.getUserProfile().observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun getHomePage(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<Product>>{
+        val result = MutableLiveData<ArrayList<Product>>()
+        FirebaseInstance.getHomePage().observe(viewLifecycleOwner) {
             result.value = it
         }
         return result

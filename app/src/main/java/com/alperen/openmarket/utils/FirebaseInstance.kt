@@ -1,6 +1,7 @@
 package com.alperen.openmarket.utils
 
 import androidx.lifecycle.MutableLiveData
+import com.alperen.openmarket.model.Product
 import com.alperen.openmarket.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -116,6 +117,24 @@ object FirebaseInstance {
             }
             .addOnFailureListener {
                 result.value = it.localizedMessage
+            }
+        return result
+    }
+
+    fun getHomePage(): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
+        val itemList = arrayListOf<Product>()
+        dbRef.reference
+            .child("products")
+            .get()
+            .addOnSuccessListener {
+                it.children.forEach { items ->
+                    itemList.add(items.getValue<Product>()!!)
+                }
+                result.value = itemList
+            }
+            .addOnFailureListener {
+
             }
         return result
     }

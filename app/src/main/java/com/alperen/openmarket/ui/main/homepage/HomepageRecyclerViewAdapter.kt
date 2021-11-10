@@ -1,52 +1,51 @@
 package com.alperen.openmarket.ui.main.homepage
 
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.alperen.openmarket.R
+import com.alperen.openmarket.model.Product
+import com.squareup.picasso.Picasso
 
 /**
  * Created by Alperen on 28.10.2021.
  */
-const val RECENTLY_SHOWN = 0
-const val RECENTLY_SHOWN_ITEMS = 1
-const val HOMEPAGE_ITEMS = 2
-class HomepageRecyclerViewAdapter(private val items: ArrayList<String>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+//const val RECENTLY_SHOWN = 0
+//const val HOMEPAGE_ITEMS = 1
+class HomepageRecyclerViewAdapter(private val list: ArrayList<Product>) :
+    RecyclerView.Adapter<HomepageRecyclerViewAdapter.HomePageRecyclerViewHolder>() {
 
-    inner class ViewHolderRecentlyShownItems(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+    inner class HomePageRecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val ivProduct = itemView.findViewById<ImageView>(R.id.ivProduct)
+        val btnFavorite = itemView.findViewById<ImageButton>(R.id.btnFavorite)
+        val tvProductName = itemView.findViewById<TextView>(R.id.tvProductName)
+        val tvProductPrice = itemView.findViewById<TextView>(R.id.tvProductPrice)
     }
 
-    inner class ViewHolderHomepageItems(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePageRecyclerViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_homepage_product, parent, false)
+        return HomePageRecyclerViewHolder(view)
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            0 -> RECENTLY_SHOWN
-            1 -> HOMEPAGE_ITEMS
-            else -> HOMEPAGE_ITEMS
-        }
-    }
+    override fun onBindViewHolder(holder: HomePageRecyclerViewHolder, position: Int) {
+        with(holder) {
+            Picasso.get().load(list[position].product_image).placeholder(R.drawable.ic_three_dot).into(ivProduct)
+            tvProductName.text = list[position].product_name
+            tvProductPrice.text = list[position].product_price.toString()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            RECENTLY_SHOWN -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_homepage_product, parent, false)
-                ViewHolderRecentlyShownItems(view)
-            }
-            else -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_homepage_product, parent, false)
-                ViewHolderHomepageItems(view)
+            btnFavorite.setOnClickListener {
+
             }
         }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return list.size
     }
 }

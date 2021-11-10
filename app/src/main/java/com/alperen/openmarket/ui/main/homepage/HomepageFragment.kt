@@ -1,12 +1,10 @@
 package com.alperen.openmarket.ui.main.homepage
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -16,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentHomepageBinding
+import com.alperen.openmarket.model.Product
 import com.alperen.openmarket.viewmodel.BaseViewModel
 
 class HomepageFragment : Fragment() {
@@ -30,56 +29,64 @@ class HomepageFragment : Fragment() {
         initLateinitVariables(inflater)
 
         with(binding) {
+            startRefresh(binding)
             setOnClickListeners(binding)
             rootLayout.setOnRefreshListener {
-                recyclerMain.visibility = View.INVISIBLE
-                recyclerRecentlyShown.visibility = View.INVISIBLE
-
-                shimmerMain.apply {
-                    visibility = View.VISIBLE
-                    startShimmer()
-                }
-
-                shimmerRecentlyShown.apply {
-                    visibility = View.VISIBLE
-                    startShimmer()
-                }
-
-                val timer = object : CountDownTimer(4000, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                }
-
-                override fun onFinish() {
-                    rootLayout.isRefreshing = false
-
-                    recyclerMain.visibility = View.VISIBLE
-                    recyclerRecentlyShown.visibility = View.VISIBLE
-
-                    shimmerMain.apply {
-                        visibility = View.INVISIBLE
-                        stopShimmer()
-                    }
-
-                    shimmerRecentlyShown.apply {
-                        visibility = View.INVISIBLE
-                        stopShimmer()
-                    }
-
-                    Toast.makeText(activity, "Refreshed", Toast.LENGTH_SHORT).show()
-                }
+                startRefresh(this)
             }
-                timer.start()
-            }
-
-            val list = arrayListOf("a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a")
-
-            recyclerRecentlyShown.adapter = HomepageRecyclerViewAdapter(list)
-            recyclerRecentlyShown.layoutManager = LinearLayoutManager(root.context, LinearLayoutManager.HORIZONTAL, false)
-
-            recyclerMain.adapter = HomepageRecyclerViewAdapter(list)
-            recyclerMain.layoutManager = GridLayoutManager(root.context, 2)
-
             return root
+        }
+    }
+
+    private fun startRefresh(binding: FragmentHomepageBinding) {
+        with(binding) {
+
+            startAnim(this)
+            viewModel.getHomePage(viewLifecycleOwner).observe(viewLifecycleOwner) {
+                stopAnim(this)
+
+                recyclerRecentlyShown.adapter = HomepageRecyclerViewAdapter(it)
+                recyclerRecentlyShown.layoutManager = LinearLayoutManager(root.context, LinearLayoutManager.HORIZONTAL, false)
+
+                recyclerMain.adapter = HomepageRecyclerViewAdapter(it)
+                recyclerMain.layoutManager = GridLayoutManager(root.context, 2)
+            }
+        }
+    }
+
+    private fun startAnim(binding: FragmentHomepageBinding) {
+        with(binding) {
+            recyclerMain.visibility = View.INVISIBLE
+            recyclerRecentlyShown.visibility = View.INVISIBLE
+
+            shimmerMain.apply {
+                visibility = View.VISIBLE
+                startShimmer()
+            }
+
+            shimmerRecentlyShown.apply {
+                visibility = View.VISIBLE
+                startShimmer()
+            }
+        }
+    }
+
+    private fun stopAnim(binding: FragmentHomepageBinding) {
+        with(binding) {
+            rootLayout.isRefreshing = false
+
+            recyclerMain.visibility = View.VISIBLE
+            recyclerRecentlyShown.visibility = View.VISIBLE
+
+            shimmerMain.apply {
+                visibility = View.INVISIBLE
+                stopShimmer()
+            }
+
+            shimmerRecentlyShown.apply {
+                visibility = View.INVISIBLE
+                stopShimmer()
+            }
         }
     }
 
