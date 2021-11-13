@@ -48,7 +48,7 @@ class ProfileFragment : Fragment() {
 
                         tvUsername.text = profile.value?.username
                         tvNameSurname.text = "${profile.value?.name} ${profile.value?.surname}"
-                        tvAddedProduct.text = profile.value?.added_product.toString()
+                        tvAddedProduct.text = profile.value?.added_product_count.toString()
                         tvCommentCount.text = profile.value?.comment_count.toString()
                         tvPurchasedProduct.text = profile.value?.purchased_product.toString()
                     }

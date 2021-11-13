@@ -123,13 +123,23 @@ class LoginFragment : Fragment() {
     private fun setListenersForText(binding: FragmentLoginBinding) {
         with(binding) {
             etEmail.addTextChangedListener {
-                if (!it.isNullOrEmpty()) {
+                if (it.isNullOrEmpty()) {
+                    textInputLayoutEmail.apply {
+                        isErrorEnabled = true
+                        error = Constants.FIELD_REQUIRED
+                    }
+                } else {
                     textInputLayoutEmail.isErrorEnabled = false
                 }
             }
 
             etPassword.addTextChangedListener {
-                if (!it.isNullOrEmpty()) {
+                if (it.isNullOrEmpty()) {
+                    textInputLayoutPassword.apply {
+                        isErrorEnabled = true
+                        error = Constants.FIELD_REQUIRED
+                    }
+                } else {
                     textInputLayoutPassword.isErrorEnabled = false
                 }
             }

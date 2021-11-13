@@ -1,84 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.main.addproduct.pages.sell.SellFragment">
+<layout>
 
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivAddProductImage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/profile_page_shape"
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
-        android:layout_margin="8dp"
-        android:elevation="8dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_add_photo" />
+        android:layout_height="match_parent"
+        tools:context=".ui.main.addproduct.pages.sell.SellFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/productNameLayout"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivAddProductImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:hint="@string/add_product_product_name">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etProductName"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="text" />
+            android:layout_height="match_parent">
 
-    </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/productDescriptionLayout"
-        app:boxCornerRadiusBottomEnd="16dp"
-        app:boxCornerRadiusBottomStart="16dp"
-        app:boxCornerRadiusTopEnd="16dp"
-        app:boxCornerRadiusTopStart="16dp"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/productNameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivAddProductImage"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_margin="8dp"
+                android:elevation="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_add_photo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/profile_page_shape" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etProductDescription"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="top|start"
-            android:hint="@string/add_product_product_description"
-            android:inputType="textMultiLine"
-            android:maxLength="160"
-            android:minLines="5" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutProductName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:hint="@string/add_product_product_name"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivAddProductImage">
 
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etProductName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text" />
 
-    <Button
-        android:id="@+id/btnAddProduct"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="@string/add_product_add_button"
-        android:textAllCaps="false" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutProductDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProductName">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etProductDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top|start"
+                    android:hint="@string/add_product_product_description"
+                    android:inputType="textMultiLine"
+                    android:maxLength="160"
+                    android:minLines="5" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutProductPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProductDescription">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etProductPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top|start"
+                    android:hint="@string/add_product_product_price"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnAddProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/add_product_add_button"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutProductPrice" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

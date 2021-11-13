@@ -29,19 +29,24 @@ class HomepageFragment : Fragment() {
         initLateinitVariables(inflater)
 
         with(binding) {
-            startRefresh(binding)
-            setOnClickListeners(binding)
+            startRefresh(this)
+            return root
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        with(binding) {
+            setOnClickListeners(this)
             rootLayout.setOnRefreshListener {
                 startRefresh(this)
             }
-            return root
         }
     }
 
     private fun startRefresh(binding: FragmentHomepageBinding) {
         with(binding) {
-
-            startAnim(this)
+            startAnim(binding)
             viewModel.getHomePage(viewLifecycleOwner).observe(viewLifecycleOwner) {
                 stopAnim(this)
 

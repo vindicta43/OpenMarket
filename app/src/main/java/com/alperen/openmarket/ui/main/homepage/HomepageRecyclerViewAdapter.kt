@@ -1,6 +1,6 @@
 package com.alperen.openmarket.ui.main.homepage
 
-import android.media.Image
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +10,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.alperen.openmarket.R
 import com.alperen.openmarket.model.Product
-import com.squareup.picasso.Picasso
+import com.alperen.openmarket.utils.GlideApp
+import com.bumptech.glide.Glide
+import com.bumptech.glide.GlideBuilder
+import com.google.firebase.storage.FirebaseStorage
 
 /**
  * Created by Alperen on 28.10.2021.
  */
-//const val RECENTLY_SHOWN = 0
-//const val HOMEPAGE_ITEMS = 1
 class HomepageRecyclerViewAdapter(private val list: ArrayList<Product>) :
     RecyclerView.Adapter<HomepageRecyclerViewAdapter.HomePageRecyclerViewHolder>() {
-
 
     inner class HomePageRecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ivProduct = itemView.findViewById<ImageView>(R.id.ivProduct)
@@ -35,7 +35,8 @@ class HomepageRecyclerViewAdapter(private val list: ArrayList<Product>) :
 
     override fun onBindViewHolder(holder: HomePageRecyclerViewHolder, position: Int) {
         with(holder) {
-            Picasso.get().load(list[position].product_image).placeholder(R.drawable.ic_three_dot).into(ivProduct)
+            val storageRef = FirebaseStorage.getInstance().reference.child(list[position].product_image)
+            GlideApp.with(holder.itemView.context).load(storageRef).into(ivProduct)
             tvProductName.text = list[position].product_name
             tvProductPrice.text = list[position].product_price.toString()
 

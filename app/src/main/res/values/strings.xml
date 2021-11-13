@@ -26,6 +26,7 @@
     <string name="add_product_product_name">Ürün ismi</string>
     <string name="add_product_add_button">Ekle</string>
     <string name="add_product_product_description">Ürün açıklaması</string>
+    <string name="add_product_product_price">Ürün fiyatı</string>
 
     <!-- Profile Page -->
     <string name="profile_page_account_settings">Hesap Ayarları</string>
