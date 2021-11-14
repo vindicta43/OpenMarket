@@ -24,6 +24,7 @@
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_account_settings.xml" value="0.17760416666666667" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_add_product.xml" value="0.26066350710900477" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_auction.xml" value="0.17760416666666667" />
+        <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_bottom_dialog_sheet.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_homepage.xml" value="0.22" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_loading.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_login.xml" value="0.25" />
@@ -35,6 +36,7 @@
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_search.xml" value="0.25" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_sell.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/fragment_splash.xml" value="0.25" />
+        <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/layout_bottom_sheet_image_pick.xml" value="0.25" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/layout_homepage_product.xml" value="0.33" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/layout_homepage_product_shimmer.xml" value="0.18" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/layout/layout_homepage_recently_shown.xml" value="0.33" />

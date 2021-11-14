@@ -3,13 +3,17 @@ package com.alperen.openmarket.ui.main.addproduct.pages.sell
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +24,8 @@ import com.alperen.openmarket.databinding.FragmentSellBinding
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.LoadingFragment
 import com.alperen.openmarket.viewmodel.BaseViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import java.util.jar.Manifest
 
 const val GALLERY_PICK = 1
 const val CAMERA_PICK = 2
@@ -38,7 +44,6 @@ class SellFragment : Fragment() {
         initLateinitVariables(inflater)
 
         with(binding) {
-
             return root
         }
     }
@@ -54,12 +59,7 @@ class SellFragment : Fragment() {
         setListenersForText(binding)
         with(binding) {
             ivAddProductImage.setOnClickListener {
-                val intent = Intent()
-                intent.apply {
-                    type = "image/*"
-                    action = Intent.ACTION_GET_CONTENT
-                }
-                startActivityForResult(intent, GALLERY_PICK)
+                setBottomSheet()
             }
 
             btnAddProduct.setOnClickListener {
@@ -115,6 +115,30 @@ class SellFragment : Fragment() {
         }
     }
 
+    private fun setBottomSheet() {
+        val view = layoutInflater.inflate(R.layout.layout_bottom_dialog_sheet, null)
+        val cameraSheet = view.findViewById<LinearLayout>(R.id.cameraSheet)
+        val gallerySheet = view.findViewById<LinearLayout>(R.id.gallerySheet)
+
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(view)
+
+        cameraSheet.setOnClickListener {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(intent, CAMERA_PICK)
+            dialog.dismiss()
+        }
+
+        gallerySheet.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, GALLERY_PICK)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
     private fun setListenersForText(binding: FragmentSellBinding) {
         with(binding) {
             etProductName.addTextChangedListener {
@@ -164,17 +188,23 @@ class SellFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             GALLERY_PICK -> {
-                if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+                if (resultCode == Activity.RESULT_OK && data != null) {
                     val selectedImage = data.data
                     binding.ivAddProductImage.scaleType = ImageView.ScaleType.FIT_XY
                     binding.ivAddProductImage.setImageURI(selectedImage)
                 }
             }
             CAMERA_PICK -> {
-
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    val selectedImage = data.extras?.get("data") as Bitmap
+                    Toast.makeText(context, selectedImage.toString(), Toast.LENGTH_SHORT).show()
+                    binding.ivAddProductImage.scaleType = ImageView.ScaleType.FIT_XY
+                    binding.ivAddProductImage.setImageBitmap(selectedImage)
+                }
+            } else ->{
+                Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

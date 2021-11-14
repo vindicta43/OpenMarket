@@ -38,4 +38,10 @@
     <string name="profile_page_comment_count">Yorum Sayısı</string>
     <string name="profile_page_purchased_product">Satın Alınan Ürün</string>
 
+    <!-- Bottom Sheet Layout -->
+    <string name="bottom_sheet_camera">Kamera</string>
+    <string name="bottom_sheet_gallery">Galeri</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
