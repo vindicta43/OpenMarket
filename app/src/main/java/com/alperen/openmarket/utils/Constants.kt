@@ -5,6 +5,7 @@ package com.alperen.openmarket.utils
  */
 object Constants {
     const val APP_INIT = "isAppInitialized"
+    const val FORGET_ME = "forgetMe"
 
     const val FIELD_REQUIRED = "Bu alan doldurulmalı"
     const val PRODUCT_ADDED = "Ürününüz başarıyla satışa sunuldu"

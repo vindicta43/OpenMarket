@@ -1,6 +1,7 @@
 package com.alperen.openmarket.ui.login
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -66,13 +67,21 @@ class LoginFragment : Fragment() {
                                     loading.show(childFragmentManager, "loaderLogin")
                                 }
                                 Constants.SUCCESS -> {
+                                    if (btnForgetMe.isChecked) {
+                                        val sharedPref = requireActivity().getSharedPreferences(
+                                            Constants.FORGET_ME,
+                                            Context.MODE_PRIVATE
+                                        )
+                                        sharedPref?.edit()?.putBoolean(Constants.FORGET_ME, true)?.apply()
+                                    }
                                     loading.dismissAllowingStateLoss()
                                     navController.navigate(R.id.action_loginFragment_to_mainActivity)
                                     activity?.finish()
+
                                 }
                                 else -> {
                                     loading.dismissAllowingStateLoss()
-                                    AlertDialog.Builder(root.context).setMessage(it)
+                                    AlertDialog.Builder(context).setMessage(it)
                                         .setPositiveButton(Constants.OK) { _, _ ->
 
                                         }.show()
@@ -106,7 +115,7 @@ class LoginFragment : Fragment() {
                                 }
                                 else -> {
                                     loading.dismissAllowingStateLoss()
-                                    AlertDialog.Builder(root.context).setMessage(it)
+                                    AlertDialog.Builder(context).setMessage(it)
                                         .setPositiveButton(Constants.OK) { _, _ ->
 
                                         }.show()
@@ -152,7 +161,8 @@ class LoginFragment : Fragment() {
             ViewModelProvider(this, SavedStateViewModelFactory(activity?.application, this)).get(
                 BaseViewModel::class.java
             )
-        navHostFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerLogin) as NavHostFragment
+        navHostFragment =
+            requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerLogin) as NavHostFragment
         navController = navHostFragment.navController
     }
 

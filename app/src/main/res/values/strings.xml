@@ -27,6 +27,7 @@
     <string name="add_product_add_button">Ekle</string>
     <string name="add_product_product_description">Ürün açıklaması</string>
     <string name="add_product_product_price">Ürün fiyatı</string>
+    <string name="add_product_add_photo">Fotoğraf Ekle</string>
 
     <!-- Profile Page -->
     <string name="profile_page_account_settings">Hesap Ayarları</string>
@@ -41,7 +42,7 @@
     <!-- Bottom Sheet Layout -->
     <string name="bottom_sheet_camera">Kamera</string>
     <string name="bottom_sheet_gallery">Galeri</string>
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bottom_sheet_sell">Doğrudan Satış</string>
+    <string name="bottom_sheet_auction">Açık Artırma</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.alperen.openmarket.viewmodel
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.text.Editable
 import androidx.lifecycle.*
@@ -79,11 +80,11 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         productName: String,
         productDescription: String,
         productPrice: String,
-        productImage: ShapeableImageView,
+        imageList: ArrayList<Bitmap>,
         viewLifecycleOwner: LifecycleOwner
     ): MutableLiveData<String> {
-        val result = MutableLiveData<String>()
-        FirebaseInstance.addProductToMarket(productName, productDescription, productPrice, productImage)
+        val result = MutableLiveData(Constants.PROCESSING)
+        FirebaseInstance.addProductToMarket(productName, productDescription, productPrice, imageList)
             .observe(viewLifecycleOwner) {
                 result.value = it
             }

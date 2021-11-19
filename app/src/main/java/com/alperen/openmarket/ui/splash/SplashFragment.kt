@@ -16,6 +16,7 @@ import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentSplashBinding
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.FirebaseInstance
+import com.google.firebase.auth.FirebaseAuth
 
 class SplashFragment : Fragment() {
     private lateinit var binding: FragmentSplashBinding
@@ -36,7 +37,7 @@ class SplashFragment : Fragment() {
 
             splashAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
                 override fun onAnimationEnd(animation: Animator?) {
-                    if (FirebaseInstance.user?.isEmailVerified == true) {
+                    if (FirebaseInstance.user?.isEmailVerified == true && FirebaseInstance.auth.currentUser != null) {
                         navController.navigate(R.id.action_splashFragment_to_mainActivity)
                         activity?.finish()
                     } else {

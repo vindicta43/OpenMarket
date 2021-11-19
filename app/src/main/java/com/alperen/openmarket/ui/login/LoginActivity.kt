@@ -18,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+
         val sharedPref = getSharedPreferences(Constants.APP_INIT, Context.MODE_PRIVATE)
         sharedPref.edit().putBoolean(Constants.APP_INIT, false).apply()
     }

@@ -35,7 +35,7 @@ class HomepageRecyclerViewAdapter(private val list: ArrayList<Product>) :
 
     override fun onBindViewHolder(holder: HomePageRecyclerViewHolder, position: Int) {
         with(holder) {
-            val storageRef = FirebaseStorage.getInstance().reference.child(list[position].product_image)
+            val storageRef = FirebaseStorage.getInstance().reference.child(list[position].product_image[0])
             GlideApp.with(holder.itemView.context).load(storageRef).into(ivProduct)
             tvProductName.text = list[position].product_name
             tvProductPrice.text = list[position].product_price.toString()
