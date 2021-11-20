@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.alperen.openmarket.R
+import com.alperen.openmarket.utils.GlideApp
 
 /**
  * Created by Alperen on 19.11.2021.
@@ -22,7 +23,7 @@ class AddProductViewPagerAdapter(private val list: ArrayList<Uri>): RecyclerView
     }
 
     override fun onBindViewHolder(holder: AddProductViewPagerViewHolder, position: Int) {
-        holder.viewPagerImage.setImageURI(list[position])
+        GlideApp.with(holder.itemView.context).load(list[position]).into(holder.viewPagerImage)
     }
 
     override fun getItemCount(): Int {

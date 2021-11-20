@@ -22,8 +22,11 @@
             android:id="@+id/action_homepageFragment_to_productDetailFragment"
             app:destination="@id/productDetailFragment" />
         <action
-            android:id="@+id/action_homepageFragment_to_addProductFragment2"
+            android:id="@+id/action_homepageFragment_to_addProductFragment"
             app:destination="@id/addProductFragment" />
+        <argument
+            android:name="product"
+            app:argType="com.alperen.openmarket.model.Product" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -54,7 +57,11 @@
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.alperen.openmarket.ui.main.productdetail.ProductDetailFragment"
-        android:label="ProductDetailFragment" />
+        android:label="ProductDetailFragment" >
+        <argument
+            android:name="product"
+            app:argType="com.alperen.openmarket.model.Product" />
+    </fragment>
     <fragment
         android:id="@+id/accountSettingsFragment"
         android:name="com.alperen.openmarket.ui.main.profile.accountsettings.AccountSettingsFragment"

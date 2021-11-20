@@ -1,15 +1,18 @@
 package com.alperen.openmarket.ui.main.homepage
 
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.alperen.openmarket.R
 import com.alperen.openmarket.model.Product
+import com.alperen.openmarket.ui.main.productdetail.ProductDetailFragmentArgs
 import com.alperen.openmarket.utils.GlideApp
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
@@ -42,6 +45,14 @@ class HomepageRecyclerViewAdapter(private val list: ArrayList<Product>) :
 
             btnFavorite.setOnClickListener {
 
+            }
+
+            itemView.setOnClickListener {
+                Log.e("OpenMarket", "${list[position].id} ${list[position].product_name}")
+
+                val singleProduct = list[position]
+                val action = HomepageFragmentDirections.actionHomepageFragmentToProductDetailFragment(singleProduct)
+                itemView.findNavController().navigate(action)
             }
         }
     }
