@@ -2,12 +2,10 @@ package com.alperen.openmarket.viewmodel
 
 import android.graphics.Bitmap
 import android.net.Uri
-import android.text.Editable
 import androidx.lifecycle.*
 import com.alperen.openmarket.model.Product
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.FirebaseInstance
-import com.google.android.material.imageview.ShapeableImageView
 import kotlin.random.Random
 
 /**
@@ -68,6 +66,14 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         return result
     }
 
+    fun getUserProducts(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
+        FirebaseInstance.getUserProducts().observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
     fun getHomePage(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<Product>> {
         val result = MutableLiveData<ArrayList<Product>>()
         FirebaseInstance.getHomePage().observe(viewLifecycleOwner) {
@@ -86,6 +92,14 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         val result = MutableLiveData(Constants.PROCESSING)
         FirebaseInstance.addProductToMarket(productName, productDescription, productPrice, imageList)
             .observe(viewLifecycleOwner) {
+                result.value = it
+            }
+        return result
+    }
+
+    fun setProfilePicture(imageUri: Uri, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+        FirebaseInstance.setProfilePicture(imageUri).observe(viewLifecycleOwner) {
                 result.value = it
             }
         return result

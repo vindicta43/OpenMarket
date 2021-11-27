@@ -1,12 +1,17 @@
 package com.alperen.openmarket.utils
 
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.alperen.openmarket.model.Product
 import com.alperen.openmarket.model.User
+import com.alperen.openmarket.model.UserSnapshot
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.GlobalScope
@@ -21,7 +26,7 @@ import kotlin.collections.ArrayList
  */
 object FirebaseInstance {
     val user = FirebaseAuth.getInstance().currentUser
-    val profile = MutableLiveData<User>()
+    val profile = MutableLiveData<UserSnapshot>()
     val auth = FirebaseAuth.getInstance()
     private val dbRef = FirebaseDatabase.getInstance()
     private val storageRef = FirebaseStorage.getInstance()
@@ -130,12 +135,35 @@ object FirebaseInstance {
             .child(id!!)
             .get()
             .addOnSuccessListener {
-                profile.value = it.getValue(User::class.java)
+                profile.value = it.getValue(UserSnapshot::class.java)
                 result.value = Constants.SUCCESS
             }
             .addOnFailureListener {
                 result.value = it.localizedMessage
             }
+
+        return result
+    }
+
+    fun getUserProducts(): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
+        val itemList = arrayListOf<Product>()
+        val id = auth.currentUser?.uid
+        dbRef.reference
+            .child("users")
+            .child(id!!)
+            .child("added_products")
+            .get()
+            .addOnSuccessListener {
+                it.children.forEach { items ->
+                    itemList.add(items.getValue(Product::class.java)!!)
+                }
+                result.value = itemList
+            }
+            .addOnFailureListener {
+
+            }
+
         return result
     }
 
@@ -147,7 +175,7 @@ object FirebaseInstance {
             .get()
             .addOnSuccessListener {
                 it.children.forEach { items ->
-                    itemList.add(items.getValue<Product>()!!)
+                    itemList.add(items.getValue(Product::class.java)!!)
                 }
                 result.value = itemList
             }
@@ -270,6 +298,22 @@ object FirebaseInstance {
                     }
             }
             .addOnFailureListener {
+                result.value = it.localizedMessage
+            }
+        return result
+    }
+
+    fun setProfilePicture(imageUri: Uri): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        val update = UserProfileChangeRequest.Builder().setPhotoUri(imageUri).build()
+
+        user?.updateProfile(update)
+            ?.addOnSuccessListener {
+                profile.value?.profile_image = update.photoUri
+                result.value = Constants.SUCCESS
+            }
+            ?.addOnFailureListener {
                 result.value = it.localizedMessage
             }
         return result

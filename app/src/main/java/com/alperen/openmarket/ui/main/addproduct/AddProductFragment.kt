@@ -83,9 +83,6 @@ class AddProductFragment : Fragment() {
                         viewLifecycleOwner
                     ).observe(viewLifecycleOwner) {
                         when (it) {
-                            Constants.PROCESSING -> {
-
-                            }
                             Constants.PRODUCT_ADDED -> {
                                 loading.dismissAllowingStateLoss()
                                 AlertDialog.Builder(context)
@@ -171,9 +168,6 @@ class AddProductFragment : Fragment() {
                     imageList.clear()
                     val selectedImage = data.extras?.get("data") as Bitmap
 
-                    // binding.ivAddProductImage.scaleType = ImageView.ScaleType.FIT_XY
-                    // binding.ivAddProductImage.setImageBitmap(selectedImage)
-
                     val imageUri = parseAndGetImageUri(selectedImage)
                     imageList.add(imageUri)
 
@@ -195,7 +189,7 @@ class AddProductFragment : Fragment() {
     }
 
     private fun setBottomSheet() {
-        val view = layoutInflater.inflate(R.layout.layout_bottom_sell_dialog_sheet, null)
+        val view = layoutInflater.inflate(R.layout.layout_bottom_dialog_sheet, null)
         val cameraSheet = view.findViewById<LinearLayout>(R.id.cameraSheet)
         val gallerySheet = view.findViewById<LinearLayout>(R.id.gallerySheet)
 
@@ -209,10 +203,6 @@ class AddProductFragment : Fragment() {
         }
 
         gallerySheet.setOnClickListener {
-//            val intent = Intent(Intent.ACTION_PICK)
-//            intent.type = "image/*"
-//            startActivityForResult(intent, GALLERY_PICK)
-
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             intent.type = "image/*"
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)

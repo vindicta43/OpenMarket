@@ -39,6 +39,9 @@
         <action
             android:id="@+id/action_profileFragment_to_creditCardsFragment"
             app:destination="@id/creditCardsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_userAddedProductsFragment"
+            app:destination="@id/userAddedProductsFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
@@ -76,4 +79,8 @@
         android:id="@+id/addProductFragment"
         android:name="com.alperen.openmarket.ui.main.addproduct.AddProductFragment"
         android:label="AddProductFragment" />
+    <fragment
+        android:id="@+id/userAddedProductsFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.useraddedproducts.UserAddedProductsFragment"
+        android:label="UserAddedProductsFragment" />
 </navigation>

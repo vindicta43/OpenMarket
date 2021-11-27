@@ -29,8 +29,8 @@ class SplashFragment : Fragment() {
         initLateinitVariables(inflater)
 
         with(binding) {
-            val sharedPref = activity?.getSharedPreferences(Constants.APP_INIT, Context.MODE_PRIVATE)
-            val isInit = sharedPref?.getBoolean(Constants.APP_INIT, false)!!
+            val sharedPrefInit = activity?.getSharedPreferences(Constants.APP_INIT, Context.MODE_PRIVATE)
+            val isInit = sharedPrefInit?.getBoolean(Constants.APP_INIT, false)!!
             if (isInit) {
                 navController.navigate(R.id.action_splashFragment_to_loginFragment)
             }
@@ -41,7 +41,14 @@ class SplashFragment : Fragment() {
                         navController.navigate(R.id.action_splashFragment_to_mainActivity)
                         activity?.finish()
                     } else {
-                        navController.navigate(R.id.action_splashFragment_to_onboardingFragment)
+                        val sharedPrefLaunch =
+                            activity?.getSharedPreferences(Constants.ONBOARDING_LAUNCHED, Context.MODE_PRIVATE)
+                        val isLaunched = sharedPrefLaunch?.getBoolean(Constants.ONBOARDING_LAUNCHED, false)!!
+                        if (isLaunched) {
+                            navController.navigate(R.id.action_splashFragment_to_loginFragment)
+                        } else {
+                            navController.navigate(R.id.action_splashFragment_to_onboardingFragment)
+                        }
                     }
                 }
 

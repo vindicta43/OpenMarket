@@ -32,17 +32,21 @@
     <!-- Profile Page -->
     <string name="profile_page_account_settings">Hesap Ayarları</string>
     <string name="profile_page_saved_cards">Kayıtlı Kartlarım</string>
+    <string name="profile_page_added_products">Eklediğim Ürünler</string>
     <string name="profile_page_logout">Çıkış Yap</string>
     <string name="homepage_recently_shown">En Son Görüntülenenler</string>
     <string name="homepage_recently_added">En Son Eklenenler</string>
-    <string name="profile_page_added_product">Eklenen Ürün</string>
+    <string name="profile_page_added_product_count">Eklenen Ürün</string>
     <string name="profile_page_comment_count">Yorum Sayısı</string>
-    <string name="profile_page_purchased_product">Satın Alınan Ürün</string>
+    <string name="profile_page_purchased_product_count">Satın Alınan Ürün</string>
 
     <!-- Bottom Sheet Layout -->
     <string name="bottom_sheet_camera">Kamera</string>
     <string name="bottom_sheet_gallery">Galeri</string>
     <string name="bottom_sheet_sell">Doğrudan Satış</string>
     <string name="bottom_sheet_auction">Açık Artırma</string>
+
+    <string name="product_detail_delete">Sil</string>
+    <string name="product_detail_edit">Düzenle</string>
 
 </resources>

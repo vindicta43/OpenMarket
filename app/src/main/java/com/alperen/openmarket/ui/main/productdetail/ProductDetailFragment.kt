@@ -21,8 +21,9 @@ class ProductDetailFragment : Fragment() {
 
         with(binding) {
             productDetailPager.adapter = ProductDetailViewPagerAdapter(args.product.product_image)
-            tvProductDetailDescription.text = args.product.toString()
-
+            tvProductDetailDescription.text = "Ürün adı: ${args.product.product_name}\n" +
+                    "Ürün açıklaması: ${args.product.product_description}\n" +
+                    "Ürün fiyatı: ${args.product.product_price}"
 
             return root
         }
