@@ -48,5 +48,18 @@
 
     <string name="product_detail_delete">Sil</string>
     <string name="product_detail_edit">Düzenle</string>
+    <string name="credit_card_exp_date">Son Kullanma</string>
+    <string name="credit_card_cvv">CVV</string>
+
+    <array name="add_product_spinner">
+        <item>Kategori seç</item>
+        <item>Giyim</item>
+        <item>Elektronik</item>
+        <item>Kozmetik</item>
+        <item>Çanta &amp; Saat</item>
+        <item>Ev &amp; Yaşam</item>
+        <item>Kırtasiye</item>
+        <item>Spor</item>
+    </array>
 
 </resources>

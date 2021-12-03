@@ -83,6 +83,10 @@ class ProfileFragment : Fragment() {
                 navController.navigate(R.id.action_profileFragment_to_userAddedProductsFragment)
             }
 
+            cardCreditCards.setOnClickListener {
+                navController.navigate(R.id.action_profileFragment_to_creditCardsFragment)
+            }
+
             btnLogout.setOnClickListener {
                 val sharedPref =
                     activity?.getSharedPreferences(Constants.APP_INIT, Context.MODE_PRIVATE)
@@ -114,8 +118,6 @@ class ProfileFragment : Fragment() {
         gallerySheet.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
-            // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            // intent.addCategory(Intent.CATEGORY_OPENABLE)
             startActivityForResult(intent, GALLERY_PICK)
             dialog.dismiss()
         }

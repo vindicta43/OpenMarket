@@ -13,11 +13,10 @@ data class User(
     val email: String,
     val name: String,
     val surname: String,
-    val password: String,
     val added_product_count: Int = 0,
     val comment_count: Int = 0,
     val purchased_product: Int = 0,
-    val added_products: List<Product>
+    val added_products: List<Product> = listOf()
 ) : Parcelable {
-    constructor() : this("", "", "", "", "", "", 0, 0, 0, listOf())
+    constructor() : this("", "", "", "", "", 0, 0, 0, listOf())
 }

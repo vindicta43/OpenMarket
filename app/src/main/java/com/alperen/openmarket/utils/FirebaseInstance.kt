@@ -8,18 +8,11 @@ import com.alperen.openmarket.model.User
 import com.alperen.openmarket.model.UserSnapshot
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by Alperen on 6.11.2021.
@@ -91,8 +84,6 @@ object FirebaseInstance {
                                 email,
                                 name,
                                 surname,
-                                password,
-                                added_products = arrayListOf()
                             )
                         dbRef.reference
                             .child("users")
@@ -247,7 +238,8 @@ object FirebaseInstance {
         val id = auth.currentUser?.uid!!
         // Add this product to added product list
         val randomProductID = UUID.randomUUID().toString()
-        val newProduct = Product(randomProductID, productName, productPrice.toInt(), productDescription, imagePathList)
+        val newProduct =
+            Product(randomProductID, productName, productPrice.toInt(), productDescription, listOf(), imagePathList)
 
         dbRef.reference
             .child("users")

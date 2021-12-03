@@ -14,11 +14,10 @@ data class UserSnapshot(
     val email: String,
     val name: String,
     val surname: String,
-    val password: String,
     val added_product_count: Int = 0,
     val comment_count: Int = 0,
     val purchased_product: Int = 0,
     var profile_image: Uri? = null
 ) : Parcelable {
-    constructor() : this("", "", "", "", "", "", 0, 0, 0, null)
+    constructor() : this("", "", "", "", "", 0, 0, 0, null)
 }
