@@ -69,44 +69,32 @@ object FirebaseInstance {
         // Create user
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
-
-                // Update display name
-                val update = UserProfileChangeRequest.Builder().setDisplayName(username).build()
-                auth.currentUser?.updateProfile(update)
-                    ?.addOnSuccessListener {
-
-                        // Create row in user table
-                        val userId = auth.currentUser!!.uid
-                        val user =
-                            User(
-                                userId,
-                                username,
-                                email,
-                                name,
-                                surname,
-                            )
-                        dbRef.reference
-                            .child("users")
-                            .child(userId)
-                            .setValue(user)
-                            .addOnSuccessListener {
-                                auth.currentUser?.sendEmailVerification()
-                                    ?.addOnSuccessListener {
-                                        result.value = Constants.REGISTER_SUCCESS
-                                    }
-                                    ?.addOnFailureListener {
-                                        result.value = it.localizedMessage
-                                    }
+                // Create row in user table
+                val userId = auth.currentUser!!.uid
+                val user =
+                    User(
+                        userId,
+                        username,
+                        email,
+                        name,
+                        surname,
+                    )
+                dbRef.reference
+                    .child("users")
+                    .child(userId)
+                    .setValue(user)
+                    .addOnSuccessListener {
+                        auth.currentUser?.sendEmailVerification()
+                            ?.addOnSuccessListener {
+                                result.value = Constants.REGISTER_SUCCESS
                             }
-                            .addOnFailureListener {
+                            ?.addOnFailureListener {
                                 result.value = it.localizedMessage
                             }
-
                     }
-                    ?.addOnFailureListener {
+                    .addOnFailureListener {
                         result.value = it.localizedMessage
                     }
-
             }
             .addOnFailureListener {
                 result.value = it.localizedMessage
@@ -306,6 +294,22 @@ object FirebaseInstance {
                 result.value = Constants.SUCCESS
             }
             ?.addOnFailureListener {
+                result.value = it.localizedMessage
+            }
+        return result
+    }
+
+    fun updateProfile(update: Map<String, String>): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        dbRef.reference
+            .child("users")
+            .child(user?.uid!!)
+            .updateChildren(update)
+            .addOnSuccessListener {
+                result.value = Constants.SUCCESS
+            }
+            .addOnFailureListener {
                 result.value = it.localizedMessage
             }
         return result

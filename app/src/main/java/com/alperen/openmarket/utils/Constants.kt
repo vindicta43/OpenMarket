@@ -21,6 +21,8 @@ object Constants {
     const val VERIFICATION_REQUIRED = "Giriş yapabilmeniz için e-mailinize gelen onay linki ile hesabınızı onaylamanız gerekli"
     const val IMAGE_REQUIRED = "Mutlaka bir resim eklemelisiniz"
     const val PROFILE_PHOTO_CHANGE = "Profil resminiz başarıyla güncellendi"
+    const val NOTHING_CHANGED = "Hiçbir değişiklik yapılmadı"
+    const val UPDATE_SUCCESS = "Bilgileriniz başarıyla güncellendi"
 
     const val OK = "Tamam"
     const val SUCCESS = "Başarılı"

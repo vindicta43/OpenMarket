@@ -41,7 +41,6 @@ class ProfileFragment : Fragment() {
     private lateinit var navController: NavController
     private val loading by lazy { LoadingFragment() }
 
-    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,6 +84,10 @@ class ProfileFragment : Fragment() {
 
             cardCreditCards.setOnClickListener {
                 navController.navigate(R.id.action_profileFragment_to_creditCardsFragment)
+            }
+
+            cardProfileSettings.setOnClickListener {
+                navController.navigate(R.id.action_profileFragment_to_accountSettingsFragment)
             }
 
             btnLogout.setOnClickListener {

@@ -21,6 +21,8 @@
 
     <!-- Homepage -->
     <string name="homepage_clear"><u>Temizle</u></string>
+    <string name="homepage_recently_shown">En Son Görüntülenenler</string>
+    <string name="homepage_recently_added">En Son Eklenenler</string>
 
     <!-- Add Product Page -->
     <string name="add_product_product_name">Ürün ismi</string>
@@ -34,11 +36,10 @@
     <string name="profile_page_saved_cards">Kayıtlı Kartlarım</string>
     <string name="profile_page_added_products">Eklediğim Ürünler</string>
     <string name="profile_page_logout">Çıkış Yap</string>
-    <string name="homepage_recently_shown">En Son Görüntülenenler</string>
-    <string name="homepage_recently_added">En Son Eklenenler</string>
     <string name="profile_page_added_product_count">Eklenen Ürün</string>
     <string name="profile_page_comment_count">Yorum Sayısı</string>
     <string name="profile_page_purchased_product_count">Satın Alınan Ürün</string>
+    <string name="profile_page_save_changes">Değişiklikleri Kaydet</string>
 
     <!-- Bottom Sheet Layout -->
     <string name="bottom_sheet_camera">Kamera</string>
