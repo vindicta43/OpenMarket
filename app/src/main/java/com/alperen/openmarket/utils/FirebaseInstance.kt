@@ -3,6 +3,7 @@ package com.alperen.openmarket.utils
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
+import com.alperen.openmarket.model.CreditCard
 import com.alperen.openmarket.model.Product
 import com.alperen.openmarket.model.User
 import com.alperen.openmarket.model.UserSnapshot
@@ -13,12 +14,12 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Alperen on 6.11.2021.
  */
 object FirebaseInstance {
-    val user = FirebaseAuth.getInstance().currentUser
     val profile = MutableLiveData<UserSnapshot>()
     val auth = FirebaseAuth.getInstance()
     private val dbRef = FirebaseDatabase.getInstance()
@@ -181,7 +182,36 @@ object FirebaseInstance {
         return@runBlocking writeOnTable(productName, productDescription, productPrice, imagePathList)
     }
 
-    private suspend fun compressImages(imageList: ArrayList<Bitmap>): ArrayList<ByteArray> {
+    fun deleteProductFromMarket(id: String): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        // Delete prduct from user
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("added_products")
+            .child(id)
+            .removeValue()
+            .addOnSuccessListener {
+                // Delete product from all products
+                dbRef.reference
+                    .child("products")
+                    .child(id)
+                    .removeValue()
+                    .addOnSuccessListener {
+                        result.value = Constants.SUCCESS
+                    }
+                    .addOnFailureListener {
+                        result.value = it.localizedMessage
+                    }
+            }
+            .addOnFailureListener {
+                result.value = it.localizedMessage
+            }
+        return result
+    }
+
+    private fun compressImages(imageList: ArrayList<Bitmap>): ArrayList<ByteArray> {
         val streamList = arrayListOf<ByteArray>()
         imageList.forEach {
             val stream = ByteArrayOutputStream()
@@ -191,7 +221,7 @@ object FirebaseInstance {
         return streamList
     }
 
-    private suspend fun uploadImages(streamList: ArrayList<ByteArray>): MutableList<String> {
+    private fun uploadImages(streamList: ArrayList<ByteArray>): MutableList<String> {
         val pathList = mutableListOf<String>()
         streamList.forEach {
             // Random id for image
@@ -216,13 +246,13 @@ object FirebaseInstance {
         return pathList
     }
 
-    private suspend fun writeOnTable(
+    private fun writeOnTable(
         productName: String,
         productDescription: String,
         productPrice: String,
         imagePathList: MutableList<String>
     ): MutableLiveData<String> {
-        val result = MutableLiveData(Constants.PROCESSING)
+        val result = MutableLiveData<String>()
         val id = auth.currentUser?.uid!!
         // Add this product to added product list
         val randomProductID = UUID.randomUUID().toString()
@@ -288,7 +318,7 @@ object FirebaseInstance {
 
         val update = UserProfileChangeRequest.Builder().setPhotoUri(imageUri).build()
 
-        user?.updateProfile(update)
+        auth.currentUser?.updateProfile(update)
             ?.addOnSuccessListener {
                 profile.value?.profile_image = update.photoUri
                 result.value = Constants.SUCCESS
@@ -304,13 +334,49 @@ object FirebaseInstance {
 
         dbRef.reference
             .child("users")
-            .child(user?.uid!!)
+            .child(auth.currentUser?.uid!!)
             .updateChildren(update)
             .addOnSuccessListener {
                 result.value = Constants.SUCCESS
             }
             .addOnFailureListener {
                 result.value = it.localizedMessage
+            }
+        return result
+    }
+
+    fun addCreditCard(creditCard: CreditCard): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("cards")
+            .child(creditCard.id)
+            .setValue(creditCard)
+            .addOnSuccessListener {
+                result.value = Constants.SUCCESS
+            }
+            .addOnFailureListener {
+                result.value = it.localizedMessage
+            }
+        return result
+    }
+
+    fun getUserCreditCards(): MutableLiveData<ArrayList<CreditCard>> {
+        val result = MutableLiveData<ArrayList<CreditCard>>()
+        val itemList = arrayListOf<CreditCard>()
+
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("cards")
+            .get()
+            .addOnSuccessListener {
+                it.children.forEach { items ->
+                    itemList.add(items.getValue(CreditCard::class.java)!!)
+                }
+                result.value = itemList
             }
         return result
     }

@@ -26,7 +26,7 @@
 
     <!-- Add Product Page -->
     <string name="add_product_product_name">Ürün ismi</string>
-    <string name="add_product_add_button">Ekle</string>
+    <string name="add_button">Ekle</string>
     <string name="add_product_product_description">Ürün açıklaması</string>
     <string name="add_product_product_price">Ürün fiyatı</string>
     <string name="add_product_add_photo">Fotoğraf Ekle</string>
@@ -49,6 +49,9 @@
 
     <string name="product_detail_delete">Sil</string>
     <string name="product_detail_edit">Düzenle</string>
+
+    <string name="credit_card_name">Kart Adı</string>
+    <string name="credit_card_number">Kart Numarası</string>
     <string name="credit_card_exp_date">Son Kullanma</string>
     <string name="credit_card_cvv">CVV</string>
 

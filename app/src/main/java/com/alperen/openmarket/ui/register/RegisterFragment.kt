@@ -32,7 +32,7 @@ class RegisterFragment : Fragment() {
         initLateinitVariables(inflater)
 
         with(binding) {
-            addListenerForText(this)
+            setListenersForText(this)
             addSetOnClickListeners(this)
             return root
         }
@@ -51,7 +51,7 @@ class RegisterFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         with(binding) {
-            addListenerForText(this)
+            setListenersForText(this)
             addSetOnClickListeners(this)
         }
     }
@@ -137,7 +137,7 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun addListenerForText(binding: FragmentRegisterBinding) {
+    private fun setListenersForText(binding: FragmentRegisterBinding) {
         with(binding) {
             etUsername.addTextChangedListener{
                 if (!it.isNullOrEmpty())

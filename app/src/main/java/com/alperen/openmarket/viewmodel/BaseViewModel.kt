@@ -3,6 +3,7 @@ package com.alperen.openmarket.viewmodel
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.*
+import com.alperen.openmarket.model.CreditCard
 import com.alperen.openmarket.model.Product
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.FirebaseInstance
@@ -89,7 +90,7 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         imageList: ArrayList<Bitmap>,
         viewLifecycleOwner: LifecycleOwner
     ): MutableLiveData<String> {
-        val result = MutableLiveData(Constants.PROCESSING)
+        val result = MutableLiveData<String>()
         FirebaseInstance.addProductToMarket(productName, productDescription, productPrice, imageList)
             .observe(viewLifecycleOwner) {
                 result.value = it
@@ -108,6 +109,22 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
     fun updateProfile(update: Map<String, String>, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
         val result = MutableLiveData<String>()
         FirebaseInstance.updateProfile(update).observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun addCreditCard(creditCard: CreditCard, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+        FirebaseInstance.addCreditCard(creditCard).observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun getUserCreditCards(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<CreditCard>> {
+        val result = MutableLiveData<ArrayList<CreditCard>>()
+        FirebaseInstance.getUserCreditCards().observe(viewLifecycleOwner) {
             result.value = it
         }
         return result

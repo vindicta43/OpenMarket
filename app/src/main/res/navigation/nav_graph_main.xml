@@ -72,15 +72,23 @@
         tools:layout="@layout/fragment_account_settings" />
     <fragment
         android:id="@+id/creditCardsFragment"
-        android:name="com.alperen.openmarket.ui.main.profile.cards.CreditCardsFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.cards.usercards.CreditCardsFragment"
         android:label="fragment_credit_cards"
-        tools:layout="@layout/fragment_credit_cards" />
+        tools:layout="@layout/fragment_credit_cards" >
+        <action
+            android:id="@+id/action_creditCardsFragment_to_addCreditCardFragment"
+            app:destination="@id/addCreditCardFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addProductFragment"
         android:name="com.alperen.openmarket.ui.main.addproduct.AddProductFragment"
         android:label="AddProductFragment" />
     <fragment
         android:id="@+id/userAddedProductsFragment"
-        android:name="com.alperen.openmarket.ui.main.profile.useraddedproducts.UserAddedProductsFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.useraddedproducts.AddedProductsFragment"
         android:label="UserAddedProductsFragment" />
+    <fragment
+        android:id="@+id/addCreditCardFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.cards.addcard.AddCreditCardFragment"
+        android:label="AddCreditCardFragment" />
 </navigation>

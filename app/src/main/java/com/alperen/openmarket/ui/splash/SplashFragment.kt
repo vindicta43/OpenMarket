@@ -37,7 +37,7 @@ class SplashFragment : Fragment() {
 
             splashAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
                 override fun onAnimationEnd(animation: Animator?) {
-                    if (FirebaseInstance.user?.isEmailVerified == true && FirebaseInstance.auth.currentUser != null) {
+                    if (FirebaseInstance.auth.currentUser?.isEmailVerified == true && FirebaseInstance.auth.currentUser != null) {
                         navController.navigate(R.id.action_splashFragment_to_mainActivity)
                         activity?.finish()
                     } else {

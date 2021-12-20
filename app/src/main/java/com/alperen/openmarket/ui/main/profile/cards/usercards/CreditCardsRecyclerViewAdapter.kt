@@ -1,4 +1,4 @@
-package com.alperen.openmarket.ui.main.profile.cards
+package com.alperen.openmarket.ui.main.profile.cards.usercards
 
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +15,14 @@ class CreditCardsRecyclerViewAdapter(private val list: ArrayList<CreditCard>) :
     RecyclerView.Adapter<CreditCardsRecyclerViewAdapter.CreditCardsRecyclerViewHolder>() {
 
     inner class CreditCardsRecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvCardName = itemView.findViewById<TextView>(R.id.tvCardName)
-        val tvCardNumber = itemView.findViewById<TextView>(R.id.tvCardNumber)
-        val tvCardDate = itemView.findViewById<TextView>(R.id.tvCardDate)
-        val tvCardCvv = itemView.findViewById<TextView>(R.id.tvCardCvv)
+        val tvCardName: TextView = itemView.findViewById(R.id.tvCardName)
+        val tvCardNumber: TextView = itemView.findViewById(R.id.tvCardNumber)
+        val tvCardDate: TextView = itemView.findViewById(R.id.tvCardDate)
+        val tvCardCvv: TextView = itemView.findViewById(R.id.tvCardCvv)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CreditCardsRecyclerViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_credit_card, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_user_credit_card, parent, false)
         return CreditCardsRecyclerViewHolder(view)
     }
 

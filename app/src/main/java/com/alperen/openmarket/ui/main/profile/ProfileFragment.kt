@@ -57,7 +57,7 @@ class ProfileFragment : Fragment() {
                         loading.dismissAllowingStateLoss()
                         rootLayout.visibility = View.VISIBLE
                         val profile = FirebaseInstance.profile
-                        val photoUri = FirebaseInstance.user?.photoUrl
+                        val photoUri = FirebaseInstance.auth.currentUser?.photoUrl
                         GlideApp.with(requireContext()).load(photoUri).into(ivProfile)
                         tvUsername.text = profile.value?.username
                         tvNameSurname.text = "${profile.value?.name} ${profile.value?.surname}"
