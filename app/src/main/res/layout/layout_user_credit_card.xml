@@ -52,6 +52,18 @@
             app:layout_constraintStart_toEndOf="@id/textView1"
             app:layout_constraintTop_toTopOf="@id/textView1" />
 
+        <ImageButton
+            android:id="@+id/ibOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_three_dot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="60dp"

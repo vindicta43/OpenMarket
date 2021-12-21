@@ -78,6 +78,9 @@
         <action
             android:id="@+id/action_creditCardsFragment_to_addCreditCardFragment"
             app:destination="@id/addCreditCardFragment" />
+        <action
+            android:id="@+id/action_creditCardsFragment_to_editCreditCardFragment"
+            app:destination="@id/editCreditCardFragment" />
     </fragment>
     <fragment
         android:id="@+id/addProductFragment"
@@ -91,4 +94,12 @@
         android:id="@+id/addCreditCardFragment"
         android:name="com.alperen.openmarket.ui.main.profile.cards.addcard.AddCreditCardFragment"
         android:label="AddCreditCardFragment" />
+    <fragment
+        android:id="@+id/editCreditCardFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.cards.editcard.EditCreditCardFragment"
+        android:label="EditCreditCardFragment" >
+        <argument
+            android:name="creditCard"
+            app:argType="com.alperen.openmarket.model.CreditCard" />
+    </fragment>
 </navigation>

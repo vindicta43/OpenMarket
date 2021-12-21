@@ -12,7 +12,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentCreditCardsBinding
-import com.alperen.openmarket.model.CreditCard
 import com.alperen.openmarket.utils.LoadingFragment
 import com.alperen.openmarket.viewmodel.BaseViewModel
 
@@ -34,7 +33,7 @@ class CreditCardsFragment : Fragment() {
             loading.show(childFragmentManager, "loaderCards")
             viewModel.getUserCreditCards(viewLifecycleOwner).observe(viewLifecycleOwner) {
                 loading.dismissAllowingStateLoss()
-                recyclerUserCards.adapter = CreditCardsRecyclerViewAdapter(it)
+                recyclerUserCards.adapter = CreditCardsRecyclerViewAdapter(requireActivity(), it)
                 recyclerUserCards.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             }
 

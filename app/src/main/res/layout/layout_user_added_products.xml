@@ -52,7 +52,7 @@
             android:fontFamily="@font/roboto_light"
             android:lines="1"
             android:maxLines="1"
-            android:text="@string/product_detail_delete"
+            android:text="@string/item_delete"
             app:layout_constraintBottom_toBottomOf="@id/ibDelete"
             app:layout_constraintEnd_toStartOf="@id/ibDelete"
             app:layout_constraintTop_toTopOf="@id/ibDelete" />
@@ -63,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
             android:scaleType="fitXY"
             android:src="@drawable/ic_delete"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +76,7 @@
             android:fontFamily="@font/roboto_light"
             android:lines="1"
             android:maxLines="1"
-            android:text="@string/product_detail_edit"
+            android:text="@string/item_edit"
             app:layout_constraintBottom_toBottomOf="@id/ibEdit"
             app:layout_constraintEnd_toStartOf="@id/ibEdit"
             app:layout_constraintTop_toTopOf="@id/ibEdit" />
@@ -86,6 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
             android:scaleType="fitXY"
             android:src="@drawable/ic_edit"
             app:layout_constraintEnd_toEndOf="parent"

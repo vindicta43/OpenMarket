@@ -129,4 +129,12 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         }
         return result
     }
+
+    fun editCreditCard(creditCard: Map<String, String>, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+        FirebaseInstance.editCreditCard(creditCard).observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
 }

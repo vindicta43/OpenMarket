@@ -14,7 +14,6 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by Alperen on 6.11.2021.
@@ -377,6 +376,42 @@ object FirebaseInstance {
                     itemList.add(items.getValue(CreditCard::class.java)!!)
                 }
                 result.value = itemList
+            }
+        return result
+    }
+
+    fun deleteCreditCard(id: String): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("cards")
+            .child(id)
+            .removeValue()
+            .addOnSuccessListener {
+                result.value = Constants.SUCCESS
+            }
+            .addOnFailureListener {
+                result.value = it.localizedMessage
+            }
+        return result
+    }
+
+    fun editCreditCard(creditCard: Map<String, String>): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("cards")
+            .child(creditCard["id"]!!)
+            .updateChildren(creditCard)
+            .addOnSuccessListener {
+                result.value = Constants.SUCCESS
+            }
+            .addOnFailureListener {
+                result.value = it.localizedMessage
             }
         return result
     }

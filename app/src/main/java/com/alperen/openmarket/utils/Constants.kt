@@ -26,6 +26,8 @@ object Constants {
     const val UPDATE_SUCCESS = "Bilgileriniz başarıyla güncellendi"
     const val PRODUCT_REMOVED = "Ürününüz başarıyla silindi"
     const val CARD_ADDED = "isimli kartınız başarıyla tanımlandı"
+    const val CARD_REMOVED = "isimli kartınız başarıyla silindi"
+    const val CARD_UPDATED = "isimli kartınız başarıyla güncellendi"
 
     const val OK = "Tamam"
     const val SUCCESS = "Başarılı"
