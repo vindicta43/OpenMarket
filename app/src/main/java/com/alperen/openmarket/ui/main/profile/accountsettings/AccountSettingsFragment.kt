@@ -1,8 +1,9 @@
 package com.alperen.openmarket.ui.main.profile.accountsettings
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentAccountSettingsBinding
+import com.alperen.openmarket.ui.login.LoginActivity
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.FirebaseInstance
 import com.alperen.openmarket.utils.LoadingFragment
@@ -19,6 +24,8 @@ import com.alperen.openmarket.viewmodel.BaseViewModel
 class AccountSettingsFragment : Fragment() {
     private lateinit var binding: FragmentAccountSettingsBinding
     private lateinit var viewModel: BaseViewModel
+    private lateinit var navHostFragment: NavHostFragment
+    private lateinit var navController: NavController
     private val loading by lazy { LoadingFragment() }
     private var user = FirebaseInstance.profile.value!!
 
@@ -43,79 +50,150 @@ class AccountSettingsFragment : Fragment() {
 
         setListenersForText()
 
-        binding.btnSaveChanges.setOnClickListener {
-            viewModel.getUserProfile(viewLifecycleOwner).observe(viewLifecycleOwner) {
-                if (it == Constants.SUCCESS) {
-                    user = FirebaseInstance.profile.value!!
-                    Log.e("OpenMarket", "${user.username} ${user.name} ${user.surname}")
+        with(binding) {
+            btnSaveUserChanges.setOnClickListener {
+                val update = mutableMapOf<String, String>()
+                viewModel.getUserProfile(viewLifecycleOwner).observe(viewLifecycleOwner) {
+                    when (it) {
+                        Constants.SUCCESS -> {
+                            user = FirebaseInstance.profile.value!!
+                            val username = etUsernameUpdate.text
+                            val name = etNameUpdate.text
+                            val surname = etSurnameUpdate.text
 
-                    if (checkFieldChange()) {
-                        val username = binding.etUsernameUpdate.text.toString()
-                        val name = binding.etNameUpdate.text.toString()
-                        val surname = binding.etSurnameUpdate.text.toString()
-
-                        if (user.username != username || user.name != name || user.surname != surname) {
-                            val update =
-                                mapOf(
-                                    "username" to username,
-                                    "name" to name,
-                                    "surname" to surname
-                                )
-                            loading.show(childFragmentManager, "loaderSetting")
-                            viewModel.updateProfile(update, viewLifecycleOwner).observe(viewLifecycleOwner) {
-                                when (it) {
-                                    Constants.SUCCESS -> {
-                                        loading.dismissAllowingStateLoss()
-                                        AlertDialog.Builder(context)
-                                            .setMessage(Constants.UPDATE_SUCCESS)
-                                            .setPositiveButton(Constants.OK) { _, _ -> }
-                                            .show()
-                                    }
-                                    else -> {
-                                        loading.dismissAllowingStateLoss()
-                                        AlertDialog.Builder(context)
-                                            .setMessage(it)
-                                            .setPositiveButton(Constants.OK) { _, _ -> }
-                                            .show()
-                                    }
+                            if (checkFieldIsEmpty(username, name, surname)) {
+                                // If any field has changed
+                                if (user.username != username.toString() ||
+                                    user.name != name.toString() ||
+                                    user.surname != surname.toString()
+                                ) {
+                                    update["username"] = username.toString()
+                                    update["name"] = name.toString()
+                                    update["surname"] = surname.toString()
+                                    updateUser(update)
+                                }
+                                // Nothing changed
+                                else {
+                                    AlertDialog.Builder(context)
+                                        .setMessage(Constants.NOTHING_CHANGED)
+                                        .setPositiveButton(Constants.OK) { _, _ -> }
+                                        .show()
                                 }
                             }
-                        } else {
+                        }
+                        else -> {
                             AlertDialog.Builder(context)
-                                .setMessage(Constants.NOTHING_CHANGED)
+                                .setMessage(it)
                                 .setPositiveButton(Constants.OK) { _, _ -> }
                                 .show()
                         }
-                    } else {
-                        with(binding) {
-                            usernameUpdateLayout.apply {
-                                isErrorEnabled = true
-                                error = Constants.FIELD_REQUIRED
+                    }
+                }
+            }
+
+            btnSaveAccountChanges.setOnClickListener {
+                val update = mutableMapOf<String, String>()
+                viewModel.getUserProfile(viewLifecycleOwner).observe(viewLifecycleOwner) {
+                    when (it) {
+                        Constants.SUCCESS -> {
+                            user = FirebaseInstance.profile.value!!
+                            val email = etEmailUpdate.text
+                            val oldPassword = etPasswordUpdate.text
+                            val newPassword = etNewPasswordUpdate.text
+
+                            if (checkFieldIsEmpty(email, oldPassword)) {
+                                // Password change
+                                if (!newPassword.isNullOrEmpty())
+                                    update["newPassword"] = newPassword.toString()
+
+                                if (user.email != email.toString())
+                                    update["newEmail"] = email.toString()
+
+                                update["oldEmail"] = user.email
+                                update["oldPassword"] = oldPassword.toString()
+
+                                updateAccount(update)
+                            } else {
+                                passwordUpdateLayout.apply {
+                                    isErrorEnabled = true
+                                    error = Constants.PASSWORD_REQUIRED
+                                }
                             }
-                            nameUpdateLayout.apply {
-                                isErrorEnabled = true
-                                error = Constants.FIELD_REQUIRED
-                            }
-                            surnameUpdateLayout.apply {
-                                isErrorEnabled = true
-                                error = Constants.FIELD_REQUIRED
-                            }
+                        }
+                        else -> {
+                            AlertDialog.Builder(context)
+                                .setMessage(it)
+                                .setPositiveButton(Constants.OK) { _, _ -> }
+                                .show()
                         }
                     }
                 }
+            }
 
+            btnBack.setOnClickListener {
+                navController.popBackStack()
             }
         }
     }
 
-    private fun checkFieldChange(): Boolean {
-        with(binding) {
-            val username = !etUsernameUpdate.text.isNullOrEmpty()
-            val name = !etNameUpdate.text.isNullOrEmpty()
-            val surname = !etSurnameUpdate.text.isNullOrEmpty()
-
-            return username && name && surname
+    private fun updateUser(update: Map<String, String>) {
+        loading.show(childFragmentManager, "loaderUserSetting")
+        viewModel.updateUser(update, viewLifecycleOwner).observe(viewLifecycleOwner) {
+            when (it) {
+                Constants.SUCCESS -> {
+                    loading.dismissAllowingStateLoss()
+                    AlertDialog.Builder(context)
+                        .setMessage(Constants.UPDATE_SUCCESS)
+                        .setPositiveButton(Constants.OK) { _, _ -> }
+                        .show()
+                }
+                else -> {
+                    loading.dismissAllowingStateLoss()
+                    AlertDialog.Builder(context)
+                        .setMessage(it)
+                        .setPositiveButton(Constants.OK) { _, _ -> }
+                        .show()
+                }
+            }
         }
+    }
+
+    private fun updateAccount(update: Map<String, String>) {
+        loading.show(childFragmentManager, "loaderUserSetting")
+        viewModel.updateAccount(update, viewLifecycleOwner).observe(viewLifecycleOwner) {
+            when (it) {
+                Constants.SUCCESS_WITH_LOGOUT -> {
+                    loading.dismissAllowingStateLoss()
+                    AlertDialog.Builder(context)
+                        .setMessage(Constants.UPDATE_SUCCESS_WITH_LOGOUT)
+                        .setCancelable(false)
+                        .setPositiveButton(Constants.OK) { _, _ ->
+                            val intent = Intent(activity, LoginActivity::class.java)
+                            startActivity(intent)
+                            activity?.finish()
+                        }
+                        .show()
+                }
+                else -> {
+                    loading.dismissAllowingStateLoss()
+                    AlertDialog.Builder(context)
+                        .setMessage(it)
+                        .setPositiveButton(Constants.OK) { _, _ -> }
+                        .show()
+                }
+            }
+        }
+    }
+
+    private fun checkFieldIsEmpty(vararg textList: Editable?): Boolean {
+        var result = true
+
+        textList.forEach {
+            if (it.isNullOrEmpty())
+                result = false
+        }
+
+        return result
     }
 
     private fun setListenersForText() {
@@ -153,17 +231,27 @@ class AccountSettingsFragment : Fragment() {
                 }
             }
 
-//            etEmailUpdate.addTextChangedListener {
-//                isFieldChanged = true
-//                if (it.isNullOrEmpty()) {
-//                    emailUpdateLayout.apply {
-//                        isErrorEnabled = true
-//                        error = Constants.FIELD_REQUIRED
-//                    }
-//                } else {
-//                    emailUpdateLayout.isErrorEnabled = false
-//                }
-//            }
+            etEmailUpdate.addTextChangedListener {
+                if (it.isNullOrEmpty()) {
+                    emailUpdateLayout.apply {
+                        isErrorEnabled = true
+                        error = Constants.FIELD_REQUIRED
+                    }
+                } else {
+                    emailUpdateLayout.isErrorEnabled = false
+                }
+            }
+
+            etPasswordUpdate.addTextChangedListener {
+                if (it.isNullOrEmpty()) {
+                    passwordUpdateLayout.apply {
+                        isErrorEnabled = true
+                        error = Constants.FIELD_REQUIRED
+                    }
+                } else {
+                    passwordUpdateLayout.isErrorEnabled = false
+                }
+            }
         }
     }
 
@@ -173,6 +261,9 @@ class AccountSettingsFragment : Fragment() {
             ViewModelProvider(this, SavedStateViewModelFactory(activity?.application, this)).get(
                 BaseViewModel::class.java
             )
+        navHostFragment =
+            requireActivity().supportFragmentManager.findFragmentById(R.id.fragmentContainerMain) as NavHostFragment
+        navController = navHostFragment.navController
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

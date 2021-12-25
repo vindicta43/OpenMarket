@@ -106,9 +106,17 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         return result
     }
 
-    fun updateProfile(update: Map<String, String>, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
+    fun updateUser(update: Map<String, String>, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
         val result = MutableLiveData<String>()
-        FirebaseInstance.updateProfile(update).observe(viewLifecycleOwner) {
+        FirebaseInstance.updateUser(update).observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun updateAccount(update: Map<String, String>, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+        FirebaseInstance.updateAccount(update).observe(viewLifecycleOwner) {
             result.value = it
         }
         return result

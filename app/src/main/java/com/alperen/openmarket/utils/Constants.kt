@@ -13,6 +13,7 @@ object Constants {
     const val FORGET_ME = "forgetMe"
 
     const val FIELD_REQUIRED = "Bu alan doldurulmalı"
+    const val PASSWORD_REQUIRED = "E-mail ve parola değişikliği için eski parola girilmelidir"
     const val FIELD_MISSING = "Lütfen bu alanı tamamen doldurunuz"
     const val PRODUCT_ADDED = "Ürününüz başarıyla satışa sunuldu"
     const val EMAIL_REQUIRED = "Sıfırlama e-maili için lütfen bu alanı doldurunuz"
@@ -24,6 +25,7 @@ object Constants {
     const val PROFILE_PHOTO_CHANGE = "Profil resminiz başarıyla güncellendi"
     const val NOTHING_CHANGED = "Hiçbir değişiklik yapılmadı"
     const val UPDATE_SUCCESS = "Bilgileriniz başarıyla güncellendi"
+    const val UPDATE_SUCCESS_WITH_LOGOUT = "Bilgileriniz başarıyla güncellendi. Yeniden giriş yapmanız gerekiyor"
     const val PRODUCT_REMOVED = "Ürününüz başarıyla silindi"
     const val CARD_ADDED = "isimli kartınız başarıyla tanımlandı"
     const val CARD_REMOVED = "isimli kartınız başarıyla silindi"
@@ -31,5 +33,6 @@ object Constants {
 
     const val OK = "Tamam"
     const val SUCCESS = "Başarılı"
+    const val SUCCESS_WITH_LOGOUT = "Başarılı. Çıkış yapılması gerekli"
     const val PROCESSING = "İşleniyor"
 }

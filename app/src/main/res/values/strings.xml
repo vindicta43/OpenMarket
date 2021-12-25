@@ -17,6 +17,7 @@
     <string name="register_page_surname">Soyad</string>
     <string name="register_page_password">Parola</string>
     <string name="register_page_password_apply">Parolayı Onayla</string>
+    <string name="register_page_new_password">Yeni Parola</string>
     <string name="register_page_register_button">kayıt ol</string>
 
     <!-- Homepage -->
@@ -55,6 +56,9 @@
     <string name="credit_card_number">Kart Numarası</string>
     <string name="credit_card_exp_date">Son Kullanma</string>
     <string name="credit_card_cvv">CVV</string>
+    <string name="notifications_page_title">Bildirimler</string>
+    <string name="account_settings_page_user_details">Kullanıcı Bilgileri</string>
+    <string name="account_settings_page_account_details">Hesap Bilgileri</string>
 
     <array name="add_product_spinner">
         <item>Kategori seç</item>

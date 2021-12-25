@@ -56,14 +56,7 @@ class ProfileFragment : Fragment() {
                     Constants.SUCCESS -> {
                         loading.dismissAllowingStateLoss()
                         rootLayout.visibility = View.VISIBLE
-                        val profile = FirebaseInstance.profile
-                        val photoUri = FirebaseInstance.auth.currentUser?.photoUrl
-                        GlideApp.with(requireContext()).load(photoUri).into(ivProfile)
-                        tvUsername.text = profile.value?.username
-                        tvNameSurname.text = "${profile.value?.name} ${profile.value?.surname}"
-                        tvAddedProduct.text = profile.value?.added_product_count.toString()
-                        tvCommentCount.text = profile.value?.comment_count.toString()
-                        tvPurchasedProduct.text = profile.value?.purchased_product.toString()
+                        fillUserFields()
                     }
                     else -> {
                         AlertDialog.Builder(context)
@@ -101,6 +94,23 @@ class ProfileFragment : Fragment() {
                 activity?.finish()
             }
             return root
+        }
+    }
+
+    private fun fillUserFields() {
+        with(binding) {
+            val profile = FirebaseInstance.profile
+            val photoUri = FirebaseInstance.auth.currentUser?.photoUrl
+            if (photoUri == null) {
+                GlideApp.with(requireContext()).load(R.drawable.ic_person).into(ivProfile)
+            } else {
+                GlideApp.with(requireContext()).load(photoUri).into(ivProfile)
+            }
+            tvUsername.text = profile.value?.username
+            tvNameSurname.text = "${profile.value?.name} ${profile.value?.surname}"
+            tvAddedProduct.text = profile.value?.added_product_count.toString()
+            tvCommentCount.text = profile.value?.comment_count.toString()
+            tvPurchasedProduct.text = profile.value?.purchased_product.toString()
         }
     }
 

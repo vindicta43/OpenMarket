@@ -328,19 +328,65 @@ object FirebaseInstance {
         return result
     }
 
-    fun updateProfile(update: Map<String, String>): MutableLiveData<String> {
+    fun updateUser(update: Map<String, String>): MutableLiveData<String> {
         val result = MutableLiveData<String>()
 
         dbRef.reference
             .child("users")
             .child(auth.currentUser?.uid!!)
-            .updateChildren(update)
+            .updateChildren(
+                mapOf(
+                    "username" to update["username"],
+                    "name" to update["name"],
+                    "surname" to update["surname"],
+                )
+            )
+            .addOnSuccessListener { result.value = Constants.SUCCESS }
+            .addOnFailureListener { result.value = it.localizedMessage!! }
+
+        return result
+    }
+
+    fun updateAccount(update: Map<String, String>): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        auth.signInWithEmailAndPassword(update["oldEmail"]!!, update["oldPassword"]!!)
             .addOnSuccessListener {
-                result.value = Constants.SUCCESS
+                // If have new email, update it and then check for new password
+                if (update.containsKey("newEmail")) {
+                    auth.currentUser!!.updateEmail(update["newEmail"]!!)
+                        .addOnSuccessListener {
+                            // Update email on realtime database
+                            dbRef.reference
+                                .child("users")
+                                .child(auth.currentUser?.uid!!)
+                                .updateChildren(mapOf("email" to update["newEmail"]))
+                                .addOnSuccessListener {
+                                    // Check for password change
+                                    if (update.containsKey("newPassword")) {
+                                        auth.currentUser!!.updatePassword(update["newPassword"]!!)
+                                            .addOnSuccessListener { result.value = Constants.SUCCESS_WITH_LOGOUT }
+                                            .addOnFailureListener { result.value = it.localizedMessage }
+                                    } else {
+                                        result.value = Constants.SUCCESS_WITH_LOGOUT
+                                        auth.signOut()
+                                    }
+                                }
+                                .addOnFailureListener { result.value = it.localizedMessage }
+                        }
+                }
+                // If have old email and new password only change password
+                else {
+                    auth.currentUser!!.updatePassword(update["newPassword"]!!)
+                        .addOnSuccessListener {
+                            result.value = Constants.SUCCESS_WITH_LOGOUT
+                            auth.signOut()
+                        }
+                        .addOnFailureListener { result.value = it.localizedMessage }
+                }
             }
-            .addOnFailureListener {
-                result.value = it.localizedMessage
-            }
+            .addOnFailureListener { result.value = it.localizedMessage }
+
         return result
     }
 
