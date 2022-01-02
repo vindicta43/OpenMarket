@@ -39,10 +39,10 @@ class AddedProductsRecyclerViewAdapter(private val activity: FragmentActivity, p
 
     override fun onBindViewHolder(holder: UserAddedProductsRecyclerViewHolder, position: Int) {
         with(holder) {
-            val storageRef = FirebaseStorage.getInstance().reference.child(list[position].product_image[0])
+            val storageRef = FirebaseStorage.getInstance().reference.child(list[position].image[0])
             GlideApp.with(itemView.context).load(storageRef).into(ivUserAddedProductImage)
-            tvUserAddedProductName.text = list[position].product_name
-            tvUserAddedProductPrice.text = list[position].product_price.toString()
+            tvUserAddedProductName.text = list[position].name
+            tvUserAddedProductPrice.text = list[position].price.toString()
 
             ibDelete.setOnClickListener {
                 loading.show(activity.supportFragmentManager, "loaderDelete")

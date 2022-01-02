@@ -48,6 +48,7 @@
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/menu/bottom_nav_bar_menu.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/OpenMarket/app/src/main/res/raw/welcome.xml" value="0.12" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/drawable/button_selector.xml" value="0.2078125" />
+        <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/drawable/divider.xml" value="0.2078125" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/drawable/homepage_profile_bg.xml" value="0.2078125" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/drawable/ic_onboarding_1.xml" value="0.2078125" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/drawable/ic_onboarding_2.xml" value="0.2078125" />
@@ -66,7 +67,7 @@
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/fragment_notifications.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/fragment_onboarding.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/fragment_product_detail.xml" value="0.1" />
-        <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/fragment_profile.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/fragment_profile.xml" value="0.25" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/fragment_register.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/fragment_search.xml" value="0.25" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/fragment_sell.xml" value="0.19166666666666668" />
@@ -82,7 +83,10 @@
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/layout_homepage_product_item.xml" value="0.12454710144927536" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/layout_homepage_product_shimmer.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/layout_notification_item.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/layout_parent.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/layout_search_item.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/layout_second.xml" value="0.33" />
+        <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/layout_secont.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/layout_user_added_products.xml" value="0.25" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/layout_user_credit_card.xml" value="0.25" />
         <entry key="..\:/Users/forei/Desktop/bitime projesi/OpenMarket/app/src/main/res/layout/layout_viewpager_product_item.xml" value="0.19166666666666668" />

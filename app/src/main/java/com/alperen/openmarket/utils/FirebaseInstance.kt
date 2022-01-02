@@ -167,8 +167,12 @@ object FirebaseInstance {
     // Coroutine function
     fun addProductToMarket(
         productName: String,
-        productDescription: String,
         productPrice: String,
+        productDescription: String,
+        productCategory: String,
+        productSize: String,
+        productCondition: String,
+        productGender: String,
         imageList: ArrayList<Bitmap>
     ): MutableLiveData<String> = runBlocking {
         // Get compressed stream array
@@ -177,8 +181,23 @@ object FirebaseInstance {
         // Upload images and get database path list
         val imagePathList = uploadImages(streamList)
 
+        // Add this product to added product list
+        val randomProductID = UUID.randomUUID().toString()
+        val newProduct =
+            Product(
+                randomProductID,
+                productName,
+                productPrice.toInt(),
+                productDescription,
+                productCategory,
+                productSize,
+                productCondition,
+                productGender,
+                imagePathList
+            )
+
         // Update table and return result
-        return@runBlocking writeOnTable(productName, productDescription, productPrice, imagePathList)
+        return@runBlocking writeOnTable(newProduct)
     }
 
     fun deleteProductFromMarket(id: String): MutableLiveData<String> {
@@ -245,31 +264,22 @@ object FirebaseInstance {
         return pathList
     }
 
-    private fun writeOnTable(
-        productName: String,
-        productDescription: String,
-        productPrice: String,
-        imagePathList: MutableList<String>
-    ): MutableLiveData<String> {
+    private fun writeOnTable(newProduct: Product): MutableLiveData<String> {
         val result = MutableLiveData<String>()
         val id = auth.currentUser?.uid!!
-        // Add this product to added product list
-        val randomProductID = UUID.randomUUID().toString()
-        val newProduct =
-            Product(randomProductID, productName, productPrice.toInt(), productDescription, listOf(), imagePathList)
 
         dbRef.reference
             .child("users")
             .child(id)
             .child("added_products")
-            .child(randomProductID)
+            .child(newProduct.id)
             .setValue(newProduct)
 
             // Add same product into all products list
             .addOnSuccessListener {
                 dbRef.reference
                     .child("products")
-                    .child(randomProductID)
+                    .child(newProduct.id)
                     .setValue(newProduct)
 
                     // Get current users added product count

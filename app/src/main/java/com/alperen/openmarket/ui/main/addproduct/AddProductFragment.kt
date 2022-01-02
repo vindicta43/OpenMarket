@@ -7,14 +7,15 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputType
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -26,7 +27,6 @@ import com.alperen.openmarket.utils.LoadingFragment
 import com.alperen.openmarket.viewmodel.BaseViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
-
 
 const val GALLERY_PICK = 0
 const val CAMERA_PICK = 1
@@ -57,71 +57,165 @@ class AddProductFragment : Fragment() {
         setListenersForText(binding)
 
         with(binding) {
-            val productName = etProductName.text
-            val productDesc = etProductDescription.text
-            val productPrice = etProductPrice.text
+            with(expandable.secondLayout) {
+                val spnCategory = findViewById<Spinner>(R.id.spnCategory)
+                val layoutSize = findViewById<ConstraintLayout>(R.id.layoutSize)
+                val layoutCondition = findViewById<ConstraintLayout>(R.id.layoutCondition)
+                val tvSize = findViewById<TextView>(R.id.tvSize)
+                val etSize = findViewById<EditText>(R.id.etSize)
+                val spnCondition = findViewById<Spinner>(R.id.spnCondition)
+                val male = findViewById<RadioButton>(R.id.btnMale)
+                val female = findViewById<RadioButton>(R.id.btnFemale)
+                val unisex = findViewById<RadioButton>(R.id.btnUnisex)
 
-            btnAddPhoto.setOnClickListener {
-                setBottomSheet()
-            }
+                val productName = etProductName.text
+                val productDesc = etProductDescription.text
+                val productPrice = etProductPrice.text
+                val category = spnCategory.selectedItem.toString()
+                val condition = spnCondition.selectedItem.toString()
 
-            btnAddProduct.setOnClickListener {
-                if (!productName.isNullOrEmpty() && !productDesc.isNullOrEmpty() && imageList.isNotEmpty() && !productPrice.isNullOrEmpty()) {
-                    loading.show(childFragmentManager, "loaderSell")
 
-                    val bitmapList = arrayListOf<Bitmap>()
-                    imageList.forEach {
-                        val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, it)
-                        bitmapList.add(bitmap)
-                    }
+                btnAddPhoto.setOnClickListener {
+                    setBottomSheet()
+                }
 
-                    viewModel.addProductToMarket(
-                        productName.toString(),
-                        productDesc.toString(),
-                        productPrice.toString(),
-                        bitmapList,
-                        viewLifecycleOwner
-                    ).observe(viewLifecycleOwner) {
-                        when (it) {
-                            Constants.PRODUCT_ADDED -> {
-                                loading.dismissAllowingStateLoss()
-                                AlertDialog.Builder(context)
-                                    .setMessage(it)
-                                    .setPositiveButton(Constants.OK) { _, _ ->
-                                        navController.popBackStack()
-                                    }.show()
+                btnAddProduct.setOnClickListener {
+                    if (!productName.isNullOrEmpty() &&
+                        !productDesc.isNullOrEmpty() &&
+                        imageList.isNotEmpty() &&
+                        !productPrice.isNullOrEmpty() &&
+                        !etSize.text.isNullOrEmpty() &&
+                        spnCategory.selectedItem.toString() != "Kategori seç"
+                    ) {
+                        loading.show(childFragmentManager, "loaderSell")
+
+                        val bitmapList = arrayListOf<Bitmap>()
+                        imageList.forEach {
+                            val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, it)
+                            bitmapList.add(bitmap)
+                        }
+
+                        val gender = when {
+                            male.isChecked -> {
+                                male.text.toString()
+                            }
+                            female.isChecked -> {
+                                female.text.toString()
                             }
                             else -> {
-                                loading.dismissAllowingStateLoss()
-                                AlertDialog.Builder(context)
-                                    .setMessage(it)
-                                    .setPositiveButton(Constants.OK) { _, _ ->
-
-                                    }.show()
+                                unisex.text.toString()
                             }
                         }
-                    }
-                } else {
-                    if (productName.isNullOrEmpty()) {
-                        textInputLayoutProductName.error = Constants.FIELD_REQUIRED
 
+                        viewModel.addProductToMarket(
+                            productName.toString(),
+                            productPrice.toString(),
+                            productDesc.toString(),
+                            category,
+                            etSize.text.toString(),
+                            condition,
+                            gender,
+                            bitmapList,
+                            viewLifecycleOwner
+                        ).observe(viewLifecycleOwner) {
+                            when (it) {
+                                Constants.PRODUCT_ADDED -> {
+                                    loading.dismissAllowingStateLoss()
+                                    AlertDialog.Builder(context)
+                                        .setMessage(it)
+                                        .setPositiveButton(Constants.OK) { _, _ ->
+                                            navController.popBackStack()
+                                        }.show()
+                                }
+                                else -> {
+                                    loading.dismissAllowingStateLoss()
+                                    AlertDialog.Builder(context)
+                                        .setMessage(it)
+                                        .setPositiveButton(Constants.OK) { _, _ -> }.show()
+                                }
+                            }
+                        }
+                    } else {
+                        var warningString = ""
+                        if (productName.isNullOrEmpty()) {
+                            textInputLayoutProductName.error = Constants.FIELD_REQUIRED
+                        }
+                        if (productDesc.isNullOrEmpty()) {
+                            textInputLayoutProductDescription.error = Constants.FIELD_REQUIRED
+                        }
+                        if (productPrice.isNullOrEmpty()) {
+                            textInputLayoutProductPrice.error = Constants.FIELD_REQUIRED
+                        }
+                        if (imageList.isEmpty()) {
+                            warningString += "- " + Constants.IMAGE_REQUIRED + "\n"
+                        }
+                        if (etSize.text.isNullOrEmpty() || spnCategory.selectedItem.toString() == "Kategori seç") {
+                            warningString += "- " + Constants.PRODUCT_PROPERTIES_REQUIRED + "\n"
+                        }
+                        if (warningString.isNotEmpty()) {
+                            showError(warningString)
+                        }
                     }
-                    if (productDesc.isNullOrEmpty()) {
-                        textInputLayoutProductDescription.error = Constants.FIELD_REQUIRED
-                    }
-                    if (productPrice.isNullOrEmpty()) {
-                        textInputLayoutProductPrice.error = Constants.FIELD_REQUIRED
-                    }
-                    if (imageList.isEmpty()) {
-                        AlertDialog.Builder(context)
-                            .setMessage(Constants.IMAGE_REQUIRED)
-                            .setPositiveButton(Constants.OK) { _, _ ->
+                }
 
-                            }.show()
+                expandable.parentLayout.setOnClickListener {
+                    if (expandable.isExpanded) {
+                        expandable.collapse()
+                        spnCategory.setSelection(0)
+                    } else {
+                        expandable.expand()
+                        unisex.isChecked = true
+                        layoutSize.visibility = View.GONE
+                        layoutCondition.visibility = View.GONE
                     }
+
+                    val spnCategorySelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                            layoutSize.visibility = View.VISIBLE
+                            layoutCondition.visibility = View.VISIBLE
+
+                            when (position) {
+                                // Kategori sec
+                                0 -> {
+                                    layoutSize.visibility = View.GONE
+                                    layoutCondition.visibility = View.GONE
+                                }
+
+                                // Giyim
+                                1 -> {
+                                    tvSize.text = "Giysi bedeni/boyu"
+                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
+                                }
+
+                                // Ayakkabi
+                                2 -> {
+                                    tvSize.text = "Ayakkabı numarası"
+                                    etSize.inputType = InputType.TYPE_CLASS_NUMBER
+                                }
+
+                                else -> {
+                                    tvSize.text = "Ürün boyutu"
+                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
+                                }
+                            }
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {}
+                    }
+
+                    // Category spinner
+                    spnCategory.onItemSelectedListener = spnCategorySelectedListener
+
                 }
             }
         }
+    }
+
+    private fun showError(warningString: String) {
+        AlertDialog.Builder(context)
+            .setMessage(warningString)
+            .setPositiveButton(Constants.OK) { _, _ -> }.show()
     }
 
     private fun initLateinitVariables(inflater: LayoutInflater) {

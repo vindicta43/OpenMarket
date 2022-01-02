@@ -63,12 +63,21 @@
     <array name="add_product_spinner">
         <item>Kategori seç</item>
         <item>Giyim</item>
+        <item>Ayakkabı</item>
         <item>Elektronik</item>
         <item>Kozmetik</item>
         <item>Çanta &amp; Saat</item>
         <item>Ev &amp; Yaşam</item>
         <item>Kırtasiye</item>
-        <item>Spor</item>
+        <item>Spor &amp; Outdoor</item>
+    </array>
+
+    <array name="add_product_condition">
+        <item>Hiç kullanılmadı</item>
+        <item>1 günden az</item>
+        <item>1 haftadan az</item>
+        <item>1 aydan az</item>
+        <item>1 yıldan az</item>
     </array>
 
 </resources>

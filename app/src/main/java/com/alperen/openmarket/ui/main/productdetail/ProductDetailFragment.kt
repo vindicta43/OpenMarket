@@ -20,10 +20,10 @@ class ProductDetailFragment : Fragment() {
         val args: ProductDetailFragmentArgs by navArgs()
 
         with(binding) {
-            productDetailPager.adapter = ProductDetailViewPagerAdapter(args.product.product_image)
-            tvProductDetailDescription.text = "Ürün adı: ${args.product.product_name}\n" +
-                    "Ürün açıklaması: ${args.product.product_description}\n" +
-                    "Ürün fiyatı: ${args.product.product_price}"
+            productDetailPager.adapter = ProductDetailViewPagerAdapter(args.product.image)
+            tvProductDetailDescription.text = "Ürün adı: ${args.product.name}\n" +
+                    "Ürün açıklaması: ${args.product.description}\n" +
+                    "Ürün fiyatı: ${args.product.price}"
 
             return root
         }

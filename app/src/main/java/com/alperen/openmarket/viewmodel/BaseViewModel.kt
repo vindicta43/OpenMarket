@@ -85,13 +85,26 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
 
     fun addProductToMarket(
         productName: String,
-        productDescription: String,
         productPrice: String,
+        productDescription: String,
+        productCategory: String,
+        productSize: String,
+        productCondition: String,
+        productGender: String,
         imageList: ArrayList<Bitmap>,
         viewLifecycleOwner: LifecycleOwner
     ): MutableLiveData<String> {
         val result = MutableLiveData<String>()
-        FirebaseInstance.addProductToMarket(productName, productDescription, productPrice, imageList)
+        FirebaseInstance.addProductToMarket(
+            productName,
+            productPrice,
+            productDescription,
+            productCategory,
+            productSize,
+            productCondition,
+            productGender,
+            imageList
+        )
             .observe(viewLifecycleOwner) {
                 result.value = it
             }
@@ -101,8 +114,8 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
     fun setProfilePicture(imageUri: Uri, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
         val result = MutableLiveData<String>()
         FirebaseInstance.setProfilePicture(imageUri).observe(viewLifecycleOwner) {
-                result.value = it
-            }
+            result.value = it
+        }
         return result
     }
 
