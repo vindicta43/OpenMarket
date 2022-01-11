@@ -11,7 +11,9 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.alperen.openmarket.R
 import com.alperen.openmarket.model.Product
+import com.alperen.openmarket.utils.FirebaseInstance
 import com.alperen.openmarket.utils.GlideApp
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 
 /**
@@ -21,10 +23,10 @@ class HomepageRecyclerViewAdapter(private val list: ArrayList<Product>) :
     RecyclerView.Adapter<HomepageRecyclerViewAdapter.HomePageRecyclerViewHolder>() {
 
     inner class HomePageRecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val ivProduct = itemView.findViewById<ImageView>(R.id.ivProduct)
-        val btnFavorite = itemView.findViewById<ImageButton>(R.id.btnFavorite)
-        val tvProductName = itemView.findViewById<TextView>(R.id.tvProductName)
-        val tvProductPrice = itemView.findViewById<TextView>(R.id.tvProductPrice)
+        val ivProduct: ImageView = itemView.findViewById(R.id.ivProduct)
+        val btnFavorite: ImageButton = itemView.findViewById(R.id.btnFavorite)
+        val tvProductName: TextView = itemView.findViewById(R.id.tvProductName)
+        val tvProductPrice: TextView = itemView.findViewById(R.id.tvProductPrice)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePageRecyclerViewHolder {
@@ -46,6 +48,13 @@ class HomepageRecyclerViewAdapter(private val list: ArrayList<Product>) :
             itemView.setOnClickListener {
                 Log.e("OpenMarket", "${list[position].id} ${list[position].name}")
 
+                FirebaseDatabase.getInstance().reference
+                    .child("users")
+                    .child(FirebaseInstance.auth.currentUser?.uid!!)
+                    .child("user_recently_shown")
+                    .child(list[position].id)
+                    .setValue(list[position])
+
                 val singleProduct = list[position]
                 val action = HomepageFragmentDirections.actionHomepageFragmentToProductDetailFragment(singleProduct)
                 itemView.findNavController().navigate(action)
@@ -55,5 +64,10 @@ class HomepageRecyclerViewAdapter(private val list: ArrayList<Product>) :
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    fun clear() {
+        list.clear()
+        notifyDataSetChanged()
     }
 }

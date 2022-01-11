@@ -1,4 +1,4 @@
-package com.alperen.openmarket.ui.main.profile.useraddedproducts
+package com.alperen.openmarket.ui.main.profile.useraddedproducts.userproducts
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

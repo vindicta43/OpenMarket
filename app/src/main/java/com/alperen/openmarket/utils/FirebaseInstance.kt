@@ -14,6 +14,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Alperen on 6.11.2021.
@@ -146,21 +147,46 @@ object FirebaseInstance {
         return result
     }
 
-    fun getHomePage(): MutableLiveData<ArrayList<Product>> {
-        val result = MutableLiveData<ArrayList<Product>>()
-        val itemList = arrayListOf<Product>()
+    fun getHomePage(): MutableLiveData<MutableMap<String, ArrayList<Product>>> {
+        val result = MutableLiveData<MutableMap<String, ArrayList<Product>>>()
+        // val itemList = arrayListOf<Product>()
+        val dataList = mutableMapOf<String, ArrayList<Product>>()
         dbRef.reference
             .child("products")
             .get()
-            .addOnSuccessListener {
-                it.children.forEach { items ->
-                    itemList.add(items.getValue(Product::class.java)!!)
-                }
-                result.value = itemList
-            }
-            .addOnFailureListener {
+            .addOnSuccessListener { products ->
+//                it.children.forEach { items ->
+//                    itemList.add(items.getValue(Product::class.java)!!)
+//                }
+//                result.value = itemList
 
+
+                    // Get all products
+                    val productList = arrayListOf<Product>()
+                    products.children.forEach { items ->
+                        productList.add(items.getValue(Product::class.java)!!)
+                    }
+                    dataList["products"] = productList
+
+
+                dbRef.reference
+                    .child("users")
+                    .child(auth.currentUser?.uid!!)
+                    .child("user_recently_shown")
+                    .get()
+                    .addOnSuccessListener { recentlyShown ->
+
+                            val recentlyShownList = arrayListOf<Product>()
+                            recentlyShown.children.forEach { items ->
+                                recentlyShownList.add(items.getValue(Product::class.java)!!)
+                            }
+                            dataList["recently"] = recentlyShownList
+                            result.value = dataList
+
+                    }
+                    .addOnFailureListener { }
             }
+            .addOnFailureListener { }
         return result
     }
 
@@ -445,12 +471,8 @@ object FirebaseInstance {
             .child("cards")
             .child(id)
             .removeValue()
-            .addOnSuccessListener {
-                result.value = Constants.SUCCESS
-            }
-            .addOnFailureListener {
-                result.value = it.localizedMessage
-            }
+            .addOnSuccessListener { result.value = Constants.SUCCESS }
+            .addOnFailureListener { result.value = it.localizedMessage }
         return result
     }
 
@@ -470,5 +492,70 @@ object FirebaseInstance {
                 result.value = it.localizedMessage
             }
         return result
+    }
+
+    fun clearRecentlyShown(): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("user_recently_shown")
+            .removeValue()
+            .addOnSuccessListener { result.value = Constants.SUCCESS }
+            .addOnFailureListener { result.value = it.localizedMessage }
+        return result
+    }
+
+    fun updateProduct(update: MutableMap<String, Any>): MutableLiveData<String> = runBlocking {
+        val result = MutableLiveData<String>()
+
+        if (update.containsKey("image")) {
+            val bitmapList = update["image"] as ArrayList<Bitmap>
+            // Get compressed stream array
+            val streamList = compressImages(bitmapList)
+
+            // Upload images and get database path list
+            val imagePathList = uploadImages(streamList)
+            update["image"] = imagePathList
+
+            // Update product of user
+            dbRef.reference
+                .child("users")
+                .child(auth.currentUser?.uid!!)
+                .child("added_products")
+                .child(update["id"] as String)
+                .updateChildren(update)
+                .addOnSuccessListener {
+                    // Update from all products
+                    dbRef.reference
+                        .child("products")
+                        .child(update["id"] as String)
+                        .updateChildren(update)
+                        .addOnSuccessListener { result.value = Constants.PRODUCT_UPDATED }
+                        .addOnFailureListener { result.value = it.localizedMessage }
+                }
+                .addOnFailureListener { result.value = it.localizedMessage }
+        } else {
+            // Update product of user
+            dbRef.reference
+                .child("users")
+                .child(auth.currentUser?.uid!!)
+                .child("added_products")
+                .child(update["id"] as String)
+                .updateChildren(update)
+                .addOnSuccessListener {
+                    // Update from all products
+                    dbRef.reference
+                        .child("products")
+                        .child(update["id"] as String)
+                        .updateChildren(update)
+                        .addOnSuccessListener { result.value = Constants.PRODUCT_UPDATED }
+                        .addOnFailureListener { result.value = it.localizedMessage }
+                }
+                .addOnFailureListener { result.value = it.localizedMessage }
+        }
+
+        return@runBlocking result
     }
 }

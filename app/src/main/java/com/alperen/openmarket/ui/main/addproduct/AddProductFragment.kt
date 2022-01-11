@@ -71,9 +71,6 @@ class AddProductFragment : Fragment() {
                 val productName = etProductName.text
                 val productDesc = etProductDescription.text
                 val productPrice = etProductPrice.text
-                val category = spnCategory.selectedItem.toString()
-                val condition = spnCondition.selectedItem.toString()
-
 
                 btnAddPhoto.setOnClickListener {
                     setBottomSheet()
@@ -107,6 +104,9 @@ class AddProductFragment : Fragment() {
                             }
                         }
 
+                        val category = spnCategory.selectedItem.toString()
+                        val condition = spnCondition.selectedItem.toString()
+
                         viewModel.addProductToMarket(
                             productName.toString(),
                             productPrice.toString(),
@@ -123,6 +123,7 @@ class AddProductFragment : Fragment() {
                                     loading.dismissAllowingStateLoss()
                                     AlertDialog.Builder(context)
                                         .setMessage(it)
+                                        .setCancelable(false)
                                         .setPositiveButton(Constants.OK) { _, _ ->
                                             navController.popBackStack()
                                         }.show()
@@ -194,6 +195,55 @@ class AddProductFragment : Fragment() {
                                     etSize.inputType = InputType.TYPE_CLASS_NUMBER
                                 }
 
+                                // Elektronik
+                                3 -> {
+                                    tvSize.text = "Cihaz boyutu"
+                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
+                                }
+
+//                                // Kozmetik
+//                                4 -> {
+//                                    tvSize.text = "Ürün boyutu"
+//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
+//                                }
+//
+//                                // Canta & Saat
+//                                5 -> {
+//                                    tvSize.text = "Ürün boyutu"
+//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
+//                                }
+//
+//                                // Ev & Yasam
+//                                6 -> {
+//                                    tvSize.text = "Ürün boyutu"
+//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
+//                                }
+//
+//                                // Kirtasiye
+//                                7 -> {
+//                                    tvSize.text = "Ürün boyutu"
+//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
+//                                }
+//
+//                                // Spor & Outdoor
+//                                8 -> {
+//                                    tvSize.text = "Ürün boyutu"
+//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
+//                                }
+//
+//                                // Motorlu Tasit
+//                                9 -> {
+//                                    tvSize.text = "Ayakkabı numarası"
+//                                    etSize.inputType = InputType.TYPE_CLASS_NUMBER
+//                                }
+//
+//                                // Hobi
+//                                10 -> {
+//                                    tvSize.text = "Ürün boyutu"
+//                                    etSize.inputType = InputType.TYPE_CLASS_NUMBER
+//                                }
+
+                                // Antika
                                 else -> {
                                     tvSize.text = "Ürün boyutu"
                                     etSize.inputType = InputType.TYPE_CLASS_TEXT
@@ -206,7 +256,6 @@ class AddProductFragment : Fragment() {
 
                     // Category spinner
                     spnCategory.onItemSelectedListener = spnCategorySelectedListener
-
                 }
             }
         }

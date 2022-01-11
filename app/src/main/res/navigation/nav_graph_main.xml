@@ -60,7 +60,7 @@
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.alperen.openmarket.ui.main.productdetail.ProductDetailFragment"
-        android:label="ProductDetailFragment" >
+        android:label="ProductDetailFragment">
         <argument
             android:name="product"
             app:argType="com.alperen.openmarket.model.Product" />
@@ -74,7 +74,7 @@
         android:id="@+id/creditCardsFragment"
         android:name="com.alperen.openmarket.ui.main.profile.cards.usercards.CreditCardsFragment"
         android:label="fragment_credit_cards"
-        tools:layout="@layout/fragment_credit_cards" >
+        tools:layout="@layout/fragment_credit_cards">
         <action
             android:id="@+id/action_creditCardsFragment_to_addCreditCardFragment"
             app:destination="@id/addCreditCardFragment" />
@@ -88,8 +88,12 @@
         android:label="AddProductFragment" />
     <fragment
         android:id="@+id/userAddedProductsFragment"
-        android:name="com.alperen.openmarket.ui.main.profile.useraddedproducts.AddedProductsFragment"
-        android:label="UserAddedProductsFragment" />
+        android:name="com.alperen.openmarket.ui.main.profile.useraddedproducts.userproducts.AddedProductsFragment"
+        android:label="UserAddedProductsFragment">
+        <action
+            android:id="@+id/action_userAddedProductsFragment_to_editProductFragment"
+            app:destination="@id/editProductFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addCreditCardFragment"
         android:name="com.alperen.openmarket.ui.main.profile.cards.addcard.AddCreditCardFragment"
@@ -97,9 +101,18 @@
     <fragment
         android:id="@+id/editCreditCardFragment"
         android:name="com.alperen.openmarket.ui.main.profile.cards.editcard.EditCreditCardFragment"
-        android:label="EditCreditCardFragment" >
+        android:label="EditCreditCardFragment">
         <argument
             android:name="creditCard"
             app:argType="com.alperen.openmarket.model.CreditCard" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProductFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.useraddedproducts.editproduct.EditProductFragment"
+        android:label="EditProductFragment">
+
+        <argument
+            android:name="product"
+            app:argType="com.alperen.openmarket.model.Product" />
     </fragment>
 </navigation>

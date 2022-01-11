@@ -1,4 +1,4 @@
-package com.alperen.openmarket.ui.main.profile.useraddedproducts
+package com.alperen.openmarket.ui.main.profile.useraddedproducts.userproducts
 
 import android.app.AlertDialog
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.alperen.openmarket.R
 import com.alperen.openmarket.model.Product
@@ -70,7 +71,10 @@ class AddedProductsRecyclerViewAdapter(private val activity: FragmentActivity, p
             }
 
             ibEdit.setOnClickListener {
-
+                val singleProduct = list[position]
+                val action =
+                    AddedProductsFragmentDirections.actionUserAddedProductsFragmentToEditProductFragment(singleProduct)
+                itemView.findNavController().navigate(action)
             }
         }
     }

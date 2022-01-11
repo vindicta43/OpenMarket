@@ -15,7 +15,7 @@ import com.google.firebase.storage.FirebaseStorage
  */
 class ProductDetailViewPagerAdapter(private val list: List<String>): RecyclerView.Adapter<ProductDetailViewPagerAdapter.ProductDetailViewPagerViewHolder>() {
     inner class ProductDetailViewPagerViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val viewPagerImage = itemView.findViewById<ImageView>(R.id.viewPagerImage)
+        val viewPagerImage: ImageView = itemView.findViewById(R.id.viewPagerImage)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductDetailViewPagerViewHolder {
@@ -30,5 +30,9 @@ class ProductDetailViewPagerAdapter(private val list: List<String>): RecyclerVie
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    fun getList(): List<String> {
+        return list
     }
 }

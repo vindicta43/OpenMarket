@@ -26,6 +26,7 @@ object Constants {
     const val PROFILE_PHOTO_CHANGE = "Profil resminiz başarıyla güncellendi"
     const val NOTHING_CHANGED = "Hiçbir değişiklik yapılmadı"
     const val UPDATE_SUCCESS = "Bilgileriniz başarıyla güncellendi"
+    const val PRODUCT_UPDATED = "Ürününüz başarıyla güncellendi"
     const val UPDATE_SUCCESS_WITH_LOGOUT = "Bilgileriniz başarıyla güncellendi. Yeniden giriş yapmanız gerekiyor"
     const val PRODUCT_REMOVED = "Ürününüz başarıyla silindi"
     const val CARD_ADDED = "isimli kartınız başarıyla tanımlandı"

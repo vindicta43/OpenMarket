@@ -75,8 +75,8 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         return result
     }
 
-    fun getHomePage(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<Product>> {
-        val result = MutableLiveData<ArrayList<Product>>()
+    fun getHomePage(viewLifecycleOwner: LifecycleOwner): MutableLiveData<MutableMap<String, ArrayList<Product>>> {
+        val result = MutableLiveData<MutableMap<String, ArrayList<Product>>>()
         FirebaseInstance.getHomePage().observe(viewLifecycleOwner) {
             result.value = it
         }
@@ -154,6 +154,22 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
     fun editCreditCard(creditCard: Map<String, String>, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
         val result = MutableLiveData<String>()
         FirebaseInstance.editCreditCard(creditCard).observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun clearRecentlyShown(viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+        FirebaseInstance.clearRecentlyShown().observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun updateProduct(update: MutableMap<String, Any>, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+        FirebaseInstance.updateProduct(update).observe(viewLifecycleOwner) {
             result.value = it
         }
         return result

@@ -60,7 +60,7 @@
     <string name="account_settings_page_user_details">Kullanıcı Bilgileri</string>
     <string name="account_settings_page_account_details">Hesap Bilgileri</string>
 
-    <array name="add_product_spinner">
+    <array name="add_product_category">
         <item>Kategori seç</item>
         <item>Giyim</item>
         <item>Ayakkabı</item>
@@ -70,6 +70,9 @@
         <item>Ev &amp; Yaşam</item>
         <item>Kırtasiye</item>
         <item>Spor &amp; Outdoor</item>
+        <item>Motorlu Taşıt</item>
+        <item>Hobi</item>
+        <item>Antika</item>
     </array>
 
     <array name="add_product_condition">
