@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -12,9 +12,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
                 tools:context=".ui.main.homepage.HomepageFragment">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,68 +52,101 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="@string/homepage_recently_shown"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/toolbar" />
+                <androidx.constraintlayout.widget.ConstraintLayout
 
-                <TextView
-                    android:id="@+id/tvRecentlyShownClear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="@string/homepage_clear"
-                    android:textColor="@android:color/holo_blue_dark"
-                    app:layout_constraintBottom_toBottomOf="@id/textView1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/textView1" />
-
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/shimmerRecentlyShown"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="@id/recyclerRecentlyShown"
-                    app:layout_constraintEnd_toEndOf="@id/recyclerRecentlyShown"
-                    app:layout_constraintStart_toStartOf="@id/recyclerRecentlyShown"
-                    app:layout_constraintTop_toTopOf="@id/recyclerRecentlyShown">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <include layout="@layout/layout_homepage_product_shimmer" />
-
-                        <include layout="@layout/layout_homepage_product_shimmer" />
-
-                        <include layout="@layout/layout_homepage_product_shimmer" />
-
-                        <include layout="@layout/layout_homepage_product_shimmer" />
-
-                        <include layout="@layout/layout_homepage_product_shimmer" />
-
-                    </LinearLayout>
-
-                </com.facebook.shimmer.ShimmerFrameLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerRecentlyShown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:orientation="horizontal"
-                    android:scrollbars="horizontal"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    app:layout_constraintTop_toBottomOf="@id/textView1">
+                    android:orientation="horizontal">
 
-                </androidx.recyclerview.widget.RecyclerView>
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="8dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/homepage_recently_shown"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvRecentlyShownClear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginVertical="8dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="@string/homepage_clear"
+                        android:textColor="@android:color/holo_blue_dark"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmerRecentlyShown"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            <include layout="@layout/layout_homepage_product_shimmer" />
+
+                        </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerRecentlyShown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal"
+                        android:scrollbars="horizontal"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <TextView
+                        android:id="@+id/tvRecentlyShownEmpty"
+                        android:layout_width="match_parent"
+                        android:layout_height="224dp"
+                        android:layout_margin="8dp"
+                        android:background="@color/browser_actions_bg_grey"
+                        android:gravity="center"
+                        android:text="Son görüntülenen ürün yok"
+                        android:textSize="32sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/textView2"
@@ -120,92 +154,95 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="32dp"
+                    android:layout_marginBottom="8dp"
                     android:fontFamily="@font/roboto_medium"
                     android:text="@string/homepage_recently_added"
                     app:layout_constraintBottom_toTopOf="@id/recyclerMain"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recyclerRecentlyShown" />
 
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/shimmerMain"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="@id/recyclerMain"
-                    app:layout_constraintEnd_toEndOf="@id/recyclerMain"
-                    app:layout_constraintStart_toStartOf="@id/recyclerMain"
-                    app:layout_constraintTop_toTopOf="@id/recyclerMain">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:baselineAligned="false"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:nestedScrollingEnabled="false"
-                            android:orientation="vertical">
-
-                            <include layout="@layout/layout_homepage_product_shimmer" />
-
-                            <include layout="@layout/layout_homepage_product_shimmer" />
-
-                            <include layout="@layout/layout_homepage_product_shimmer" />
-
-                            <include layout="@layout/layout_homepage_product_shimmer" />
-
-                            <include layout="@layout/layout_homepage_product_shimmer" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:nestedScrollingEnabled="false"
-                            android:orientation="vertical">
-
-                            <include layout="@layout/layout_homepage_product_shimmer" />
-
-                            <include layout="@layout/layout_homepage_product_shimmer" />
-
-                            <include layout="@layout/layout_homepage_product_shimmer" />
-
-                            <include layout="@layout/layout_homepage_product_shimmer" />
-
-                            <include layout="@layout/layout_homepage_product_shimmer" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </com.facebook.shimmer.ShimmerFrameLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerMain"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    android:nestedScrollingEnabled="false"
+                    android:layout_height="wrap_content">
 
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmerMain"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="@id/recyclerMain"
+                        app:layout_constraintEnd_toEndOf="@id/recyclerMain"
+                        app:layout_constraintStart_toStartOf="@id/recyclerMain"
+                        app:layout_constraintTop_toTopOf="@id/recyclerMain">
 
-                    android:scrollbars="vertical"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView2"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:gravity="center"
+                            android:orientation="horizontal">
 
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_horizontal"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="vertical">
 
-                    >
+                                <include layout="@layout/layout_homepage_product_shimmer" />
 
-                </androidx.recyclerview.widget.RecyclerView>
+                                <include layout="@layout/layout_homepage_product_shimmer" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                                <include layout="@layout/layout_homepage_product_shimmer" />
+
+                                <include layout="@layout/layout_homepage_product_shimmer" />
+
+                                <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_horizontal"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="vertical">
+
+                                <include layout="@layout/layout_homepage_product_shimmer" />
+
+                                <include layout="@layout/layout_homepage_product_shimmer" />
+
+                                <include layout="@layout/layout_homepage_product_shimmer" />
+
+                                <include layout="@layout/layout_homepage_product_shimmer" />
+
+                                <include layout="@layout/layout_homepage_product_shimmer" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerMain"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:nestedScrollingEnabled="false"
+                        android:scrollbars="vertical"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 

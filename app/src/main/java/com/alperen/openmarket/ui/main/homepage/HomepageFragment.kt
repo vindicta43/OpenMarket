@@ -24,7 +24,6 @@ class HomepageFragment : Fragment() {
     private lateinit var viewModel: BaseViewModel
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
-    var recyclerData = mutableMapOf<String, ArrayList<Product>>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,6 +54,8 @@ class HomepageFragment : Fragment() {
                             recyclerRecentlyShown.apply {
                                 adapter = HomepageRecyclerViewAdapter(arrayListOf())
                                 adapter?.notifyDataSetChanged()
+
+                                tvRecentlyShownEmpty.visibility = View.VISIBLE
                             }
                         }
                         else -> {
@@ -75,15 +76,18 @@ class HomepageFragment : Fragment() {
 
     private fun startRefresh(binding: FragmentHomepageBinding) {
         with(binding) {
+            tvRecentlyShownEmpty.visibility = View.INVISIBLE
             startAnim(binding)
             viewModel.getHomePage(viewLifecycleOwner).observe(viewLifecycleOwner) {
                 stopAnim(this)
-                recyclerData = it
                 if (!it["recently"].isNullOrEmpty()) {
+                    tvRecentlyShownEmpty.visibility = View.INVISIBLE
                     recyclerRecentlyShown.apply {
                         adapter = HomepageRecyclerViewAdapter(it["recently"]!!)
                         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                     }
+                } else {
+                    tvRecentlyShownEmpty.visibility = View.VISIBLE
                 }
 
                 if (!it["products"].isNullOrEmpty()) {
@@ -98,8 +102,8 @@ class HomepageFragment : Fragment() {
 
     private fun startAnim(binding: FragmentHomepageBinding) {
         with(binding) {
-            recyclerMain.visibility = View.INVISIBLE
-            recyclerRecentlyShown.visibility = View.INVISIBLE
+            recyclerMain.visibility = View.VISIBLE
+            recyclerRecentlyShown.visibility = View.VISIBLE
 
             shimmerMain.apply {
                 visibility = View.VISIBLE
