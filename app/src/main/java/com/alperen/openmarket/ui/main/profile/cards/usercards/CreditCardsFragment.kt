@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentCreditCardsBinding
 import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.viewmodel.BaseViewModel
+import com.alperen.openmarket.utils.BaseViewModel
 
 
 class CreditCardsFragment : Fragment() {

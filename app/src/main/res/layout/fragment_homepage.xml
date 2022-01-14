@@ -65,86 +65,66 @@
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginVertical="8dp"
                         android:fontFamily="@font/roboto_medium"
-                        android:text="@string/homepage_recently_shown"
+                        android:text="@string/homepage_sponsored"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvRecentlyShownClear"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginVertical="8dp"
-                        android:fontFamily="@font/roboto_medium"
-                        android:text="@string/homepage_clear"
-                        android:textColor="@android:color/holo_blue_dark"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="320dp">
 
-                    <com.facebook.shimmer.ShimmerFrameLayout
-                        android:id="@+id/shimmerRecentlyShown"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                    <!--                    <com.facebook.shimmer.ShimmerFrameLayout-->
+                    <!--                        android:id="@+id/shimmerRecentlyShown"-->
+                    <!--                        android:layout_width="0dp"-->
+                    <!--                        android:layout_height="0dp"-->
+                    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                        app:layout_constraintTop_toTopOf="parent">-->
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                    <!--                        <LinearLayout-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:orientation="horizontal">-->
 
-                            <include layout="@layout/layout_homepage_product_shimmer" />
+                    <!--                            <include layout="@layout/layout_homepage_product_shimmer" />-->
 
-                            <include layout="@layout/layout_homepage_product_shimmer" />
+                    <!--                            <include layout="@layout/layout_homepage_product_shimmer" />-->
 
-                            <include layout="@layout/layout_homepage_product_shimmer" />
+                    <!--                            <include layout="@layout/layout_homepage_product_shimmer" />-->
 
-                            <include layout="@layout/layout_homepage_product_shimmer" />
+                    <!--                            <include layout="@layout/layout_homepage_product_shimmer" />-->
 
-                            <include layout="@layout/layout_homepage_product_shimmer" />
+                    <!--                            <include layout="@layout/layout_homepage_product_shimmer" />-->
 
-                        </LinearLayout>
+                    <!--                        </LinearLayout>-->
 
-                    </com.facebook.shimmer.ShimmerFrameLayout>
+                    <!--                    </com.facebook.shimmer.ShimmerFrameLayout>-->
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerRecentlyShown"
+                    <!--                    <androidx.recyclerview.widget.RecyclerView-->
+                    <!--                        android:id="@+id/recyclerRecentlyShown"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_margin="8dp"-->
+                    <!--                        android:orientation="horizontal"-->
+                    <!--                        android:scrollbars="horizontal"-->
+                    <!--                        app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+                    <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+                    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                        app:layout_constraintTop_toTopOf="parent">-->
+
+                    <!--                    </androidx.recyclerview.widget.RecyclerView>-->
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/productSponsoredPager"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:orientation="horizontal"
-                        android:scrollbars="horizontal"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                    </androidx.recyclerview.widget.RecyclerView>
-
-                    <TextView
-                        android:id="@+id/tvRecentlyShownEmpty"
-                        android:layout_width="match_parent"
-                        android:layout_height="224dp"
-                        android:layout_margin="8dp"
-                        android:background="@color/browser_actions_bg_grey"
-                        android:gravity="center"
-                        android:text="Son görüntülenen ürün yok"
-                        android:textSize="32sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/app_name"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

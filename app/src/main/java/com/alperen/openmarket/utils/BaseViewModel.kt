@@ -1,4 +1,4 @@
-package com.alperen.openmarket.viewmodel
+package com.alperen.openmarket.utils
 
 import android.graphics.Bitmap
 import android.net.Uri
@@ -170,6 +170,22 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
     fun updateProduct(update: MutableMap<String, Any>, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
         val result = MutableLiveData<String>()
         FirebaseInstance.updateProduct(update).observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun getUserFavorites(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
+        FirebaseInstance.getUserFavorites().observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun getUserRecentlyShown(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
+        FirebaseInstance.getUserRecentlyShown().observe(viewLifecycleOwner) {
             result.value = it
         }
         return result

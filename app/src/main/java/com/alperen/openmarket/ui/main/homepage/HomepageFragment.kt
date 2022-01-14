@@ -1,7 +1,8 @@
 package com.alperen.openmarket.ui.main.homepage
 
-import android.app.AlertDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +14,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentHomepageBinding
-import com.alperen.openmarket.model.Product
-import com.alperen.openmarket.utils.Constants
-import com.alperen.openmarket.viewmodel.BaseViewModel
+import com.alperen.openmarket.utils.BaseViewModel
+import com.alperen.openmarket.utils.ProductRecyclerViewAdapter
+import java.util.*
 
 class HomepageFragment : Fragment() {
     private lateinit var binding: FragmentHomepageBinding
@@ -31,14 +33,42 @@ class HomepageFragment : Fragment() {
         initLateinitVariables(inflater)
 
         with(binding) {
-            startRefresh(this)
+            startRefresh()
             return root
         }
     }
 
     override fun onResume() {
+        var currentPage = 0
+        val NUM_PAGES = 3
         super.onResume()
         with(binding) {
+
+
+
+
+            val handler = Handler()
+
+            val update = Runnable {
+                if (currentPage == NUM_PAGES) {
+                    currentPage = 0
+                }
+                productSponsoredPager.setCurrentItem(currentPage++, true)
+            }
+
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    handler.post(update)
+                }
+            }, 1000, 2000)
+
+            productSponsoredPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    currentPage = position
+                }
+            })
+
             ibSearch.setOnClickListener {
                 root.findNavController().navigate(R.id.action_homepageFragment_to_searchFragment)
             }
@@ -47,54 +77,33 @@ class HomepageFragment : Fragment() {
                 root.findNavController().navigate(R.id.action_homepageFragment_to_notificationsFragment)
             }
 
-            tvRecentlyShownClear.setOnClickListener {
-                viewModel.clearRecentlyShown(viewLifecycleOwner).observe(viewLifecycleOwner) {
-                    when (it) {
-                        Constants.SUCCESS -> {
-                            recyclerRecentlyShown.apply {
-                                adapter = HomepageRecyclerViewAdapter(arrayListOf())
-                                adapter?.notifyDataSetChanged()
-
-                                tvRecentlyShownEmpty.visibility = View.VISIBLE
-                            }
-                        }
-                        else -> {
-                            AlertDialog.Builder(context)
-                                .setMessage(it)
-                                .setPositiveButton(Constants.OK) { _, _ -> }
-                                .show()
-                        }
-                    }
-                }
-            }
-
             rootLayout.setOnRefreshListener {
-                startRefresh(this)
+                startRefresh()
             }
         }
     }
 
-    private fun startRefresh(binding: FragmentHomepageBinding) {
+    private fun startRefresh() {
         with(binding) {
-            tvRecentlyShownEmpty.visibility = View.INVISIBLE
             startAnim(binding)
             viewModel.getHomePage(viewLifecycleOwner).observe(viewLifecycleOwner) {
                 stopAnim(this)
                 if (!it["recently"].isNullOrEmpty()) {
-                    tvRecentlyShownEmpty.visibility = View.INVISIBLE
-                    recyclerRecentlyShown.apply {
-                        adapter = HomepageRecyclerViewAdapter(it["recently"]!!)
-                        layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    }
+//                    productSponsoredPager.apply {
+//                        adapter = HomepageViewPagerAdapter(it["recently"]!!)
+//                        layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//                    }
                 } else {
-                    tvRecentlyShownEmpty.visibility = View.VISIBLE
+
                 }
 
                 if (!it["products"].isNullOrEmpty()) {
                     recyclerMain.apply {
-                        adapter = HomepageRecyclerViewAdapter(it["products"]!!)
+                        adapter = ProductRecyclerViewAdapter(it["products"]!!, "HomepageFragment")
                         layoutManager = GridLayoutManager(context, 2)
                     }
+
+                    productSponsoredPager.adapter = HomepageViewPagerAdapter(it["products"]!!)
                 }
             }
         }
@@ -103,17 +112,17 @@ class HomepageFragment : Fragment() {
     private fun startAnim(binding: FragmentHomepageBinding) {
         with(binding) {
             recyclerMain.visibility = View.VISIBLE
-            recyclerRecentlyShown.visibility = View.VISIBLE
+//            recyclerRecentlyShown.visibility = View.VISIBLE
 
             shimmerMain.apply {
                 visibility = View.VISIBLE
                 startShimmer()
             }
 
-            shimmerRecentlyShown.apply {
-                visibility = View.VISIBLE
-                startShimmer()
-            }
+//            shimmerRecentlyShown.apply {
+//                visibility = View.VISIBLE
+//                startShimmer()
+//            }
         }
     }
 
@@ -122,17 +131,17 @@ class HomepageFragment : Fragment() {
             rootLayout.isRefreshing = false
 
             recyclerMain.visibility = View.VISIBLE
-            recyclerRecentlyShown.visibility = View.VISIBLE
+//            recyclerRecentlyShown.visibility = View.VISIBLE
 
             shimmerMain.apply {
                 visibility = View.INVISIBLE
                 stopShimmer()
             }
 
-            shimmerRecentlyShown.apply {
-                visibility = View.INVISIBLE
-                stopShimmer()
-            }
+//            shimmerRecentlyShown.apply {
+//                visibility = View.INVISIBLE
+//                stopShimmer()
+//            }
         }
     }
 

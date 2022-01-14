@@ -128,10 +128,9 @@ object FirebaseInstance {
     fun getUserProducts(): MutableLiveData<ArrayList<Product>> {
         val result = MutableLiveData<ArrayList<Product>>()
         val itemList = arrayListOf<Product>()
-        val id = auth.currentUser?.uid
         dbRef.reference
             .child("users")
-            .child(id!!)
+            .child(auth.currentUser?.uid!!)
             .child("added_products")
             .get()
             .addOnSuccessListener {
@@ -557,5 +556,41 @@ object FirebaseInstance {
         }
 
         return@runBlocking result
+    }
+
+    fun getUserFavorites(): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
+        val itemList = arrayListOf<Product>()
+
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("user_favorites")
+            .get()
+            .addOnSuccessListener {
+                it.children.forEach { items ->
+                    itemList.add(items.getValue(Product::class.java)!!)
+                }
+                result.value = itemList
+            }
+        return result
+    }
+
+    fun getUserRecentlyShown(): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
+        val itemList = arrayListOf<Product>()
+
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("user_recently_shown")
+            .get()
+            .addOnSuccessListener {
+                it.children.forEach { items ->
+                    itemList.add(items.getValue(Product::class.java)!!)
+                }
+                result.value = itemList
+            }
+        return result
     }
 }

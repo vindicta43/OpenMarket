@@ -17,7 +17,7 @@ import com.alperen.openmarket.databinding.FragmentAddCreditCardBinding
 import com.alperen.openmarket.model.CreditCard
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.viewmodel.BaseViewModel
+import com.alperen.openmarket.utils.BaseViewModel
 import java.util.*
 
 class AddCreditCardFragment : Fragment() {

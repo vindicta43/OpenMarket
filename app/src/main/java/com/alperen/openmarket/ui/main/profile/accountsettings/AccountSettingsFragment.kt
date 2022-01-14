@@ -19,7 +19,7 @@ import com.alperen.openmarket.ui.login.LoginActivity
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.FirebaseInstance
 import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.viewmodel.BaseViewModel
+import com.alperen.openmarket.utils.BaseViewModel
 
 class AccountSettingsFragment : Fragment() {
     private lateinit var binding: FragmentAccountSettingsBinding

@@ -24,7 +24,7 @@ import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentAddProductBinding
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.viewmodel.BaseViewModel
+import com.alperen.openmarket.utils.BaseViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
 

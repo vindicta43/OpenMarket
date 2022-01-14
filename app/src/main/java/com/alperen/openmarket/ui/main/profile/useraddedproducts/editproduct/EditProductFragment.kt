@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,21 +11,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.view.children
-import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentEditProductBinding
 import com.alperen.openmarket.ui.main.addproduct.AddProductViewPagerAdapter
@@ -34,11 +26,9 @@ import com.alperen.openmarket.ui.main.addproduct.CAMERA_PICK
 import com.alperen.openmarket.ui.main.addproduct.GALLERY_PICK
 import com.alperen.openmarket.ui.main.productdetail.ProductDetailViewPagerAdapter
 import com.alperen.openmarket.utils.Constants
-import com.alperen.openmarket.utils.GlideApp
 import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.viewmodel.BaseViewModel
+import com.alperen.openmarket.utils.BaseViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
 class EditProductFragment : Fragment() {

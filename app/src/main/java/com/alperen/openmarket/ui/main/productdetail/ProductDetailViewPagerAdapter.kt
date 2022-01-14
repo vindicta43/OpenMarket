@@ -31,8 +31,4 @@ class ProductDetailViewPagerAdapter(private val list: List<String>): RecyclerVie
     override fun getItemCount(): Int {
         return list.size
     }
-
-    fun getList(): List<String> {
-        return list
-    }
 }

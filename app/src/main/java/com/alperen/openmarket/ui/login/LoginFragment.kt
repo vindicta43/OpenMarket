@@ -11,15 +11,12 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentLoginBinding
 import com.alperen.openmarket.utils.Constants
-import com.alperen.openmarket.utils.FirebaseInstance
 import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.viewmodel.BaseViewModel
+import com.alperen.openmarket.utils.BaseViewModel
 
 class LoginFragment : Fragment() {
     private lateinit var viewModel: BaseViewModel

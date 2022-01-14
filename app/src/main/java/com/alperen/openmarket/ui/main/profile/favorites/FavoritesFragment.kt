@@ -1,4 +1,4 @@
-package com.alperen.openmarket.ui.main.profile.useraddedproducts.userproducts
+package com.alperen.openmarket.ui.main.profile.favorites
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,33 +9,24 @@ import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.alperen.openmarket.R
-import com.alperen.openmarket.databinding.FragmentAddedProductsBinding
-import com.alperen.openmarket.utils.LoadingFragment
+import com.alperen.openmarket.databinding.FragmentFavoritesBinding
+import com.alperen.openmarket.utils.ProductRecyclerViewAdapter
 import com.alperen.openmarket.utils.BaseViewModel
 
-class AddedProductsFragment : Fragment() {
-    private lateinit var binding: FragmentAddedProductsBinding
+class FavoritesFragment : Fragment() {
+    private lateinit var binding: FragmentFavoritesBinding
     private lateinit var viewModel: BaseViewModel
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
-    private val loading by lazy { LoadingFragment() }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         initLateinitVariables(inflater)
-
         with(binding) {
-            loading.show(requireActivity().supportFragmentManager, "loaderAddedProducts")
-            viewModel.getUserProducts(viewLifecycleOwner).observe(viewLifecycleOwner) {
-                loading.dismissAllowingStateLoss()
-                recyclerUserAddedProducts.adapter = AddedProductsRecyclerViewAdapter(requireActivity() ,it)
-                recyclerUserAddedProducts.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            }
-
+            startRefresh()
             return root
         }
     }
@@ -43,14 +34,32 @@ class AddedProductsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         with(binding) {
-            btnBack.setOnClickListener {
-                navController.popBackStack()
+            btnBack.setOnClickListener { navController.popBackStack() }
+        }
+    }
+
+    private fun startRefresh() {
+        with(binding) {
+            shimmerRecentlyShown.apply {
+                visibility = View.VISIBLE
+                startShimmer()
+            }
+            viewModel.getUserFavorites(viewLifecycleOwner).observe(viewLifecycleOwner) {
+                shimmerRecentlyShown.apply {
+                    visibility = View.INVISIBLE
+                    stopShimmer()
+                }
+
+                recyclerRecentlyShown.apply {
+                    adapter = ProductRecyclerViewAdapter(it, "FavoritesFragment")
+                    layoutManager = GridLayoutManager(context, 2)
+                }
             }
         }
     }
 
     private fun initLateinitVariables(inflater: LayoutInflater) {
-        binding = FragmentAddedProductsBinding.inflate(inflater)
+        binding = FragmentFavoritesBinding.inflate(inflater)
         viewModel =
             ViewModelProvider(this, SavedStateViewModelFactory(activity?.application, this)).get(
                 BaseViewModel::class.java

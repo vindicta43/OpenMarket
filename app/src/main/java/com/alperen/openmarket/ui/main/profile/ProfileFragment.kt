@@ -1,6 +1,5 @@
 package com.alperen.openmarket.ui.main.profile
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -26,8 +25,7 @@ import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.FirebaseInstance
 import com.alperen.openmarket.utils.GlideApp
 import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.viewmodel.BaseViewModel
-import com.bumptech.glide.Glide
+import com.alperen.openmarket.utils.BaseViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
 
@@ -81,6 +79,14 @@ class ProfileFragment : Fragment() {
 
             cardProfileSettings.setOnClickListener {
                 navController.navigate(R.id.action_profileFragment_to_accountSettingsFragment)
+            }
+
+            cardRecentlyShown.setOnClickListener {
+                navController.navigate(R.id.action_profileFragment_to_recentlyShownFragment)
+            }
+
+            cardFavorites.setOnClickListener {
+                navController.navigate(R.id.action_profileFragment_to_favoritesFragment)
             }
 
             btnLogout.setOnClickListener {

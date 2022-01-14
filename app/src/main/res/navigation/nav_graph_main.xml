@@ -42,6 +42,12 @@
         <action
             android:id="@+id/action_profileFragment_to_userAddedProductsFragment"
             app:destination="@id/userAddedProductsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_recentlyShownFragment"
+            app:destination="@id/recentlyShownFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
@@ -114,5 +120,21 @@
         <argument
             android:name="product"
             app:argType="com.alperen.openmarket.model.Product" />
+    </fragment>
+    <fragment
+        android:id="@+id/recentlyShownFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.recentlyshown.RecentlyShownFragment"
+        android:label="RecentlyShownFragment" >
+        <action
+            android:id="@+id/action_recentlyShownFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.favorites.FavoritesFragment"
+        android:label="FavoritesFragment" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
     </fragment>
 </navigation>

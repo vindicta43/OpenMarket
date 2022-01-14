@@ -14,14 +14,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import com.alperen.openmarket.R
-import com.alperen.openmarket.databinding.FragmentAddCreditCardBinding
 import com.alperen.openmarket.databinding.FragmentEditCreditCardBinding
-import com.alperen.openmarket.model.CreditCard
-import com.alperen.openmarket.ui.main.productdetail.ProductDetailFragmentArgs
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.viewmodel.BaseViewModel
-import java.util.*
+import com.alperen.openmarket.utils.BaseViewModel
 
 class EditCreditCardFragment : Fragment() {
     private lateinit var binding: FragmentEditCreditCardBinding
