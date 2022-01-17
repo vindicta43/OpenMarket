@@ -1,4 +1,4 @@
-package com.alperen.openmarket.ui.main.profile.useraddedproducts.editproduct
+package com.alperen.openmarket.ui.main.profile.addedproducts.editproduct
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -99,6 +99,9 @@ class EditProductFragment : Fragment() {
                     update["name"] = etProductName.text.toString()
                     update["price"] = etProductPrice.text.toString().toInt()
                     update["size"] = etSize.text.toString()
+                    update["purchased"] = args.product.purchased
+                    update["purchase_date"] = args.product.purchase_date
+                    update["list_date"] = args.product.list_date
 
                     viewModel.updateProduct(update, viewLifecycleOwner).observe(viewLifecycleOwner) {
                         when(it) {

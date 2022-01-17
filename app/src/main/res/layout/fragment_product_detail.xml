@@ -248,6 +248,19 @@
                         app:layout_constraintStart_toEndOf="@id/textView6"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <TextView
+                        android:id="@+id/tvProductIsPurchased"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@android:color/holo_red_dark"
+                        android:text=""
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tvProductPrice"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <Button

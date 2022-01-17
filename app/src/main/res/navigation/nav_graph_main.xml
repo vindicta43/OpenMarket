@@ -48,6 +48,9 @@
         <action
             android:id="@+id/action_profileFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_purchasedProductsFragment"
+            app:destination="@id/purchasedProductsFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
@@ -94,7 +97,7 @@
         android:label="AddProductFragment" />
     <fragment
         android:id="@+id/userAddedProductsFragment"
-        android:name="com.alperen.openmarket.ui.main.profile.useraddedproducts.userproducts.AddedProductsFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.addedproducts.userproducts.AddedProductsFragment"
         android:label="UserAddedProductsFragment">
         <action
             android:id="@+id/action_userAddedProductsFragment_to_editProductFragment"
@@ -114,7 +117,7 @@
     </fragment>
     <fragment
         android:id="@+id/editProductFragment"
-        android:name="com.alperen.openmarket.ui.main.profile.useraddedproducts.editproduct.EditProductFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.addedproducts.editproduct.EditProductFragment"
         android:label="EditProductFragment">
 
         <argument
@@ -135,6 +138,14 @@
         android:label="FavoritesFragment" >
         <action
             android:id="@+id/action_favoritesFragment_to_productDetailFragment"
+            app:destination="@id/productDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/purchasedProductsFragment"
+        android:name="com.alperen.openmarket.ui.main.profile.purchasedproducts.PurchasedProductsFragment"
+        android:label="PurchasedProductsFragment" >
+        <action
+            android:id="@+id/action_purchasedProductsFragment_to_productDetailFragment"
             app:destination="@id/productDetailFragment" />
     </fragment>
 </navigation>

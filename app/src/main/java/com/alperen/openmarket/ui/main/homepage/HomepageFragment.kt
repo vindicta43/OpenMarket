@@ -88,23 +88,26 @@ class HomepageFragment : Fragment() {
             startAnim(binding)
             viewModel.getHomePage(viewLifecycleOwner).observe(viewLifecycleOwner) {
                 stopAnim(this)
-                if (!it["recently"].isNullOrEmpty()) {
+
+                recyclerMain.apply {
+                    adapter = ProductRecyclerViewAdapter(it, "HomepageFragment")
+                    layoutManager = GridLayoutManager(context, 2)
+                }
+
+                productSponsoredPager.adapter = HomepageViewPagerAdapter(it)
+
+//                if (!it["recently"].isNullOrEmpty()) {
 //                    productSponsoredPager.apply {
 //                        adapter = HomepageViewPagerAdapter(it["recently"]!!)
 //                        layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 //                    }
-                } else {
-
-                }
-
-                if (!it["products"].isNullOrEmpty()) {
-                    recyclerMain.apply {
-                        adapter = ProductRecyclerViewAdapter(it["products"]!!, "HomepageFragment")
-                        layoutManager = GridLayoutManager(context, 2)
-                    }
-
-                    productSponsoredPager.adapter = HomepageViewPagerAdapter(it["products"]!!)
-                }
+//                } else {
+//
+//                }
+//
+//                if (!it["products"].isNullOrEmpty()) {
+//
+//                }
             }
         }
     }

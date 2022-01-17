@@ -1,4 +1,4 @@
-package com.alperen.openmarket.ui.main.profile.useraddedproducts.userproducts
+package com.alperen.openmarket.ui.main.profile.addedproducts.userproducts
 
 import android.app.AlertDialog
 import android.view.LayoutInflater
@@ -46,25 +46,32 @@ class AddedProductsRecyclerViewAdapter(private val activity: FragmentActivity, p
             tvUserAddedProductPrice.text = list[position].price.toString()
 
             ibDelete.setOnClickListener {
-                loading.show(activity.supportFragmentManager, "loaderDelete")
-                FirebaseInstance.deleteProductFromMarket(list[position].id).observeForever { result ->
-                    when (result) {
-                        Constants.SUCCESS -> {
-                            loading.dismissAllowingStateLoss()
-                            AlertDialog.Builder(activity)
-                                .setMessage(Constants.PRODUCT_REMOVED)
-                                .setPositiveButton(Constants.OK) { _, _ -> }
-                                .show()
+                if (list[position].purchased) {
+                    AlertDialog.Builder(activity)
+                        .setMessage(Constants.DELETE_DENIED)
+                        .setPositiveButton(Constants.OK) { _, _ -> }
+                        .show()
+                } else {
+                    loading.show(activity.supportFragmentManager, "loaderDelete")
+                    FirebaseInstance.deleteProductFromMarket(list[position].id).observeForever { result ->
+                        when (result) {
+                            Constants.SUCCESS -> {
+                                loading.dismissAllowingStateLoss()
+                                AlertDialog.Builder(activity)
+                                    .setMessage(Constants.PRODUCT_REMOVED)
+                                    .setPositiveButton(Constants.OK) { _, _ -> }
+                                    .show()
 
-                            list.removeAt(position)
-                            notifyDataSetChanged()
-                        }
-                        else -> {
-                            loading.dismissAllowingStateLoss()
-                            AlertDialog.Builder(activity)
-                                .setMessage(result)
-                                .setPositiveButton(Constants.OK) { _, _ -> }
-                                .show()
+                                list.removeAt(position)
+                                notifyDataSetChanged()
+                            }
+                            else -> {
+                                loading.dismissAllowingStateLoss()
+                                AlertDialog.Builder(activity)
+                                    .setMessage(result)
+                                    .setPositiveButton(Constants.OK) { _, _ -> }
+                                    .show()
+                            }
                         }
                     }
                 }
@@ -72,9 +79,18 @@ class AddedProductsRecyclerViewAdapter(private val activity: FragmentActivity, p
 
             ibEdit.setOnClickListener {
                 val singleProduct = list[position]
-                val action =
-                    AddedProductsFragmentDirections.actionUserAddedProductsFragmentToEditProductFragment(singleProduct)
-                itemView.findNavController().navigate(action)
+                if (singleProduct.purchased) {
+                    AlertDialog.Builder(activity)
+                        .setMessage(Constants.EDIT_DENIED)
+                        .setPositiveButton(Constants.OK) { _, _ -> }
+                        .show()
+                } else {
+                    val action =
+                        AddedProductsFragmentDirections.actionUserAddedProductsFragmentToEditProductFragment(
+                            singleProduct
+                        )
+                    itemView.findNavController().navigate(action)
+                }
             }
         }
     }

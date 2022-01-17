@@ -8,25 +8,25 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentProfileBinding
+import com.alperen.openmarket.model.User
+import com.alperen.openmarket.model.UserSnapshot
 import com.alperen.openmarket.ui.login.LoginActivity
-import com.alperen.openmarket.utils.Constants
-import com.alperen.openmarket.utils.FirebaseInstance
-import com.alperen.openmarket.utils.GlideApp
-import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.utils.BaseViewModel
+import com.alperen.openmarket.utils.*
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
 const val GALLERY_PICK = 0
@@ -50,19 +50,23 @@ class ProfileFragment : Fragment() {
             rootLayout.visibility = View.INVISIBLE
 
             viewModel.getUserProfile(viewLifecycleOwner).observe(viewLifecycleOwner) {
-                when (it) {
-                    Constants.SUCCESS -> {
-                        loading.dismissAllowingStateLoss()
-                        rootLayout.visibility = View.VISIBLE
-                        fillUserFields()
-                    }
-                    else -> {
-                        AlertDialog.Builder(context)
-                            .setMessage(it)
-                            .setPositiveButton(Constants.OK) { _, _ -> }
-                            .show()
-                    }
-                }
+                loading.dismissAllowingStateLoss()
+                rootLayout.visibility = View.VISIBLE
+                fillUserFields(it)
+
+//                when (it) {
+//                    Constants.SUCCESS -> {
+//                        loading.dismissAllowingStateLoss()
+//                        rootLayout.visibility = View.VISIBLE
+//                        fillUserFields()
+//                    }
+//                    else -> {
+//                        AlertDialog.Builder(context)
+//                            .setMessage(it)
+//                            .setPositiveButton(Constants.OK) { _, _ -> }
+//                            .show()
+//                    }
+//                }
             }
 
             ivProfile.setOnClickListener {
@@ -89,6 +93,10 @@ class ProfileFragment : Fragment() {
                 navController.navigate(R.id.action_profileFragment_to_favoritesFragment)
             }
 
+            cardPurchasedProducts.setOnClickListener {
+                navController.navigate(R.id.action_profileFragment_to_purchasedProductsFragment)
+            }
+
             btnLogout.setOnClickListener {
                 val sharedPref =
                     activity?.getSharedPreferences(Constants.APP_INIT, Context.MODE_PRIVATE)
@@ -103,20 +111,20 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun fillUserFields() {
+    private fun fillUserFields(user: UserSnapshot) {
         with(binding) {
-            val profile = FirebaseInstance.profile
-            val photoUri = FirebaseInstance.auth.currentUser?.photoUrl
-            if (photoUri == null) {
-                GlideApp.with(requireContext()).load(R.drawable.ic_person).into(ivProfile)
+            if (user.profile_image == null) {
+                ivProfile.setImageResource(R.drawable.ic_person)
+                // Glide.with(requireContext()).load(R.drawable.ic_person).into(ivProfile)
             } else {
-                GlideApp.with(requireContext()).load(photoUri).into(ivProfile)
+                val storageRef = FirebaseStorage.getInstance().reference.child(user.profile_image!!)
+                GlideApp.with(requireContext()).load(storageRef).into(ivProfile)
             }
-            tvUsername.text = profile.value?.username
-            tvNameSurname.text = "${profile.value?.name} ${profile.value?.surname}"
-            tvAddedProduct.text = profile.value?.added_product_count.toString()
-            tvCommentCount.text = profile.value?.comment_count.toString()
-            tvPurchasedProduct.text = profile.value?.purchased_product.toString()
+            tvUsername.text = user.username
+            tvNameSurname.text = "${user.name} ${user.surname}"
+            tvAddedProduct.text = user.added_product_count.toString()
+            tvCommentCount.text = user.comment_count.toString()
+            tvPurchasedProduct.text = user.purchased_product.toString()
         }
     }
 
@@ -152,7 +160,10 @@ class ProfileFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     val image = data.data!!
                     binding.ivProfile.setImageURI(image)
-                    viewModel.setProfilePicture(image, viewLifecycleOwner).observe(viewLifecycleOwner) {
+
+                    val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, image)
+
+                    viewModel.setProfilePicture(bitmap, viewLifecycleOwner).observe(viewLifecycleOwner) {
                         when (it) {
                             Constants.SUCCESS -> {
                                 loading.dismissAllowingStateLoss()
@@ -170,16 +181,18 @@ class ProfileFragment : Fragment() {
                             }
                         }
                     }
-
                 }
             }
             CAMERA_PICK -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     val selectedImage = data.extras?.get("data") as Bitmap
 
-                    val imageUri = parseAndGetImageUri(selectedImage)
-                    binding.ivProfile.setImageURI(imageUri)
-                    viewModel.setProfilePicture(imageUri, viewLifecycleOwner).observe(viewLifecycleOwner) {
+                    val image = parseAndGetImageUri(selectedImage)
+                    binding.ivProfile.setImageURI(image)
+
+                    val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, image)
+
+                    viewModel.setProfilePicture(bitmap, viewLifecycleOwner).observe(viewLifecycleOwner) {
                         when (it) {
                             Constants.SUCCESS -> {
                                 loading.dismissAllowingStateLoss()

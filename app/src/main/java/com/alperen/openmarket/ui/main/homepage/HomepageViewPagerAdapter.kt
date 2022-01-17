@@ -36,7 +36,7 @@ class HomepageViewPagerAdapter(private val list: ArrayList<Product>): RecyclerVi
                 .child(FirebaseInstance.auth.currentUser?.uid!!)
                 .child("user_recently_shown")
                 .child(list[position].id)
-                .setValue(list[position])
+                .setValue(list[position].id)
 
             val singleProduct = list[position]
             val action = HomepageFragmentDirections.actionHomepageFragmentToProductDetailFragment(singleProduct)
@@ -45,6 +45,6 @@ class HomepageViewPagerAdapter(private val list: ArrayList<Product>): RecyclerVi
     }
 
     override fun getItemCount(): Int {
-        return 3
+        return list.size
     }
 }

@@ -5,6 +5,8 @@ import android.net.Uri
 import androidx.lifecycle.*
 import com.alperen.openmarket.model.CreditCard
 import com.alperen.openmarket.model.Product
+import com.alperen.openmarket.model.User
+import com.alperen.openmarket.model.UserSnapshot
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.FirebaseInstance
 import kotlin.random.Random
@@ -59,8 +61,8 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         FirebaseInstance.logout()
     }
 
-    fun getUserProfile(viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
-        val result = MutableLiveData<String>()
+    fun getUserProfile(viewLifecycleOwner: LifecycleOwner): MutableLiveData<UserSnapshot> {
+        val result = MutableLiveData<UserSnapshot>()
         FirebaseInstance.getUserProfile().observe(viewLifecycleOwner) {
             result.value = it
         }
@@ -75,8 +77,8 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         return result
     }
 
-    fun getHomePage(viewLifecycleOwner: LifecycleOwner): MutableLiveData<MutableMap<String, ArrayList<Product>>> {
-        val result = MutableLiveData<MutableMap<String, ArrayList<Product>>>()
+    fun getHomePage(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
         FirebaseInstance.getHomePage().observe(viewLifecycleOwner) {
             result.value = it
         }
@@ -111,9 +113,9 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         return result
     }
 
-    fun setProfilePicture(imageUri: Uri, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
+    fun setProfilePicture(bitmap: Bitmap, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
         val result = MutableLiveData<String>()
-        FirebaseInstance.setProfilePicture(imageUri).observe(viewLifecycleOwner) {
+        FirebaseInstance.setProfilePicture(bitmap).observe(viewLifecycleOwner) {
             result.value = it
         }
         return result
@@ -186,6 +188,22 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
     fun getUserRecentlyShown(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<Product>> {
         val result = MutableLiveData<ArrayList<Product>>()
         FirebaseInstance.getUserRecentlyShown().observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun purchaseProduct(product: Product, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+        FirebaseInstance.purchaseProduct(product).observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun getUserPurchasedProducts(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
+        FirebaseInstance.getUserPurchasedProducts().observe(viewLifecycleOwner) {
             result.value = it
         }
         return result

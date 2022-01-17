@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:nestedScrollingEnabled="true"
-        tools:context=".ui.main.profile.useraddedproducts.editproduct.EditProductFragment">
+        tools:context=".ui.main.profile.addedproducts.editproduct.EditProductFragment">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -16,10 +16,9 @@ import androidx.navigation.fragment.NavHostFragment
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentAccountSettingsBinding
 import com.alperen.openmarket.ui.login.LoginActivity
-import com.alperen.openmarket.utils.Constants
-import com.alperen.openmarket.utils.FirebaseInstance
-import com.alperen.openmarket.utils.LoadingFragment
 import com.alperen.openmarket.utils.BaseViewModel
+import com.alperen.openmarket.utils.Constants
+import com.alperen.openmarket.utils.LoadingFragment
 
 class AccountSettingsFragment : Fragment() {
     private lateinit var binding: FragmentAccountSettingsBinding
@@ -27,7 +26,6 @@ class AccountSettingsFragment : Fragment() {
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
     private val loading by lazy { LoadingFragment() }
-    private var user = FirebaseInstance.profile.value!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,12 +34,20 @@ class AccountSettingsFragment : Fragment() {
         initLateinitVariables(inflater)
 
         with(binding) {
-            etUsernameUpdate.setText(user.username)
-            etNameUpdate.setText(user.name)
-            etSurnameUpdate.setText(user.surname)
-            etEmailUpdate.setText(user.email)
+            fillFields()
 
             return root
+        }
+    }
+
+    private fun fillFields() {
+        viewModel.getUserProfile(viewLifecycleOwner).observe(viewLifecycleOwner) { user ->
+            with(binding) {
+                etUsernameUpdate.setText(user.username)
+                etNameUpdate.setText(user.name)
+                etSurnameUpdate.setText(user.surname)
+                etEmailUpdate.setText(user.email)
+            }
         }
     }
 
@@ -53,80 +59,129 @@ class AccountSettingsFragment : Fragment() {
         with(binding) {
             btnSaveUserChanges.setOnClickListener {
                 val update = mutableMapOf<String, String>()
-                viewModel.getUserProfile(viewLifecycleOwner).observe(viewLifecycleOwner) {
-                    when (it) {
-                        Constants.SUCCESS -> {
-                            user = FirebaseInstance.profile.value!!
-                            val username = etUsernameUpdate.text
-                            val name = etNameUpdate.text
-                            val surname = etSurnameUpdate.text
+                viewModel.getUserProfile(viewLifecycleOwner).observe(viewLifecycleOwner) { user ->
 
-                            if (checkFieldIsEmpty(username, name, surname)) {
-                                // If any field has changed
-                                if (user.username != username.toString() ||
-                                    user.name != name.toString() ||
-                                    user.surname != surname.toString()
-                                ) {
-                                    update["username"] = username.toString()
-                                    update["name"] = name.toString()
-                                    update["surname"] = surname.toString()
-                                    updateUser(update)
-                                }
-                                // Nothing changed
-                                else {
-                                    AlertDialog.Builder(context)
-                                        .setMessage(Constants.NOTHING_CHANGED)
-                                        .setPositiveButton(Constants.OK) { _, _ -> }
-                                        .show()
-                                }
-                            }
+                    val username = etUsernameUpdate.text
+                    val name = etNameUpdate.text
+                    val surname = etSurnameUpdate.text
+
+                    if (checkFieldIsEmpty(username, name, surname)) {
+                        // If any field has changed
+                        if (user.username != username.toString() ||
+                            user.name != name.toString() ||
+                            user.surname != surname.toString()
+                        ) {
+                            update["username"] = username.toString()
+                            update["name"] = name.toString()
+                            update["surname"] = surname.toString()
+                            updateUser(update)
                         }
-                        else -> {
+                        // Nothing changed
+                        else {
                             AlertDialog.Builder(context)
-                                .setMessage(it)
+                                .setMessage(Constants.NOTHING_CHANGED)
                                 .setPositiveButton(Constants.OK) { _, _ -> }
                                 .show()
                         }
                     }
+
+//                    when (it) {
+//                        Constants.SUCCESS -> {
+//                            user = FirebaseInstance.profile.value!!
+//                            val username = etUsernameUpdate.text
+//                            val name = etNameUpdate.text
+//                            val surname = etSurnameUpdate.text
+//
+//                            if (checkFieldIsEmpty(username, name, surname)) {
+//                                // If any field has changed
+//                                if (user.username != username.toString() ||
+//                                    user.name != name.toString() ||
+//                                    user.surname != surname.toString()
+//                                ) {
+//                                    update["username"] = username.toString()
+//                                    update["name"] = name.toString()
+//                                    update["surname"] = surname.toString()
+//                                    updateUser(update)
+//                                }
+//                                // Nothing changed
+//                                else {
+//                                    AlertDialog.Builder(context)
+//                                        .setMessage(Constants.NOTHING_CHANGED)
+//                                        .setPositiveButton(Constants.OK) { _, _ -> }
+//                                        .show()
+//                                }
+//                            }
+//                        }
+//                        else -> {
+//                            AlertDialog.Builder(context)
+//                                .setMessage(it)
+//                                .setPositiveButton(Constants.OK) { _, _ -> }
+//                                .show()
+//                        }
+//                    }
                 }
             }
 
             btnSaveAccountChanges.setOnClickListener {
                 val update = mutableMapOf<String, String>()
-                viewModel.getUserProfile(viewLifecycleOwner).observe(viewLifecycleOwner) {
-                    when (it) {
-                        Constants.SUCCESS -> {
-                            user = FirebaseInstance.profile.value!!
-                            val email = etEmailUpdate.text
-                            val oldPassword = etPasswordUpdate.text
-                            val newPassword = etNewPasswordUpdate.text
+                viewModel.getUserProfile(viewLifecycleOwner).observe(viewLifecycleOwner) { user ->
 
-                            if (checkFieldIsEmpty(email, oldPassword)) {
-                                // Password change
-                                if (!newPassword.isNullOrEmpty())
-                                    update["newPassword"] = newPassword.toString()
+                    val email = etEmailUpdate.text
+                    val oldPassword = etPasswordUpdate.text
+                    val newPassword = etNewPasswordUpdate.text
 
-                                if (user.email != email.toString())
-                                    update["newEmail"] = email.toString()
+                    if (checkFieldIsEmpty(email, oldPassword)) {
+                        // Password change
+                        if (!newPassword.isNullOrEmpty())
+                            update["newPassword"] = newPassword.toString()
 
-                                update["oldEmail"] = user.email
-                                update["oldPassword"] = oldPassword.toString()
+                        if (user.email != email.toString())
+                            update["newEmail"] = email.toString()
 
-                                updateAccount(update)
-                            } else {
-                                passwordUpdateLayout.apply {
-                                    isErrorEnabled = true
-                                    error = Constants.PASSWORD_REQUIRED
-                                }
-                            }
-                        }
-                        else -> {
-                            AlertDialog.Builder(context)
-                                .setMessage(it)
-                                .setPositiveButton(Constants.OK) { _, _ -> }
-                                .show()
+                        update["oldEmail"] = user.email
+                        update["oldPassword"] = oldPassword.toString()
+
+                        updateAccount(update)
+                    } else {
+                        passwordUpdateLayout.apply {
+                            isErrorEnabled = true
+                            error = Constants.PASSWORD_REQUIRED
                         }
                     }
+
+//                    when (it) {
+//                        Constants.SUCCESS -> {
+//                            user = FirebaseInstance.profile.value!!
+//                            val email = etEmailUpdate.text
+//                            val oldPassword = etPasswordUpdate.text
+//                            val newPassword = etNewPasswordUpdate.text
+//
+//                            if (checkFieldIsEmpty(email, oldPassword)) {
+//                                // Password change
+//                                if (!newPassword.isNullOrEmpty())
+//                                    update["newPassword"] = newPassword.toString()
+//
+//                                if (user.email != email.toString())
+//                                    update["newEmail"] = email.toString()
+//
+//                                update["oldEmail"] = user.email
+//                                update["oldPassword"] = oldPassword.toString()
+//
+//                                updateAccount(update)
+//                            } else {
+//                                passwordUpdateLayout.apply {
+//                                    isErrorEnabled = true
+//                                    error = Constants.PASSWORD_REQUIRED
+//                                }
+//                            }
+//                        }
+//                        else -> {
+//                            AlertDialog.Builder(context)
+//                                .setMessage(it)
+//                                .setPositiveButton(Constants.OK) { _, _ -> }
+//                                .show()
+//                        }
+//                    }
                 }
             }
 

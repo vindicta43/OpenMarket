@@ -17,7 +17,7 @@ data class UserSnapshot(
     val added_product_count: Int = 0,
     val comment_count: Int = 0,
     val purchased_product: Int = 0,
-    var profile_image: Uri? = null
+    var profile_image: String? = null
 ) : Parcelable {
     constructor() : this("", "", "", "", "", 0, 0, 0, null)
 }

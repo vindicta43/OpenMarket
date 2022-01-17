@@ -13,6 +13,7 @@ import com.alperen.openmarket.R
 import com.alperen.openmarket.model.Product
 import com.alperen.openmarket.ui.main.homepage.HomepageFragmentDirections
 import com.alperen.openmarket.ui.main.profile.favorites.FavoritesFragmentDirections
+import com.alperen.openmarket.ui.main.profile.purchasedproducts.PurchasedProductsFragmentDirections
 import com.alperen.openmarket.ui.main.profile.recentlyshown.RecentlyShownFragmentDirections
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -42,8 +43,10 @@ class ProductRecyclerViewAdapter(private val list: ArrayList<Product>, private v
             tvProductName.text = list[position].name
             tvProductPrice.text = list[position].price.toString()
 
+            // TODO: halledildi ama tekrardan düzenle
             checkFavoriteButton(list[position], btnFavorite)
 
+            // TODO: halledildi ama tekrardan düzenle
             btnFavorite.setOnClickListener {
                 FirebaseInstance.getUserFavorites().observeForever { favoriteList ->
                     if (favoriteList?.contains(list[position]) == false) {
@@ -52,7 +55,7 @@ class ProductRecyclerViewAdapter(private val list: ArrayList<Product>, private v
                             .child(FirebaseInstance.auth.currentUser?.uid!!)
                             .child("user_favorites")
                             .child(list[position].id)
-                            .setValue(list[position])
+                            .setValue(list[position].id)
 
                         btnFavorite.setImageResource(R.drawable.ic_favorite)
                     } else {
@@ -76,7 +79,7 @@ class ProductRecyclerViewAdapter(private val list: ArrayList<Product>, private v
                     .child(FirebaseInstance.auth.currentUser?.uid!!)
                     .child("user_recently_shown")
                     .child(list[position].id)
-                    .setValue(list[position])
+                    .setValue(list[position].id)
 
                 when (className) {
                     "FavoritesFragment" -> {
@@ -94,11 +97,17 @@ class ProductRecyclerViewAdapter(private val list: ArrayList<Product>, private v
                         val action = HomepageFragmentDirections.actionHomepageFragmentToProductDetailFragment(singleProduct)
                         itemView.findNavController().navigate(action)
                     }
+                    "PurchasedProductsFragment" -> {
+                        val singleProduct = list[position]
+                        val action = PurchasedProductsFragmentDirections.actionPurchasedProductsFragmentToProductDetailFragment(singleProduct)
+                        itemView.findNavController().navigate(action)
+                    }
                 }
             }
         }
     }
 
+    // TODO: halledildi ama tekrardan düzenle
     private fun checkFavoriteButton(product: Product, btnFavorite: ImageButton) {
         FirebaseInstance.getUserFavorites().observeForever { favoriteList ->
             if (favoriteList?.contains(product) == true) {

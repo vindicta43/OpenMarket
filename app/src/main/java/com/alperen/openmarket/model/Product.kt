@@ -9,6 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Product(
     val id: String,
+    val seller_id: String,
     val name: String,
     val price: Int,
     val description: String,
@@ -16,7 +17,10 @@ data class Product(
     val size: String,
     val condition: String,
     val gender: String,
+    var purchased: Boolean,
+    val list_date: String,
+    var purchase_date: String,
     val image: List<String>,
 ) : Parcelable {
-    constructor() : this("", "", 0, "", "", "", "", "", listOf())
+    constructor() : this("", "", "", 0, "", "", "", "", "", false, "", "", listOf())
 }

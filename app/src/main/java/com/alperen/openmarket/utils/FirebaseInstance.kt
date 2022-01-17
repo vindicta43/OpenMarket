@@ -2,6 +2,7 @@ package com.alperen.openmarket.utils
 
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.alperen.openmarket.model.CreditCard
 import com.alperen.openmarket.model.Product
@@ -20,11 +21,11 @@ import kotlin.collections.ArrayList
  * Created by Alperen on 6.11.2021.
  */
 object FirebaseInstance {
-    val profile = MutableLiveData<UserSnapshot>()
     val auth = FirebaseAuth.getInstance()
     private val dbRef = FirebaseDatabase.getInstance()
     private val storageRef = FirebaseStorage.getInstance()
 
+    // Completed
     fun login(email: String, password: String): MutableLiveData<String> {
         val result = MutableLiveData<String>()
         auth.signInWithEmailAndPassword(email, password)
@@ -47,6 +48,7 @@ object FirebaseInstance {
         return result
     }
 
+    // Completed
     fun sendResetEmail(email: String): MutableLiveData<String> {
         val result = MutableLiveData<String>()
         auth.sendPasswordResetEmail(email)
@@ -59,6 +61,7 @@ object FirebaseInstance {
         return result
     }
 
+    // Completed
     fun register(
         username: String,
         email: String,
@@ -103,87 +106,136 @@ object FirebaseInstance {
         return result
     }
 
+    // Completed
     fun logout() {
         auth.signOut()
     }
 
-    fun getUserProfile(): MutableLiveData<String> {
-        val result = MutableLiveData<String>()
-        val id = auth.currentUser?.uid
+    // Completed
+    fun getUserProfile(): MutableLiveData<UserSnapshot> {
+        val result = MutableLiveData<UserSnapshot>()
+
         dbRef.reference
             .child("users")
-            .child(id!!)
+            .child(auth.currentUser?.uid!!)
             .get()
             .addOnSuccessListener {
-                profile.value = it.getValue(UserSnapshot::class.java)
-                result.value = Constants.SUCCESS
-            }
-            .addOnFailureListener {
-                result.value = it.localizedMessage
+                val user = it.getValue(UserSnapshot::class.java)
+                result.value = user
             }
 
         return result
     }
 
+
+    private fun productQuery(refList: ArrayList<String>): MutableLiveData<ArrayList<Product>> {
+//        val result = MutableLiveData<ArrayList<Product>>()
+//        dbRef.reference
+//            .child("products")
+//            .get()
+//            .addOnSuccessListener {
+//                it.children.forEach { singleProduct ->
+//                val mSingleProduct = singleProduct.getValue(Product::class.java)
+//                    if (refList.contains(mSingleProduct?.id))
+//                        result.value?.add(mSingleProduct!!)
+//                }
+//            }
+//        return result
+
+        val result = MutableLiveData<ArrayList<Product>>()
+        dbRef.reference
+            .child("products")
+            .get()
+            .addOnSuccessListener { productSnapshot ->
+                val productList = arrayListOf<Product>()
+                productSnapshot.children.forEach { singleProduct ->
+                    val mSingleProduct = singleProduct.getValue(Product::class.java)
+                    if (refList.contains(mSingleProduct?.id))
+                        productList.add(mSingleProduct!!)
+                }
+                result.value = productList
+            }
+
+        return result
+    }
+
+
+
+
     fun getUserProducts(): MutableLiveData<ArrayList<Product>> {
         val result = MutableLiveData<ArrayList<Product>>()
-        val itemList = arrayListOf<Product>()
+        val refList = arrayListOf<String>()
         dbRef.reference
             .child("users")
             .child(auth.currentUser?.uid!!)
             .child("added_products")
             .get()
             .addOnSuccessListener {
-                it.children.forEach { items ->
-                    itemList.add(items.getValue(Product::class.java)!!)
+                it.children.forEach { refSnapshot ->
+                    refList.add(refSnapshot.getValue(String::class.java)!!)
                 }
-                result.value = itemList
-            }
-            .addOnFailureListener {
+
+                productQuery(refList).observeForever { productQuery ->
+                    result.value = productQuery
+                }
 
             }
 
         return result
     }
 
-    fun getHomePage(): MutableLiveData<MutableMap<String, ArrayList<Product>>> {
-        val result = MutableLiveData<MutableMap<String, ArrayList<Product>>>()
-        // val itemList = arrayListOf<Product>()
-        val dataList = mutableMapOf<String, ArrayList<Product>>()
+    fun getUserPurchasedProducts(): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
+        val refList = arrayListOf<String>()
+
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("user_purchased_products")
+            .get()
+            .addOnSuccessListener {
+                it.children.forEach { items ->
+                    refList.add(items.getValue(String::class.java)!!)
+                }
+                productQuery(refList).observeForever { productQuery ->
+                    productQuery.sortWith(Comparator.comparing(Product::list_date))
+                    result.value = productQuery
+                }
+            }
+        return result
+    }
+
+    fun getHomePage(): MutableLiveData<ArrayList<Product>> {
+        val result = MutableLiveData<ArrayList<Product>>()
+
         dbRef.reference
             .child("products")
             .get()
             .addOnSuccessListener { products ->
-//                it.children.forEach { items ->
-//                    itemList.add(items.getValue(Product::class.java)!!)
-//                }
-//                result.value = itemList
+                // Get all products
+                val productList = arrayListOf<Product>()
+                products.children.forEach { items ->
+                    productList.add(items.getValue(Product::class.java)!!)
+                }
+                productList.sortWith(Comparator.comparing(Product::list_date).reversed())
+                result.value = productList
 
-
-                    // Get all products
-                    val productList = arrayListOf<Product>()
-                    products.children.forEach { items ->
-                        productList.add(items.getValue(Product::class.java)!!)
-                    }
-                    dataList["products"] = productList
-
-
-                dbRef.reference
-                    .child("users")
-                    .child(auth.currentUser?.uid!!)
-                    .child("user_recently_shown")
-                    .get()
-                    .addOnSuccessListener { recentlyShown ->
-
-                            val recentlyShownList = arrayListOf<Product>()
-                            recentlyShown.children.forEach { items ->
-                                recentlyShownList.add(items.getValue(Product::class.java)!!)
-                            }
-                            dataList["recently"] = recentlyShownList
-                            result.value = dataList
-
-                    }
-                    .addOnFailureListener { }
+//                dbRef.reference
+//                    .child("users")
+//                    .child(auth.currentUser?.uid!!)
+//                    .child("user_recently_shown")
+//                    .get()
+//                    .addOnSuccessListener { recentlyShown ->
+//
+//                        val recentlyShownList = arrayListOf<Product>()
+//                        recentlyShown.children.forEach { items ->
+//                            recentlyShownList.add(items.getValue(Product::class.java)!!)
+//                        }
+//                        dataList["recently"] = recentlyShownList
+//                        result.value = dataList
+//
+//                    }
+//                    .addOnFailureListener { }
             }
             .addOnFailureListener { }
         return result
@@ -211,6 +263,7 @@ object FirebaseInstance {
         val newProduct =
             Product(
                 randomProductID,
+                auth.currentUser?.uid!!,
                 productName,
                 productPrice.toInt(),
                 productDescription,
@@ -218,6 +271,9 @@ object FirebaseInstance {
                 productSize,
                 productCondition,
                 productGender,
+                false,
+                System.currentTimeMillis().toString(),
+                System.currentTimeMillis().toString(),
                 imagePathList
             )
 
@@ -298,7 +354,7 @@ object FirebaseInstance {
             .child(id)
             .child("added_products")
             .child(newProduct.id)
-            .setValue(newProduct)
+            .setValue(newProduct.id)
 
             // Add same product into all products list
             .addOnSuccessListener {
@@ -347,19 +403,44 @@ object FirebaseInstance {
         return result
     }
 
-    fun setProfilePicture(imageUri: Uri): MutableLiveData<String> {
+    fun setProfilePicture(bitmap: Bitmap): MutableLiveData<String> {
         val result = MutableLiveData<String>()
 
-        val update = UserProfileChangeRequest.Builder().setPhotoUri(imageUri).build()
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 75, stream)
+        val byteArray = stream.toByteArray()
 
-        auth.currentUser?.updateProfile(update)
-            ?.addOnSuccessListener {
-                profile.value?.profile_image = update.photoUri
-                result.value = Constants.SUCCESS
+        // Random id for image
+        val randomImageID = UUID.randomUUID().toString()
+
+        // Image database reference
+        val uploadRef = storageRef.reference
+            .child("profile_image")
+            .child(auth.currentUser?.uid!!)
+            .child(randomImageID)
+
+        uploadRef.putBytes(byteArray)
+            .addOnSuccessListener {
+                dbRef.reference
+                    .child("users")
+                    .child(auth.currentUser?.uid!!)
+                    .child("profile_image")
+                    .setValue(uploadRef.path)
+                    .addOnSuccessListener { result.value = Constants.PROFILE_PHOTO_CHANGE }
+                    .addOnFailureListener { result.value = it.localizedMessage }
             }
-            ?.addOnFailureListener {
-                result.value = it.localizedMessage
-            }
+            .addOnFailureListener { result.value = it.localizedMessage }
+
+//        val update = UserProfileChangeRequest.Builder().setPhotoUri(imageUri).build()
+//
+//        auth.currentUser?.updateProfile(update)
+//            ?.addOnSuccessListener {
+//                profile.value?.profile_image = update.photoUri
+//                result.value = Constants.SUCCESS
+//            }
+//            ?.addOnFailureListener {
+//                result.value = it.localizedMessage
+//            }
         return result
     }
 
@@ -506,7 +587,7 @@ object FirebaseInstance {
         return result
     }
 
-    fun updateProduct(update: MutableMap<String, Any>): MutableLiveData<String> = runBlocking {
+    fun updateProduct(update: MutableMap<String, Any>): MutableLiveData<String> {
         val result = MutableLiveData<String>()
 
         if (update.containsKey("image")) {
@@ -518,49 +599,57 @@ object FirebaseInstance {
             val imagePathList = uploadImages(streamList)
             update["image"] = imagePathList
 
-            // Update product of user
+            // TODO: içinden alındı
             dbRef.reference
-                .child("users")
-                .child(auth.currentUser?.uid!!)
-                .child("added_products")
+                .child("products")
                 .child(update["id"] as String)
                 .updateChildren(update)
-                .addOnSuccessListener {
-                    // Update from all products
-                    dbRef.reference
-                        .child("products")
-                        .child(update["id"] as String)
-                        .updateChildren(update)
-                        .addOnSuccessListener { result.value = Constants.PRODUCT_UPDATED }
-                        .addOnFailureListener { result.value = it.localizedMessage }
-                }
+                .addOnSuccessListener { result.value = Constants.PRODUCT_UPDATED }
                 .addOnFailureListener { result.value = it.localizedMessage }
+
+            // Update product of user
+//            dbRef.reference
+//                .child("users")
+//                .child(auth.currentUser?.uid!!)
+//                .child("added_products")
+//                .child(update["id"] as String)
+//                .updateChildren(update)
+//                .addOnSuccessListener {
+//                    // Update from all products
+//                    // TODO: içinden aldım
+//                }
+//                .addOnFailureListener { result.value = it.localizedMessage }
         } else {
-            // Update product of user
+
+            // TODO: içinden alındı
             dbRef.reference
-                .child("users")
-                .child(auth.currentUser?.uid!!)
-                .child("added_products")
+                .child("products")
                 .child(update["id"] as String)
                 .updateChildren(update)
-                .addOnSuccessListener {
-                    // Update from all products
-                    dbRef.reference
-                        .child("products")
-                        .child(update["id"] as String)
-                        .updateChildren(update)
-                        .addOnSuccessListener { result.value = Constants.PRODUCT_UPDATED }
-                        .addOnFailureListener { result.value = it.localizedMessage }
-                }
+                .addOnSuccessListener { result.value = Constants.PRODUCT_UPDATED }
                 .addOnFailureListener { result.value = it.localizedMessage }
+
+
+            // Update product of user
+//            dbRef.reference
+//                .child("users")
+//                .child(auth.currentUser?.uid!!)
+//                .child("added_products")
+//                .child(update["id"] as String)
+//                .updateChildren(update)
+//                .addOnSuccessListener {
+//                    // Update from all products
+//                    // TODO: içinden aldım
+//                }
+//                .addOnFailureListener { result.value = it.localizedMessage }
         }
 
-        return@runBlocking result
+        return result
     }
 
     fun getUserFavorites(): MutableLiveData<ArrayList<Product>> {
         val result = MutableLiveData<ArrayList<Product>>()
-        val itemList = arrayListOf<Product>()
+        val refList = arrayListOf<String>()
 
         dbRef.reference
             .child("users")
@@ -569,16 +658,18 @@ object FirebaseInstance {
             .get()
             .addOnSuccessListener {
                 it.children.forEach { items ->
-                    itemList.add(items.getValue(Product::class.java)!!)
+                    refList.add(items.getValue(String::class.java)!!)
                 }
-                result.value = itemList
+                productQuery(refList).observeForever { productQuery ->
+                    result.value = productQuery
+                }
             }
         return result
     }
 
     fun getUserRecentlyShown(): MutableLiveData<ArrayList<Product>> {
         val result = MutableLiveData<ArrayList<Product>>()
-        val itemList = arrayListOf<Product>()
+        val refList = arrayListOf<String>()
 
         dbRef.reference
             .child("users")
@@ -587,10 +678,56 @@ object FirebaseInstance {
             .get()
             .addOnSuccessListener {
                 it.children.forEach { items ->
-                    itemList.add(items.getValue(Product::class.java)!!)
+                    refList.add(items.getValue(String()::class.java)!!)
                 }
-                result.value = itemList
+                productQuery(refList).observeForever { productQuery ->
+                    result.value = productQuery
+                }
             }
+        return result
+    }
+
+    fun purchaseProduct(product: Product): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        product.purchased = true
+        product.purchase_date = System.currentTimeMillis().toString()
+
+        // Add product into users purchased products
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("user_purchased_products")
+            .child(product.id)
+            .setValue(product.id)
+            .addOnSuccessListener {
+                // Get user details
+                dbRef.reference
+                    .child("users")
+                    .child(auth.currentUser?.uid!!)
+                    .child("purchased_product")
+                    .get()
+                    .addOnSuccessListener { snapshot ->
+                        val currentUser = snapshot.getValue(Int::class.java)!!
+                        // TODO: açıklama satırları düzenle
+                        dbRef.reference
+                            .child("users")
+                            .child(auth.currentUser?.uid!!)
+                            .updateChildren(mapOf("purchased_product" to currentUser + 1))
+                            .addOnSuccessListener {
+                                dbRef.reference
+                                    .child("products")
+                                    .child(product.id)
+                                    .setValue(product)
+                                    .addOnSuccessListener { result.value = Constants.PRODUCT_PURCHASED }
+                                    .addOnFailureListener { result.value = it.localizedMessage }
+                            }
+                            .addOnFailureListener { result.value = it.localizedMessage }
+                    }
+                    .addOnFailureListener { result.value = it.localizedMessage }
+            }
+            .addOnFailureListener { result.value = it.localizedMessage }
+
         return result
     }
 }
