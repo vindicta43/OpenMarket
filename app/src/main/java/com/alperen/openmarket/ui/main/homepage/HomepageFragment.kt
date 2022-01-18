@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentHomepageBinding
+import com.alperen.openmarket.model.Product
 import com.alperen.openmarket.utils.BaseViewModel
 import com.alperen.openmarket.utils.ProductRecyclerViewAdapter
 import java.util.*
@@ -94,7 +95,19 @@ class HomepageFragment : Fragment() {
                     layoutManager = GridLayoutManager(context, 2)
                 }
 
-                productSponsoredPager.adapter = HomepageViewPagerAdapter(it)
+                var sponsoredProducts = arrayListOf<Product>()
+                if (it.size >= 3) {
+                    sponsoredProducts.ensureCapacity(3)
+                    for (i in 0..3) {
+                        sponsoredProducts.add(it.random())
+                    }
+                } else {
+                    sponsoredProducts.ensureCapacity(it.size)
+                    for (i in 0..it.size) {
+                        sponsoredProducts.add(it.random())
+                    }
+                }
+                productSponsoredPager.adapter = HomepageViewPagerAdapter(sponsoredProducts)
 
 //                if (!it["recently"].isNullOrEmpty()) {
 //                    productSponsoredPager.apply {

@@ -26,6 +26,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/credit_cards_title"
+                app:layout_constraintBottom_toBottomOf="@id/btnBack"
+                app:layout_constraintStart_toEndOf="@id/btnBack"
+                app:layout_constraintTop_toTopOf="@id/btnBack" />
+
             <ImageButton
                 android:id="@+id/btnAddCreditCard"
                 android:layout_width="36dp"

@@ -29,15 +29,33 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/account_settings_title"
+                    app:layout_constraintBottom_toBottomOf="@id/btnBack"
+                    app:layout_constraintStart_toEndOf="@id/btnBack"
+                    app:layout_constraintTop_toTopOf="@id/btnBack" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:fontFamily="@font/roboto_medium"
-                android:text="@string/account_settings_page_user_details"
-                android:textSize="16sp" />
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/account_settings_user_details" />
+
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_margin="8dp"-->
+            <!--                android:fontFamily="@font/roboto_medium"-->
+            <!--                android:text="@string/account_settings_page_user_details"-->
+            <!--                android:textSize="16sp" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/usernameUpdateLayout"
@@ -50,7 +68,9 @@
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
                 app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
+                app:boxStrokeWidthFocused="0dp"
+                app:endIconDrawable="@drawable/ic_username"
+                app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etUsernameUpdate"
@@ -69,7 +89,9 @@
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
                 app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
+                app:boxStrokeWidthFocused="0dp"
+                app:endIconDrawable="@drawable/ic_person_outline"
+                app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNameUpdate"
@@ -88,7 +110,9 @@
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
                 app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
+                app:boxStrokeWidthFocused="0dp"
+                app:endIconDrawable="@drawable/ic_person"
+                app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etSurnameUpdate"
@@ -96,11 +120,13 @@
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSaveUserChanges"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:background="@drawable/drawable_green_button"
+                android:fontFamily="@font/roboto_bold"
                 android:text="@string/profile_page_save_changes"
                 android:textAllCaps="false" />
 
@@ -109,13 +135,20 @@
                 android:layout_height="4dp"
                 android:background="@android:color/darker_gray" />
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:fontFamily="@font/roboto_medium"
-                android:text="@string/account_settings_page_account_details"
-                android:textSize="16sp" />
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/account_settings_account_details" />
+
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_margin="8dp"-->
+            <!--                android:fontFamily="@font/roboto_medium"-->
+            <!--                android:text="@string/account_settings_page_account_details"-->
+            <!--                android:textSize="16sp" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailUpdateLayout"
@@ -128,7 +161,9 @@
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
                 app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
+                app:boxStrokeWidthFocused="0dp"
+                app:endIconDrawable="@drawable/ic_email"
+                app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmailUpdate"
@@ -178,11 +213,13 @@
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSaveAccountChanges"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:background="@drawable/drawable_green_button"
+                android:fontFamily="@font/roboto_bold"
                 android:text="@string/profile_page_save_changes"
                 android:textAllCaps="false" />
 

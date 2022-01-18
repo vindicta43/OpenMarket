@@ -18,7 +18,7 @@
     <string name="register_page_password">Parola</string>
     <string name="register_page_password_apply">Parolayı Onayla</string>
     <string name="register_page_new_password">Yeni Parola</string>
-    <string name="register_page_register_button">kayıt ol</string>
+    <string name="register_page_register_button">Kayıt Ol</string>
 
     <!-- Homepage -->
     <string name="homepage_clear"><u>Temizle</u></string>

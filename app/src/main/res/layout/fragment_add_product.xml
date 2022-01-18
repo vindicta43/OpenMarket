@@ -22,11 +22,13 @@
                 android:nestedScrollingEnabled="true"
                 android:orientation="horizontal" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnAddPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:background="@drawable/drawable_green_button"
+                android:fontFamily="@font/roboto_bold"
                 android:text="@string/add_product_add_photo"
                 android:textAllCaps="false" />
 
@@ -113,11 +115,13 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnAddProduct"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:background="@drawable/drawable_green_button"
+                android:fontFamily="@font/roboto_bold"
                 android:text="@string/add_button"
                 android:textAllCaps="false" />
         </LinearLayout>
