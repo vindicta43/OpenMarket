@@ -31,7 +31,7 @@
     <string name="edit_button">Düzenle</string>
     <string name="add_product_product_description">Ürün açıklaması</string>
     <string name="add_product_product_price">Ürün fiyatı</string>
-    <string name="add_product_add_photo">Fotoğraf Ekle</string>
+    <string name="add_photo">Fotoğraf Ekle</string>
 
     <!-- Profile Page -->
     <string name="profile_page_account_settings">Hesap Ayarları</string>

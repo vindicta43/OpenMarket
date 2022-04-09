@@ -21,15 +21,16 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentEditProductBinding
-import com.alperen.openmarket.ui.main.addproduct.AddProductViewPagerAdapter
-import com.alperen.openmarket.ui.main.addproduct.CAMERA_PICK
-import com.alperen.openmarket.ui.main.addproduct.GALLERY_PICK
+import com.alperen.openmarket.utils.ProductViewPagerAdapter
 import com.alperen.openmarket.ui.main.productdetail.ProductDetailViewPagerAdapter
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.LoadingFragment
 import com.alperen.openmarket.utils.BaseViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
+
+const val GALLERY_PICK = 0
+const val CAMERA_PICK = 1
 
 class EditProductFragment : Fragment() {
     private lateinit var binding: FragmentEditProductBinding
@@ -195,12 +196,12 @@ class EditProductFragment : Fragment() {
                             Log.e("OpenMarket", "${data.clipData!!.getItemAt(i).uri}")
                             imageList.add(data.clipData!!.getItemAt(i).uri)
                         }
-                        binding.sellPager.adapter = AddProductViewPagerAdapter(imageList)
+                        binding.sellPager.adapter = ProductViewPagerAdapter(imageList)
                         Log.e("OpenMarket", "${binding.sellPager.childCount}")
                     } else if (data.data != null) {
                         Log.e("OpenMarket", "single item ${data.data}")
                         imageList.add(data.data!!)
-                        binding.sellPager.adapter = AddProductViewPagerAdapter(imageList)
+                        binding.sellPager.adapter = ProductViewPagerAdapter(imageList)
                     }
                 }
             }
@@ -213,7 +214,7 @@ class EditProductFragment : Fragment() {
                     imageList.add(imageUri)
 
                     Log.e("OpenMarket", imageList.toString())
-                    binding.sellPager.adapter = AddProductViewPagerAdapter(imageList)
+                    binding.sellPager.adapter = ProductViewPagerAdapter(imageList)
                 }
             }
             else -> {

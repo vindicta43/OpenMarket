@@ -95,7 +95,7 @@ class HomepageFragment : Fragment() {
                     layoutManager = GridLayoutManager(context, 2)
                 }
 
-                var sponsoredProducts = arrayListOf<Product>()
+                val sponsoredProducts = arrayListOf<Product>()
                 if (it.size >= 3) {
                     sponsoredProducts.ensureCapacity(3)
                     for (i in 0..3) {

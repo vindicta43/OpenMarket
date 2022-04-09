@@ -6,7 +6,8 @@
     android:divider="@android:color/darker_gray"
     android:dividerPadding="4dp"
     android:orientation="vertical"
-    android:showDividers="middle">
+    android:showDividers="middle"
+    android:background="#cccccc">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

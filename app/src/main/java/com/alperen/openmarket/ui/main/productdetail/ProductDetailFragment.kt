@@ -13,8 +13,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentProductDetailBinding
-import com.alperen.openmarket.model.Product
-import com.alperen.openmarket.ui.main.addproduct.AddProductViewPagerAdapter
 import com.alperen.openmarket.utils.BaseViewModel
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.LoadingFragment

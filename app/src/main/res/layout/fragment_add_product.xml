@@ -1,129 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:nestedScrollingEnabled="true"
+        android:orientation="vertical"
         tools:context=".ui.main.addproduct.pages.AddProductFragment">
 
-        <LinearLayout
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:tabMode="fixed">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/sellPager"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="8dp"
-                android:nestedScrollingEnabled="true"
-                android:orientation="horizontal" />
+        </com.google.android.material.tabs.TabLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnAddPhoto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/drawable_green_button"
-                android:fontFamily="@font/roboto_bold"
-                android:text="@string/add_product_add_photo"
-                android:textAllCaps="false" />
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pagerAddProduct"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            >
 
-            <com.skydoves.expandablelayout.ExpandableLayout
-                android:id="@+id/expandable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:expandable_duration="300"
-                app:expandable_isExpanded="false"
-                app:expandable_parentLayout="@layout/layout_parent"
-                app:expandable_secondLayout="@layout/layout_second"
-                app:expandable_showSpinner="true"
-                app:expandable_spinner="@drawable/ic_arrow_down"
-                app:expandable_spinner_animate="true"
-                app:expandable_spinner_gravity="start"
-                app:expandable_spinner_margin="14dp"
-                app:expandable_spinner_size="32dp" />
+        </androidx.viewpager2.widget.ViewPager2>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutProductName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:hint="@string/add_product_product_name"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etProductName"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="text" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutProductDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etProductDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top|start"
-                    android:hint="@string/add_product_product_description"
-                    android:inputType="textMultiLine"
-                    android:maxLength="500"
-                    android:minLines="5" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutProductPrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etProductPrice"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="top|start"
-                    android:hint="@string/add_product_product_price"
-                    android:inputType="number" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnAddProduct"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/drawable_green_button"
-                android:fontFamily="@font/roboto_bold"
-                android:text="@string/add_button"
-                android:textAllCaps="false" />
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 </layout>

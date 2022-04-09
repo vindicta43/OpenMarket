@@ -1,4 +1,4 @@
-package com.alperen.openmarket.ui.main.addproduct
+package com.alperen.openmarket.utils
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.alperen.openmarket.R
-import com.alperen.openmarket.utils.GlideApp
 
 /**
  * Created by Alperen on 19.11.2021.
  */
-class AddProductViewPagerAdapter(private val list: ArrayList<Uri>): RecyclerView.Adapter<AddProductViewPagerAdapter.AddProductViewPagerViewHolder>() {
+class ProductViewPagerAdapter(private val list: ArrayList<Uri>): RecyclerView.Adapter<ProductViewPagerAdapter.AddProductViewPagerViewHolder>() {
     inner class AddProductViewPagerViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val viewPagerImage = itemView.findViewById<ImageView>(R.id.viewPagerImage)
     }
