@@ -1,14 +1,10 @@
 package com.alperen.openmarket.utils
 
 import android.graphics.Bitmap
-import android.net.Uri
 import androidx.lifecycle.*
 import com.alperen.openmarket.model.CreditCard
 import com.alperen.openmarket.model.Product
-import com.alperen.openmarket.model.User
 import com.alperen.openmarket.model.UserSnapshot
-import com.alperen.openmarket.utils.Constants
-import com.alperen.openmarket.utils.FirebaseInstance
 import kotlin.random.Random
 
 /**
@@ -85,7 +81,7 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         return result
     }
 
-    fun addProductToMarket(
+    fun addProductToMarketSell(
         productName: String,
         productPrice: String,
         productDescription: String,
@@ -97,7 +93,7 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         viewLifecycleOwner: LifecycleOwner
     ): MutableLiveData<String> {
         val result = MutableLiveData<String>()
-        FirebaseInstance.addProductToMarket(
+        FirebaseInstance.addProductToMarketSell(
             productName,
             productPrice,
             productDescription,
@@ -110,6 +106,39 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
             .observe(viewLifecycleOwner) {
                 result.value = it
             }
+        return result
+    }
+
+    fun addProductToMarketAuction(
+        productName: String,
+        productPrice: String,
+        productDescription: String,
+        productCategory: String,
+        productSize: String,
+        productCondition: String,
+        productGender: String,
+        imageList: ArrayList<Bitmap>,
+        expirationDate: String,
+        startingPrice: String,
+        increment: String,
+        viewLifecycleOwner: LifecycleOwner
+    ): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+        FirebaseInstance.addProductToMarketAuction(
+            productName,
+            productPrice,
+            productDescription,
+            productCategory,
+            productSize,
+            productCondition,
+            productGender,
+            imageList,
+            expirationDate,
+            startingPrice,
+            increment,
+        ).observe(viewLifecycleOwner) {
+            result.value = it
+        }
         return result
     }
 

@@ -104,7 +104,7 @@ class SellFragment : Fragment() {
                         val category = spnCategory.selectedItem.toString()
                         val condition = spnCondition.selectedItem.toString()
 
-                        viewModel.addProductToMarket(
+                        viewModel.addProductToMarketSell(
                             productName.toString(),
                             productPrice.toString(),
                             productDesc.toString(),
@@ -198,49 +198,7 @@ class SellFragment : Fragment() {
                                     etSize.inputType = InputType.TYPE_CLASS_TEXT
                                 }
 
-//                                // Kozmetik
-//                                4 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
-//                                }
-//
-//                                // Canta & Saat
-//                                5 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
-//                                }
-//
-//                                // Ev & Yasam
-//                                6 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
-//                                }
-//
-//                                // Kirtasiye
-//                                7 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
-//                                }
-//
-//                                // Spor & Outdoor
-//                                8 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
-//                                }
-//
-//                                // Motorlu Tasit
-//                                9 -> {
-//                                    tvSize.text = "Ayakkabı numarası"
-//                                    etSize.inputType = InputType.TYPE_CLASS_NUMBER
-//                                }
-//
-//                                // Hobi
-//                                10 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_NUMBER
-//                                }
-
-                                // Antika
+                                // Geri kalanlar
                                 else -> {
                                     tvSize.text = "Ürün boyutu"
                                     etSize.inputType = InputType.TYPE_CLASS_TEXT

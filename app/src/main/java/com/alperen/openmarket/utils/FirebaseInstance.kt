@@ -1,15 +1,9 @@
 package com.alperen.openmarket.utils
 
 import android.graphics.Bitmap
-import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.alperen.openmarket.model.CreditCard
-import com.alperen.openmarket.model.Product
-import com.alperen.openmarket.model.User
-import com.alperen.openmarket.model.UserSnapshot
+import com.alperen.openmarket.model.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.runBlocking
@@ -242,7 +236,7 @@ object FirebaseInstance {
     }
 
     // Coroutine function
-    fun addProductToMarket(
+    fun addProductToMarketSell(
         productName: String,
         productPrice: String,
         productDescription: String,
@@ -274,10 +268,59 @@ object FirebaseInstance {
                 false,
                 System.currentTimeMillis().toString(),
                 System.currentTimeMillis().toString(),
-                imagePathList
+                imagePathList,
+                PRODUCT_TYPE.SELL,
+                null,
+                null,
+                null
             )
 
         // Update table and return result
+        return@runBlocking writeOnTable(newProduct)
+    }
+
+    fun addProductToMarketAuction(
+        productName: String,
+        productPrice: String,
+        productDescription: String,
+        productCategory: String,
+        productSize: String,
+        productCondition: String,
+        productGender: String,
+        imageList: ArrayList<Bitmap>,
+        expirationDate: String,
+        startingPrice: String,
+        increment: String
+    ): MutableLiveData<String> = runBlocking {
+        // Get compressed stream array
+        val streamList = compressImages(imageList)
+
+        // Upload images and get database path list
+        val imagePathList = uploadImages(streamList)
+
+        // Add this product to added product list
+        val randomProductID = UUID.randomUUID().toString()
+
+        val newProduct = Product(
+            randomProductID,
+            auth.currentUser?.uid!!,
+            productName,
+            productPrice.toInt(),
+            productDescription,
+            productCategory,
+            productSize,
+            productCondition,
+            productGender,
+            false,
+            System.currentTimeMillis().toString(),
+            System.currentTimeMillis().toString(),
+            imagePathList,
+            PRODUCT_TYPE.AUCTION,
+            expirationDate,
+            startingPrice.toInt(),
+            increment.toInt()
+        )
+
         return@runBlocking writeOnTable(newProduct)
     }
 
@@ -326,6 +369,7 @@ object FirebaseInstance {
             // Random id for image
             val randomImageID = UUID.randomUUID().toString()
 
+            // TODO: product_images backend kısmında klasör halinde depolanacak (product_images/product_id/(all images))
             // Image database reference
             val uploadRef = storageRef.reference
                 .child("product_images")

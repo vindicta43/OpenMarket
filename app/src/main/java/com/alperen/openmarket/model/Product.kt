@@ -8,19 +8,46 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class Product(
-    val id: String,
-    val seller_id: String,
-    val name: String,
-    val price: Int,
-    val description: String,
-    val category: String,
-    val size: String,
-    val condition: String,
-    val gender: String,
+    var id: String,
+    var seller_id: String,
+    var name: String,
+    var price: Int,
+    var description: String,
+    var category: String,
+    var size: String,
+    var condition: String,
+    var gender: String,
     var purchased: Boolean,
-    val list_date: String,
+    var list_date: String,
     var purchase_date: String,
-    val image: List<String>,
+    var image: List<String>,
+    var productType: PRODUCT_TYPE?,
+    var expiration_date: String?,
+    var starting_price: Int?,
+    var increment: Int?,
 ) : Parcelable {
-    constructor() : this("", "", "", 0, "", "", "", "", "", false, "", "", listOf())
+    constructor() : this(
+        "",
+        "",
+        "",
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        false,
+        "",
+        "",
+        listOf(),
+        null,
+        "",
+        0,
+        0
+    )
+}
+
+enum class PRODUCT_TYPE {
+    SELL,
+    AUCTION
 }

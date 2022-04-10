@@ -2,6 +2,8 @@ package com.alperen.openmarket.ui.main.addproduct.auction
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -22,13 +24,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentAuctionBinding
-import com.alperen.openmarket.databinding.FragmentSellBinding
-import com.alperen.openmarket.utils.Constants
-import com.alperen.openmarket.utils.LoadingFragment
-import com.alperen.openmarket.utils.BaseViewModel
-import com.alperen.openmarket.utils.ProductViewPagerAdapter
+import com.alperen.openmarket.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 const val GALLERY_PICK = 0
 const val CAMERA_PICK = 1
@@ -69,18 +68,63 @@ class AuctionFragment : Fragment() {
 
                 val productName = etProductName.text
                 val productDesc = etProductDescription.text
-                val productPrice = etProductPrice.text
+                // TODO: açık artırma
+                val productStartingPrice = etProductStartingPrice.text
+                val productIncrement = etIncrement.text
+                val expDate = tvAuctionDate.text
+                val expTime = tvAuctionTime.text
 
                 btnAddPhoto.setOnClickListener {
                     setBottomSheet()
+                }
+
+                btnHelpAuction.setOnClickListener {
+                    AlertDialog.Builder(requireContext())
+                        .setMessage(Constants.AUCTION_MESSAGE)
+                        .setPositiveButton(Constants.OK) { _, _ -> }
+                        .show()
+                }
+
+                val c = Calendar.getInstance()
+                val cHour = c.get(Calendar.HOUR)
+                val cMinute = c.get(Calendar.MINUTE)
+                val cYear = c.get(Calendar.YEAR)
+                val cMonth = c.get(Calendar.MONTH)
+                val cDay = c.get(Calendar.DAY_OF_MONTH)
+
+                btnAuctionTime.setOnClickListener {
+                    TimePickerDialog(
+                        requireContext(),
+                        { view, hourOfDay, minute ->
+                            tvAuctionTime.text = String.format("%02d:%02d", hourOfDay, minute);
+                            c.set(Calendar.HOUR, hourOfDay)
+                            c.set(Calendar.MINUTE, minute)
+                        }, cHour, cMinute, true
+                    ).show()
+
+                }
+
+                btnAuctionDate.setOnClickListener {
+                    DatePickerDialog(
+                        requireContext(),
+                        { view, year, month, dayOfMonth ->
+                            tvAuctionDate.text = String.format("%02d:%02d:%4d", dayOfMonth, month, year)
+                            c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                            c.set(Calendar.MONTH, month)
+                            c.set(Calendar.YEAR, year)
+                        }, cYear, cMonth, cDay
+                    ).show()
                 }
 
                 btnAddProduct.setOnClickListener {
                     if (!productName.isNullOrEmpty() &&
                         !productDesc.isNullOrEmpty() &&
                         imageList.isNotEmpty() &&
-                        !productPrice.isNullOrEmpty() &&
+                        !productStartingPrice.isNullOrEmpty() &&
+                        !productIncrement.isNullOrEmpty() &&
                         !etSize.text.isNullOrEmpty() &&
+                        !tvAuctionDate.text.isNullOrEmpty() &&
+                        !tvAuctionTime.text.isNullOrEmpty() &&
                         spnCategory.selectedItem.toString() != "Kategori seç"
                     ) {
                         loading.show(childFragmentManager, "loaderSell")
@@ -106,15 +150,20 @@ class AuctionFragment : Fragment() {
                         val category = spnCategory.selectedItem.toString()
                         val condition = spnCondition.selectedItem.toString()
 
-                        viewModel.addProductToMarket(
+                        // val dateMillis = convertDateToMillis(tv)
+                        // TODO: önce buton ve tarih kontrolleri ardından gönder
+                        viewModel.addProductToMarketAuction(
                             productName.toString(),
-                            productPrice.toString(),
+                            productStartingPrice.toString(),
                             productDesc.toString(),
                             category,
                             etSize.text.toString(),
                             condition,
                             gender,
                             bitmapList,
+                            c.timeInMillis.toString(),
+                            productStartingPrice.toString(),
+                            productIncrement.toString(),
                             viewLifecycleOwner
                         ).observe(viewLifecycleOwner) {
                             when (it) {
@@ -143,14 +192,23 @@ class AuctionFragment : Fragment() {
                         if (productDesc.isNullOrEmpty()) {
                             textInputLayoutProductDescription.error = Constants.FIELD_REQUIRED
                         }
-                        if (productPrice.isNullOrEmpty()) {
-                            textInputLayoutProductPrice.error = Constants.FIELD_REQUIRED
+                        if (productStartingPrice.isNullOrEmpty()) {
+                            textInputLayoutProductStartingPrice.error = Constants.FIELD_REQUIRED
+                        }
+                        if (productIncrement.isNullOrEmpty()) {
+                            textInputLayoutIncrement.error = Constants.FIELD_REQUIRED
                         }
                         if (imageList.isEmpty()) {
                             warningString += "- " + Constants.IMAGE_REQUIRED + "\n"
                         }
                         if (etSize.text.isNullOrEmpty() || spnCategory.selectedItem.toString() == "Kategori seç") {
                             warningString += "- " + Constants.PRODUCT_PROPERTIES_REQUIRED + "\n"
+                        }
+                        if (tvAuctionDate.text.isNullOrEmpty()) {
+                            warningString += "- " + Constants.AUCTION_DATE_REQUIRED + "\n"
+                        }
+                        if (tvAuctionTime.text.isNullOrEmpty()) {
+                            warningString += "- " + Constants.AUCTION_TIME_REQUIRED + "\n"
                         }
                         if (warningString.isNotEmpty()) {
                             showError(warningString)
@@ -378,14 +436,24 @@ class AuctionFragment : Fragment() {
                     textInputLayoutProductDescription.isErrorEnabled = false
                 }
             }
-            etProductPrice.addTextChangedListener {
+            etProductStartingPrice.addTextChangedListener {
                 if (it.isNullOrEmpty()) {
-                    textInputLayoutProductPrice.apply {
+                    textInputLayoutProductStartingPrice.apply {
                         isErrorEnabled = true
                         error = Constants.FIELD_REQUIRED
                     }
                 } else {
-                    textInputLayoutProductPrice.isErrorEnabled = false
+                    textInputLayoutProductStartingPrice.isErrorEnabled = false
+                }
+            }
+            etIncrement.addTextChangedListener {
+                if (it.isNullOrEmpty()) {
+                    textInputLayoutIncrement.apply {
+                        isErrorEnabled = true
+                        error = Constants.FIELD_REQUIRED
+                    }
+                } else {
+                    textInputLayoutIncrement.isErrorEnabled = false
                 }
             }
         }

@@ -32,7 +32,7 @@ class ProductRecyclerViewAdapter(private val list: ArrayList<Product>, private v
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePageRecyclerViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_homepage_product_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_homepage_sell_item, parent, false)
         return HomePageRecyclerViewHolder(view)
     }
 
