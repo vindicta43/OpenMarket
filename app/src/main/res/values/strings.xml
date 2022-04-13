@@ -82,7 +82,5 @@
         <item>1 aydan az</item>
         <item>1 yıldan az</item>
     </array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

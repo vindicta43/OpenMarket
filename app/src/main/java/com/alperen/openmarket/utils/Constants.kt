@@ -36,10 +36,14 @@ object Constants {
     const val CARD_REMOVED = "isimli kartınız başarıyla silindi"
     const val CARD_UPDATED = "isimli kartınız başarıyla güncellendi"
     const val AUCTION_MESSAGE = "Başlangıç fiyatı: Açık artırmanın başlangıç fiyatını belirler\n" +
-            "Artırma miktarı: Başlangıç fiyatı üzerine kaçar kaçar artırma miktarını belirler\n" +
+            "Artırma miktarı: Başlangıç fiyatı üzerine kaçar kaçar artırma yapılacağını belirler\n" +
             "Tarih ve Saat: Açık artırmanın bitiş tarihi ve saatini belirler"
     const val AUCTION_DATE_REQUIRED = "Bitiş tarihi belirlenmelidir"
     const val AUCTION_TIME_REQUIRED = "Bitiş saati belirlenmelidir"
+
+    val smallIncrement = arrayOf("1","2","3","4","5","6","7","8","9","10")
+    val mediumIncrement = arrayOf("5","10","15","20","25","30","35","40","45","50")
+    val largeIncrement = arrayOf("50","100","150","200","250","300","350","400","450","500")
 
     const val OK = "Tamam"
     const val SUCCESS = "Başarılı"

@@ -102,9 +102,11 @@ class HomepageFragment : Fragment() {
                         sponsoredProducts.add(it.random())
                     }
                 } else {
-                    sponsoredProducts.ensureCapacity(it.size)
-                    for (i in 0..it.size) {
-                        sponsoredProducts.add(it.random())
+                    if(it.isNotEmpty()) {
+                        sponsoredProducts.ensureCapacity(it.size)
+                        for (i in 0..it.size) {
+                            sponsoredProducts.add(it.random())
+                        }
                     }
                 }
                 productSponsoredPager.adapter = HomepageViewPagerAdapter(sponsoredProducts)

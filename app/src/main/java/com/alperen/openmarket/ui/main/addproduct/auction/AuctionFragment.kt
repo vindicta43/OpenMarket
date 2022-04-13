@@ -24,7 +24,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentAuctionBinding
-import com.alperen.openmarket.utils.*
+import com.alperen.openmarket.utils.BaseViewModel
+import com.alperen.openmarket.utils.Constants
+import com.alperen.openmarket.utils.LoadingFragment
+import com.alperen.openmarket.utils.ProductViewPagerAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -40,6 +43,11 @@ class AuctionFragment : Fragment() {
     private lateinit var navController: NavController
     private val loading by lazy { LoadingFragment() }
     private val imageList = arrayListOf<Uri>()
+
+    // Number picker value and index
+    var incrementValue = "1"
+    var pickerIndex = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,11 +76,11 @@ class AuctionFragment : Fragment() {
 
                 val productName = etProductName.text
                 val productDesc = etProductDescription.text
-                // TODO: açık artırma
                 val productStartingPrice = etProductStartingPrice.text
-                val productIncrement = etIncrement.text
                 val expDate = tvAuctionDate.text
                 val expTime = tvAuctionTime.text
+                pickerIncrement.minValue = 1
+                pickerIncrement.maxValue = 10
 
                 btnAddPhoto.setOnClickListener {
                     setBottomSheet()
@@ -97,11 +105,12 @@ class AuctionFragment : Fragment() {
                         requireContext(),
                         { view, hourOfDay, minute ->
                             tvAuctionTime.text = String.format("%02d:%02d", hourOfDay, minute);
-                            c.set(Calendar.HOUR, hourOfDay)
+                            c.set(Calendar.HOUR_OF_DAY, hourOfDay)
                             c.set(Calendar.MINUTE, minute)
+                            c.set(Calendar.SECOND, 0)
+                            c.set(Calendar.MILLISECOND, 0)
                         }, cHour, cMinute, true
                     ).show()
-
                 }
 
                 btnAuctionDate.setOnClickListener {
@@ -116,12 +125,30 @@ class AuctionFragment : Fragment() {
                     ).show()
                 }
 
+                pickerIncrement.setOnValueChangedListener { picker, oldVal, newVal ->
+                    val price = if(productStartingPrice.isNullOrEmpty()) "1" else productStartingPrice.toString()
+                    incrementValue = when (price.toInt()) {
+                        in 0..100 -> {
+                            // Small
+                            Constants.smallIncrement[newVal-1]
+                        }
+                        in 100..1000 -> {
+                            // Medium
+                            Constants.mediumIncrement[newVal-1]
+                        }
+                        else -> {
+                            // Large
+                            Constants.largeIncrement[newVal-1]
+                        }
+                    }
+                    pickerIndex = newVal-1
+                }
+
                 btnAddProduct.setOnClickListener {
                     if (!productName.isNullOrEmpty() &&
                         !productDesc.isNullOrEmpty() &&
                         imageList.isNotEmpty() &&
                         !productStartingPrice.isNullOrEmpty() &&
-                        !productIncrement.isNullOrEmpty() &&
                         !etSize.text.isNullOrEmpty() &&
                         !tvAuctionDate.text.isNullOrEmpty() &&
                         !tvAuctionTime.text.isNullOrEmpty() &&
@@ -150,8 +177,6 @@ class AuctionFragment : Fragment() {
                         val category = spnCategory.selectedItem.toString()
                         val condition = spnCondition.selectedItem.toString()
 
-                        // val dateMillis = convertDateToMillis(tv)
-                        // TODO: önce buton ve tarih kontrolleri ardından gönder
                         viewModel.addProductToMarketAuction(
                             productName.toString(),
                             productStartingPrice.toString(),
@@ -163,7 +188,7 @@ class AuctionFragment : Fragment() {
                             bitmapList,
                             c.timeInMillis.toString(),
                             productStartingPrice.toString(),
-                            productIncrement.toString(),
+                            incrementValue,
                             viewLifecycleOwner
                         ).observe(viewLifecycleOwner) {
                             when (it) {
@@ -194,9 +219,6 @@ class AuctionFragment : Fragment() {
                         }
                         if (productStartingPrice.isNullOrEmpty()) {
                             textInputLayoutProductStartingPrice.error = Constants.FIELD_REQUIRED
-                        }
-                        if (productIncrement.isNullOrEmpty()) {
-                            textInputLayoutIncrement.error = Constants.FIELD_REQUIRED
                         }
                         if (imageList.isEmpty()) {
                             warningString += "- " + Constants.IMAGE_REQUIRED + "\n"
@@ -444,16 +466,23 @@ class AuctionFragment : Fragment() {
                     }
                 } else {
                     textInputLayoutProductStartingPrice.isErrorEnabled = false
-                }
-            }
-            etIncrement.addTextChangedListener {
-                if (it.isNullOrEmpty()) {
-                    textInputLayoutIncrement.apply {
-                        isErrorEnabled = true
-                        error = Constants.FIELD_REQUIRED
+
+                    val incrementArray = when (it.toString().toInt()) {
+                        in 0..100 -> {
+                            // Small
+                            Constants.smallIncrement
+                        }
+                        in 100..1000 -> {
+                            // Medium
+                            Constants.mediumIncrement
+                        }
+                        else -> {
+                            // Large
+                            Constants.largeIncrement
+                        }
                     }
-                } else {
-                    textInputLayoutIncrement.isErrorEnabled = false
+                    incrementValue = incrementArray[pickerIndex]
+                    pickerIncrement.displayedValues = incrementArray
                 }
             }
         }

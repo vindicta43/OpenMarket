@@ -115,7 +115,6 @@ class ProfileFragment : Fragment() {
         with(binding) {
             if (user.profile_image == null) {
                 ivProfile.setImageResource(R.drawable.ic_person)
-                // Glide.with(requireContext()).load(R.drawable.ic_person).into(ivProfile)
             } else {
                 val storageRef = FirebaseStorage.getInstance().reference.child(user.profile_image!!)
                 GlideApp.with(requireContext()).load(storageRef).into(ivProfile)
