@@ -1,15 +1,18 @@
 package com.alperen.openmarket.utils
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.alperen.openmarket.model.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by Alperen on 6.11.2021.
@@ -154,8 +157,6 @@ object FirebaseInstance {
     }
 
 
-
-
     fun getUserProducts(): MutableLiveData<ArrayList<Product>> {
         val result = MutableLiveData<ArrayList<Product>>()
         val refList = arrayListOf<String>()
@@ -213,25 +214,37 @@ object FirebaseInstance {
                 }
                 productList.sortWith(Comparator.comparing(Product::list_date).reversed())
                 result.value = productList
-
-//                dbRef.reference
-//                    .child("users")
-//                    .child(auth.currentUser?.uid!!)
-//                    .child("user_recently_shown")
-//                    .get()
-//                    .addOnSuccessListener { recentlyShown ->
-//
-//                        val recentlyShownList = arrayListOf<Product>()
-//                        recentlyShown.children.forEach { items ->
-//                            recentlyShownList.add(items.getValue(Product::class.java)!!)
-//                        }
-//                        dataList["recently"] = recentlyShownList
-//                        result.value = dataList
-//
-//                    }
-//                    .addOnFailureListener { }
             }
             .addOnFailureListener { }
+        return result
+    }
+
+    fun deleteProductFromMarket(id: String): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        // Delete prduct from user
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .child("added_products")
+            .child(id)
+            .removeValue()
+            .addOnSuccessListener {
+                // Delete product from all products
+                dbRef.reference
+                    .child("products")
+                    .child(id)
+                    .removeValue()
+                    .addOnSuccessListener {
+                        result.value = Constants.SUCCESS
+                    }
+                    .addOnFailureListener {
+                        result.value = it.localizedMessage
+                    }
+            }
+            .addOnFailureListener {
+                result.value = it.localizedMessage
+            }
         return result
     }
 
@@ -267,12 +280,12 @@ object FirebaseInstance {
                 productGender,
                 false,
                 System.currentTimeMillis().toString(),
-                System.currentTimeMillis().toString(),
+                null,
                 imagePathList,
                 PRODUCT_TYPE.SELL,
                 null,
                 null,
-                null
+                null,
             )
 
         // Update table and return result
@@ -290,7 +303,6 @@ object FirebaseInstance {
         imageList: ArrayList<Bitmap>,
         expirationDate: String,
         startingPrice: String,
-        increment: String
     ): MutableLiveData<String> = runBlocking {
         // Get compressed stream array
         val streamList = compressImages(imageList)
@@ -313,44 +325,15 @@ object FirebaseInstance {
             productGender,
             false,
             System.currentTimeMillis().toString(),
-            System.currentTimeMillis().toString(),
+            null,
             imagePathList,
             PRODUCT_TYPE.AUCTION,
             expirationDate,
             startingPrice.toInt(),
-            increment.toInt()
+            null
         )
 
         return@runBlocking writeOnTable(newProduct)
-    }
-
-    fun deleteProductFromMarket(id: String): MutableLiveData<String> {
-        val result = MutableLiveData<String>()
-
-        // Delete prduct from user
-        dbRef.reference
-            .child("users")
-            .child(auth.currentUser?.uid!!)
-            .child("added_products")
-            .child(id)
-            .removeValue()
-            .addOnSuccessListener {
-                // Delete product from all products
-                dbRef.reference
-                    .child("products")
-                    .child(id)
-                    .removeValue()
-                    .addOnSuccessListener {
-                        result.value = Constants.SUCCESS
-                    }
-                    .addOnFailureListener {
-                        result.value = it.localizedMessage
-                    }
-            }
-            .addOnFailureListener {
-                result.value = it.localizedMessage
-            }
-        return result
     }
 
     private fun compressImages(imageList: ArrayList<Bitmap>): ArrayList<ByteArray> {
@@ -772,6 +755,91 @@ object FirebaseInstance {
             }
             .addOnFailureListener { result.value = it.localizedMessage }
 
+        return result
+    }
+
+    fun makeOffer(product: Product, increment: Int): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+
+        dbRef.reference
+            .child("users")
+            .child(auth.currentUser?.uid!!)
+            .get()
+            .addOnSuccessListener {
+                val user = it.getValue(UserSnapshot::class.java)
+                val name = if (user?.name?.length!! < 3)
+                    user.name.take(3)
+                else
+                    user.name.take(3) + "***"
+
+                val surname = if (user.surname.length < 3)
+                    user.surname.take(3)
+                else
+                    user.surname.take(3) + "***"
+
+                val offer = OfferModel(
+                    auth.uid.toString(),
+                    System.currentTimeMillis().toString(),
+                    increment,
+                    "$name $surname"
+                )
+
+                product.price = increment
+                product.last_offers?.add(offer)
+
+                dbRef.reference
+                    .child("products")
+                    .child(product.id)
+                    .setValue(product)
+                    .addOnSuccessListener { result.value = Constants.OFFER_MADE }
+                    .addOnFailureListener { result.value = it.localizedMessage }
+            }
+        return result
+    }
+
+    fun observeOffers(product: Product): MutableLiveData<ArrayList<OfferModel>> {
+        val result = MutableLiveData<ArrayList<OfferModel>>()
+
+        val eventListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val offerList = arrayListOf<OfferModel>()
+                for (st in snapshot.children) {
+                    val singleValue = st.getValue(OfferModel::class.java)
+                    if (singleValue != null) {
+                        offerList.add(singleValue)
+                    }
+                }
+                Log.d("offers", offerList.toString())
+                offerList.reverse()
+                result.value = offerList
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        }
+
+        dbRef.reference
+            .child("products")
+            .child(product.id)
+            .child("last_offers")
+            .addValueEventListener(eventListener)
+
+        dbRef.reference
+            .child("products")
+            .child(product.id)
+            .child("last_offers")
+            .get()
+            .addOnSuccessListener { offers ->
+                val offerList = arrayListOf<OfferModel>()
+                offers.children.forEach { singleOffer ->
+                    offerList.add(singleOffer.getValue(OfferModel::class.java)!!)
+                }
+                Log.d("offers", offerList.toString())
+                offerList.reverse()
+                result.value = offerList
+            }
+            .addOnFailureListener { }
         return result
     }
 }

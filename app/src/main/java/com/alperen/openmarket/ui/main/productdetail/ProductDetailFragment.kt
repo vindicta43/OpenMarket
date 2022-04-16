@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,16 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentProductDetailBinding
 import com.alperen.openmarket.model.PRODUCT_TYPE
 import com.alperen.openmarket.utils.BaseViewModel
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.LoadingFragment
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDateTime
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class ProductDetailFragment : Fragment() {
@@ -51,11 +47,6 @@ class ProductDetailFragment : Fragment() {
         with(binding) {
             productDetailPager.adapter = ProductDetailViewPagerAdapter(args.product.image)
 
-            val time = System.currentTimeMillis()
-
-            Log.e("dateDetail", "Sysyem date: $time")
-            Log.e("dateDetail", "Product date: ${args.product.expiration_date}")
-
             tvProductName.text = args.product.name
             tvProductCondition.text = args.product.condition
             tvProductGender.text = args.product.gender
@@ -74,7 +65,25 @@ class ProductDetailFragment : Fragment() {
                 tvProductIsPurchased.text = "Bu ürün satıldı"
             }
 
-
+            // Picker values
+            pickerIncrement.apply {
+                minValue = 1
+                maxValue = 10
+                displayedValues = when (args.product.starting_price) {
+                    in 0..99 -> {
+                        // Small
+                        Constants.smallIncrement
+                    }
+                    in 100..999 -> {
+                        // Medium
+                        Constants.mediumIncrement
+                    }
+                    else -> {
+                        // Large
+                        Constants.largeIncrement
+                    }
+                }
+            }
 
             return root
         }
@@ -86,8 +95,8 @@ class ProductDetailFragment : Fragment() {
         with(binding) {
             // TODO: açık artırma ve satın alma için düzenle
             btnPurchase.setOnClickListener {
-                loading.show(childFragmentManager, "loaderPurchase")
-                when(args.product.productType) {
+                loading.show(childFragmentManager, "loaderDetail")
+                when (args.product.productType) {
                     PRODUCT_TYPE.SELL -> {
                         viewModel.purchaseProduct(args.product, viewLifecycleOwner).observe(viewLifecycleOwner) {
                             when (it) {
@@ -110,10 +119,53 @@ class ProductDetailFragment : Fragment() {
                         }
                     }
                     else -> {
-                        // TODO: AuctionFragment işleri bitince buna başla
-                        // viewModel.giveOffer(args.product, viewLifecycleOwner).observe(viewLifecycleOwner) {}
+                        val incrementValue = etIncrement.text.toString().toInt()
+                        viewModel.makeOffer(args.product, incrementValue, viewLifecycleOwner)
+                            .observe(viewLifecycleOwner) {
+                                when (it) {
+                                    Constants.OFFER_MADE -> {
+                                        loading.dismissAllowingStateLoss()
+                                        AlertDialog.Builder(context)
+                                            .setMessage(it)
+                                            .setPositiveButton(Constants.OK) { _, _ -> }.show()
+                                    }
+                                    else -> {
+                                        loading.dismissAllowingStateLoss()
+                                        AlertDialog.Builder(context)
+                                            .setMessage(it)
+                                            .setPositiveButton(Constants.OK) { _, _ -> }.show()
+                                    }
+                                }
+                            }
                     }
                 }
+            }
+
+            pickerIncrement.setOnValueChangedListener { picker, oldVal, newVal ->
+                val incrementValues = when (args.product.starting_price) {
+                    in 0..99 -> {
+                        // Small
+                        Constants.smallIncrement
+                    }
+                    in 100..999 -> {
+                        // Medium
+                        Constants.mediumIncrement
+                    }
+                    else -> {
+                        // Large
+                        Constants.largeIncrement
+                    }
+                }
+                val offer = incrementValues[newVal - 1].toInt() + args.product.price
+                etIncrement.setText(offer.toString())
+            }
+
+            viewModel.observeOffers(args.product).observeForever {
+                recyclerLastOffers.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                recyclerLastOffers.adapter = LastOffersAdapter(it)
+                if (it.isNotEmpty())
+                    tvProductPrice.text = it[0].increment.toString()
+                notifyChange()
             }
         }
     }
@@ -138,7 +190,6 @@ class ProductDetailFragment : Fragment() {
         val hours = TimeUnit.MILLISECONDS.toHours(milliSeconds) % 24
         val minutes = TimeUnit.MILLISECONDS.toMinutes(milliSeconds) % 60
         val seconds = TimeUnit.MILLISECONDS.toSeconds(milliSeconds) % 60
-
 
         return "$days gün $hours saat $minutes dakika $seconds saniye"
     }

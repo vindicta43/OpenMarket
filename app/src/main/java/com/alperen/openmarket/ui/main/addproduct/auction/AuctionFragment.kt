@@ -128,11 +128,11 @@ class AuctionFragment : Fragment() {
                 pickerIncrement.setOnValueChangedListener { picker, oldVal, newVal ->
                     val price = if(productStartingPrice.isNullOrEmpty()) "1" else productStartingPrice.toString()
                     incrementValue = when (price.toInt()) {
-                        in 0..100 -> {
+                        in 0..99 -> {
                             // Small
                             Constants.smallIncrement[newVal-1]
                         }
-                        in 100..1000 -> {
+                        in 100..999 -> {
                             // Medium
                             Constants.mediumIncrement[newVal-1]
                         }
@@ -188,7 +188,6 @@ class AuctionFragment : Fragment() {
                             bitmapList,
                             c.timeInMillis.toString(),
                             productStartingPrice.toString(),
-                            incrementValue,
                             viewLifecycleOwner
                         ).observe(viewLifecycleOwner) {
                             when (it) {
@@ -468,11 +467,11 @@ class AuctionFragment : Fragment() {
                     textInputLayoutProductStartingPrice.isErrorEnabled = false
 
                     val incrementArray = when (it.toString().toInt()) {
-                        in 0..100 -> {
+                        in 0..99 -> {
                             // Small
                             Constants.smallIncrement
                         }
-                        in 100..1000 -> {
+                        in 100..999 -> {
                             // Medium
                             Constants.mediumIncrement
                         }

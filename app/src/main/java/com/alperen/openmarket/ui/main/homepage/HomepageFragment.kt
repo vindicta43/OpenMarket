@@ -45,9 +45,6 @@ class HomepageFragment : Fragment() {
         super.onResume()
         with(binding) {
 
-
-
-
             val handler = Handler()
 
             val update = Runnable {

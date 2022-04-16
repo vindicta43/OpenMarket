@@ -101,7 +101,7 @@ class EditProductFragment : Fragment() {
                     update["price"] = etProductPrice.text.toString().toInt()
                     update["size"] = etSize.text.toString()
                     update["purchased"] = args.product.purchased
-                    update["purchase_date"] = args.product.purchase_date
+                    // update["purchase_date"] = args.product.purchase_date
                     update["list_date"] = args.product.list_date
 
                     viewModel.updateProduct(update, viewLifecycleOwner).observe(viewLifecycleOwner) {

@@ -3,6 +3,7 @@ package com.alperen.openmarket.utils
 import android.graphics.Bitmap
 import androidx.lifecycle.*
 import com.alperen.openmarket.model.CreditCard
+import com.alperen.openmarket.model.OfferModel
 import com.alperen.openmarket.model.Product
 import com.alperen.openmarket.model.UserSnapshot
 import kotlin.random.Random
@@ -120,7 +121,6 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         imageList: ArrayList<Bitmap>,
         expirationDate: String,
         startingPrice: String,
-        increment: String,
         viewLifecycleOwner: LifecycleOwner
     ): MutableLiveData<String> {
         val result = MutableLiveData<String>()
@@ -135,7 +135,6 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
             imageList,
             expirationDate,
             startingPrice,
-            increment,
         ).observe(viewLifecycleOwner) {
             result.value = it
         }
@@ -230,9 +229,25 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         return result
     }
 
+    fun makeOffer(product: Product, increment: Int, viewLifecycleOwner: LifecycleOwner): MutableLiveData<String> {
+        val result = MutableLiveData<String>()
+        FirebaseInstance.makeOffer(product, increment).observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
     fun getUserPurchasedProducts(viewLifecycleOwner: LifecycleOwner): MutableLiveData<ArrayList<Product>> {
         val result = MutableLiveData<ArrayList<Product>>()
         FirebaseInstance.getUserPurchasedProducts().observe(viewLifecycleOwner) {
+            result.value = it
+        }
+        return result
+    }
+
+    fun observeOffers(product: Product): MutableLiveData<ArrayList<OfferModel>> {
+        val result = MutableLiveData<ArrayList<OfferModel>>()
+        FirebaseInstance.observeOffers(product).observeForever {
             result.value = it
         }
         return result
