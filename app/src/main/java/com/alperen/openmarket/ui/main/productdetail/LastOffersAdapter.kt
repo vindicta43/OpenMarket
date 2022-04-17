@@ -42,7 +42,7 @@ class LastOffersAdapter(val list: ArrayList<OfferModel>): RecyclerView.Adapter<L
     }
 
     private fun getDate(milliSeconds: Long): String {
-        val fmt = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+        val fmt = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
         val date = Date(milliSeconds)
 
         return fmt.format(date)

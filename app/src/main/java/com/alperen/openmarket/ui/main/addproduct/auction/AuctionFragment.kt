@@ -188,6 +188,7 @@ class AuctionFragment : Fragment() {
                             bitmapList,
                             c.timeInMillis.toString(),
                             productStartingPrice.toString(),
+                            pickerIncrement.displayedValues[0],
                             viewLifecycleOwner
                         ).observe(viewLifecycleOwner) {
                             when (it) {

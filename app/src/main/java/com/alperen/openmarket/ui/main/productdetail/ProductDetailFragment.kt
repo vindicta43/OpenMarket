@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.ViewModelProvider
@@ -91,13 +92,18 @@ class ProductDetailFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        handler.post(updateTask)
+        if (args.product.productType == PRODUCT_TYPE.AUCTION) {
+            handler.post(updateTask)
+            binding.layoutAuction.visibility = View.VISIBLE
+            binding.recyclerLastOffers.visibility = View.VISIBLE
+        }
+
         with(binding) {
             // TODO: açık artırma ve satın alma için düzenle
             btnPurchase.setOnClickListener {
-                loading.show(childFragmentManager, "loaderDetail")
                 when (args.product.productType) {
                     PRODUCT_TYPE.SELL -> {
+                        loading.show(childFragmentManager, "loaderSell")
                         viewModel.purchaseProduct(args.product, viewLifecycleOwner).observe(viewLifecycleOwner) {
                             when (it) {
                                 Constants.PRODUCT_PURCHASED -> {
@@ -120,23 +126,38 @@ class ProductDetailFragment : Fragment() {
                     }
                     else -> {
                         val incrementValue = etIncrement.text.toString().toInt()
-                        viewModel.makeOffer(args.product, incrementValue, viewLifecycleOwner)
-                            .observe(viewLifecycleOwner) {
-                                when (it) {
-                                    Constants.OFFER_MADE -> {
-                                        loading.dismissAllowingStateLoss()
-                                        AlertDialog.Builder(context)
-                                            .setMessage(it)
-                                            .setPositiveButton(Constants.OK) { _, _ -> }.show()
+                        if (tvProductPrice.text.toString().toInt() < incrementValue) {
+                            if (incrementValue % args.product.increment_multiplier!! == 0) {
+                                loading.show(childFragmentManager, "loaderAuction")
+                                viewModel.makeOffer(args.product, incrementValue, viewLifecycleOwner)
+                                    .observe(viewLifecycleOwner) {
+                                        when (it) {
+                                            Constants.OFFER_MADE -> {
+                                                loading.dismissAllowingStateLoss()
+                                                AlertDialog.Builder(context)
+                                                    .setMessage(it)
+                                                    .setPositiveButton(Constants.OK) { _, _ -> }.show()
+                                            }
+                                            else -> {
+                                                loading.dismissAllowingStateLoss()
+                                                AlertDialog.Builder(context)
+                                                    .setMessage(it)
+                                                    .setPositiveButton(Constants.OK) { _, _ -> }.show()
+                                            }
+                                        }
                                     }
-                                    else -> {
-                                        loading.dismissAllowingStateLoss()
-                                        AlertDialog.Builder(context)
-                                            .setMessage(it)
-                                            .setPositiveButton(Constants.OK) { _, _ -> }.show()
-                                    }
+                            } else {
+                                textInputLayoutIncrement.apply {
+                                    isErrorEnabled = true
+                                    error = "Artırma miktarı ${args.product.increment_multiplier} katlarında olmalıdır"
                                 }
                             }
+                        } else {
+                            textInputLayoutIncrement.apply {
+                                isErrorEnabled = true
+                                error = Constants.SMALL_OFFER
+                            }
+                        }
                     }
                 }
             }
@@ -160,6 +181,17 @@ class ProductDetailFragment : Fragment() {
                 etIncrement.setText(offer.toString())
             }
 
+            etIncrement.addTextChangedListener {
+                if (it.isNullOrEmpty()) {
+                    textInputLayoutIncrement.apply {
+                        isErrorEnabled = true
+                        error = Constants.FIELD_REQUIRED
+                    }
+                } else {
+                    textInputLayoutIncrement.isErrorEnabled = false
+                }
+            }
+
             viewModel.observeOffers(args.product).observeForever {
                 recyclerLastOffers.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 recyclerLastOffers.adapter = LastOffersAdapter(it)
@@ -180,7 +212,7 @@ class ProductDetailFragment : Fragment() {
             binding.tvRemainingTime.text = "Süre doldu"
             binding.tvProductIsPurchased.text = "Açık artırmanın süresi doldu"
         } else {
-            remainingString = getDate(remainingTime.toLong())
+            remainingString = getDate(remainingTime)
             binding.tvRemainingTime.text = remainingString
         }
     }

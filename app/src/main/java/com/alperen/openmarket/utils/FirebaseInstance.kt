@@ -286,6 +286,7 @@ object FirebaseInstance {
                 null,
                 null,
                 null,
+                null
             )
 
         // Update table and return result
@@ -303,6 +304,7 @@ object FirebaseInstance {
         imageList: ArrayList<Bitmap>,
         expirationDate: String,
         startingPrice: String,
+        increment: String,
     ): MutableLiveData<String> = runBlocking {
         // Get compressed stream array
         val streamList = compressImages(imageList)
@@ -330,6 +332,7 @@ object FirebaseInstance {
             PRODUCT_TYPE.AUCTION,
             expirationDate,
             startingPrice.toInt(),
+            increment.toInt(),
             null
         )
 

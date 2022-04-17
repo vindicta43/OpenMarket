@@ -121,6 +121,7 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
         imageList: ArrayList<Bitmap>,
         expirationDate: String,
         startingPrice: String,
+        increment: String,
         viewLifecycleOwner: LifecycleOwner
     ): MutableLiveData<String> {
         val result = MutableLiveData<String>()
@@ -135,6 +136,7 @@ class BaseViewModel(private val state: SavedStateHandle) : ViewModel() {
             imageList,
             expirationDate,
             startingPrice,
+            increment
         ).observe(viewLifecycleOwner) {
             result.value = it
         }

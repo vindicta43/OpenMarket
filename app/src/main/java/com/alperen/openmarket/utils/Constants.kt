@@ -41,6 +41,7 @@ object Constants {
     const val AUCTION_DATE_REQUIRED = "Bitiş tarihi belirlenmelidir"
     const val AUCTION_TIME_REQUIRED = "Bitiş saati belirlenmelidir"
     const val OFFER_MADE = "Teklifiniz başarıyla verildi"
+    const val SMALL_OFFER = "Teklifiniz mevcut fiyattan düşük olamaz"
 
     val smallIncrement = arrayOf("1","2","3","4","5","6","7","8","9","10")
     val mediumIncrement = arrayOf("5","10","15","20","25","30","35","40","45","50")

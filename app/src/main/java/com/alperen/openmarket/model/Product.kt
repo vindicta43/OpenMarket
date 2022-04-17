@@ -25,6 +25,7 @@ data class Product(
     var productType: PRODUCT_TYPE?,
     var expiration_date: String?,
     var starting_price: Int?,
+    var increment_multiplier: Int?,
     var last_offers: MutableList<OfferModel>?,
 ) : Parcelable {
     constructor() : this(
@@ -44,6 +45,7 @@ data class Product(
         null,
         "",
         0,
+        null,
         mutableListOf()
     )
 }
