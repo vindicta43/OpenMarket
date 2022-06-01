@@ -30,6 +30,7 @@ import com.alperen.openmarket.utils.LoadingFragment
 import com.alperen.openmarket.utils.ProductViewPagerAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
+import java.time.LocalDateTime
 import java.util.*
 
 const val GALLERY_PICK = 0
@@ -86,19 +87,26 @@ class AuctionFragment : Fragment() {
                     setBottomSheet()
                 }
 
-                btnHelpAuction.setOnClickListener {
-                    AlertDialog.Builder(requireContext())
-                        .setMessage(Constants.AUCTION_MESSAGE)
-                        .setPositiveButton(Constants.OK) { _, _ -> }
-                        .show()
-                }
-
                 val c = Calendar.getInstance()
                 val cHour = c.get(Calendar.HOUR)
                 val cMinute = c.get(Calendar.MINUTE)
                 val cYear = c.get(Calendar.YEAR)
                 val cMonth = c.get(Calendar.MONTH)
                 val cDay = c.get(Calendar.DAY_OF_MONTH)
+
+                btnHelpAuction.setOnClickListener {
+                    Log.d("dateAuction", "---------")
+                    Log.d("dateAuction", "current millis: ${System.currentTimeMillis()}")
+                    Log.d("dateAuction", "calendar millis: ${c.timeInMillis}")
+                    Log.d("dateAuction", "---------")
+                    Log.d("dateAuction", "current date: ${LocalDateTime.now()}")
+                    Log.d("dateAuction", "calendar date: ${c.time}")
+                    Log.d("dateAuction", "---------")
+                    AlertDialog.Builder(requireContext())
+                        .setMessage(Constants.AUCTION_MESSAGE)
+                        .setPositiveButton(Constants.OK) { _, _ -> }
+                        .show()
+                }
 
                 btnAuctionTime.setOnClickListener {
                     TimePickerDialog(
@@ -126,22 +134,22 @@ class AuctionFragment : Fragment() {
                 }
 
                 pickerIncrement.setOnValueChangedListener { picker, oldVal, newVal ->
-                    val price = if(productStartingPrice.isNullOrEmpty()) "1" else productStartingPrice.toString()
+                    val price = if (productStartingPrice.isNullOrEmpty()) "1" else productStartingPrice.toString()
                     incrementValue = when (price.toInt()) {
                         in 0..99 -> {
                             // Small
-                            Constants.smallIncrement[newVal-1]
+                            Constants.smallIncrement[newVal - 1]
                         }
                         in 100..999 -> {
                             // Medium
-                            Constants.mediumIncrement[newVal-1]
+                            Constants.mediumIncrement[newVal - 1]
                         }
                         else -> {
                             // Large
-                            Constants.largeIncrement[newVal-1]
+                            Constants.largeIncrement[newVal - 1]
                         }
                     }
-                    pickerIndex = newVal-1
+                    pickerIndex = newVal - 1
                 }
 
                 btnAddProduct.setOnClickListener {
@@ -188,7 +196,7 @@ class AuctionFragment : Fragment() {
                             bitmapList,
                             c.timeInMillis.toString(),
                             productStartingPrice.toString(),
-                            pickerIncrement.displayedValues[0],
+                            pickerIncrement.displayedValues[pickerIndex],
                             viewLifecycleOwner
                         ).observe(viewLifecycleOwner) {
                             when (it) {
@@ -231,6 +239,9 @@ class AuctionFragment : Fragment() {
                         }
                         if (tvAuctionTime.text.isNullOrEmpty()) {
                             warningString += "- " + Constants.AUCTION_TIME_REQUIRED + "\n"
+                        }
+                        if (c.timeInMillis - System.currentTimeMillis() <= 0) {
+                            warningString += "- " + Constants.AUCTION_DATE_INVALID + "\n"
                         }
                         if (warningString.isNotEmpty()) {
                             showError(warningString)
@@ -279,48 +290,6 @@ class AuctionFragment : Fragment() {
                                     tvSize.text = "Cihaz boyutu"
                                     etSize.inputType = InputType.TYPE_CLASS_TEXT
                                 }
-
-//                                // Kozmetik
-//                                4 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
-//                                }
-//
-//                                // Canta & Saat
-//                                5 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
-//                                }
-//
-//                                // Ev & Yasam
-//                                6 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
-//                                }
-//
-//                                // Kirtasiye
-//                                7 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
-//                                }
-//
-//                                // Spor & Outdoor
-//                                8 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_TEXT
-//                                }
-//
-//                                // Motorlu Tasit
-//                                9 -> {
-//                                    tvSize.text = "Ayakkabı numarası"
-//                                    etSize.inputType = InputType.TYPE_CLASS_NUMBER
-//                                }
-//
-//                                // Hobi
-//                                10 -> {
-//                                    tvSize.text = "Ürün boyutu"
-//                                    etSize.inputType = InputType.TYPE_CLASS_NUMBER
-//                                }
 
                                 // Antika
                                 else -> {

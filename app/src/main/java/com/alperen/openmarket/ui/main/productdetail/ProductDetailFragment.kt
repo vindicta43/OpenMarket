@@ -1,12 +1,18 @@
 package com.alperen.openmarket.ui.main.productdetail
 
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -18,9 +24,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alperen.openmarket.R
 import com.alperen.openmarket.databinding.FragmentProductDetailBinding
 import com.alperen.openmarket.model.PRODUCT_TYPE
+import com.alperen.openmarket.utils.AuctionAlarmService
 import com.alperen.openmarket.utils.BaseViewModel
 import com.alperen.openmarket.utils.Constants
 import com.alperen.openmarket.utils.LoadingFragment
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class ProductDetailFragment : Fragment() {
@@ -31,6 +39,7 @@ class ProductDetailFragment : Fragment() {
     lateinit var handler: Handler
     private val loading by lazy { LoadingFragment() }
     private val args: ProductDetailFragmentArgs by navArgs()
+    val pickerValues = mutableListOf<String>()
 
     val updateTask = object : Runnable {
         override fun run() {
@@ -67,23 +76,14 @@ class ProductDetailFragment : Fragment() {
             }
 
             // Picker values
+            for (i in 1..10) {
+                val singleValue = (args.product.increment_multiplier!! * i).toString()
+                pickerValues.add(singleValue)
+            }
             pickerIncrement.apply {
                 minValue = 1
                 maxValue = 10
-                displayedValues = when (args.product.starting_price) {
-                    in 0..99 -> {
-                        // Small
-                        Constants.smallIncrement
-                    }
-                    in 100..999 -> {
-                        // Medium
-                        Constants.mediumIncrement
-                    }
-                    else -> {
-                        // Large
-                        Constants.largeIncrement
-                    }
-                }
+                displayedValues = pickerValues.toTypedArray()
             }
 
             return root
@@ -125,6 +125,7 @@ class ProductDetailFragment : Fragment() {
                         }
                     }
                     else -> {
+                        // TODO: input error null geçmemeli
                         val incrementValue = etIncrement.text.toString().toInt()
                         if (tvProductPrice.text.toString().toInt() < incrementValue) {
                             if (incrementValue % args.product.increment_multiplier!! == 0) {
@@ -134,6 +135,38 @@ class ProductDetailFragment : Fragment() {
                                         when (it) {
                                             Constants.OFFER_MADE -> {
                                                 loading.dismissAllowingStateLoss()
+
+                                                // TODO: background service test
+                                                val alarmIntent =
+                                                    Intent(requireContext(), AuctionAlarmService::class.java)
+
+                                                alarmIntent.putExtra("productId", args.product.id)
+                                                alarmIntent.putExtra("expDate", args.product.expiration_date.toString())
+                                                alarmIntent.putExtra("incrementValue", incrementValue)
+
+                                                val pendingIntent =
+                                                    PendingIntent.getBroadcast(
+                                                        requireContext(),
+                                                        0,
+                                                        alarmIntent,
+                                                        0
+                                                    )
+
+                                                val alarmManager: AlarmManager =
+                                                    requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+                                                val remainingTime = args.product.expiration_date!!.toLong() - System.currentTimeMillis()
+                                                val calendar = Calendar.getInstance()
+                                                calendar.timeInMillis = calendar.timeInMillis + remainingTime
+                                                alarmManager.setExactAndAllowWhileIdle(
+                                                    AlarmManager.RTC_WAKEUP,
+                                                    calendar.timeInMillis,
+                                                    pendingIntent
+                                                )
+
+                                                Log.d("auctionService", "Alarm invoked first time. remaining: ${calendar.timeInMillis}")
+                                                Log.d("auctionService", "Alarm intent ${alarmIntent.extras.toString()}")
+
                                                 AlertDialog.Builder(context)
                                                     .setMessage(it)
                                                     .setPositiveButton(Constants.OK) { _, _ -> }.show()
@@ -163,21 +196,7 @@ class ProductDetailFragment : Fragment() {
             }
 
             pickerIncrement.setOnValueChangedListener { picker, oldVal, newVal ->
-                val incrementValues = when (args.product.starting_price) {
-                    in 0..99 -> {
-                        // Small
-                        Constants.smallIncrement
-                    }
-                    in 100..999 -> {
-                        // Medium
-                        Constants.mediumIncrement
-                    }
-                    else -> {
-                        // Large
-                        Constants.largeIncrement
-                    }
-                }
-                val offer = incrementValues[newVal - 1].toInt() + args.product.price
+                val offer = pickerValues[newVal - 1].toInt() + args.product.price
                 etIncrement.setText(offer.toString())
             }
 

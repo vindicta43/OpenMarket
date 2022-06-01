@@ -40,6 +40,7 @@ object Constants {
             "Tarih ve Saat: Açık artırmanın bitiş tarihi ve saatini belirler"
     const val AUCTION_DATE_REQUIRED = "Bitiş tarihi belirlenmelidir"
     const val AUCTION_TIME_REQUIRED = "Bitiş saati belirlenmelidir"
+    const val AUCTION_DATE_INVALID = "Bitiş süresi şu anki zamandan önce olamaz"
     const val OFFER_MADE = "Teklifiniz başarıyla verildi"
     const val SMALL_OFFER = "Teklifiniz mevcut fiyattan düşük olamaz"
 
