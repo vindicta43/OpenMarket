@@ -25,7 +25,8 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"
@@ -40,8 +41,7 @@
         <receiver
             android:name=".utils.AuctionAlarmService"
             android:enabled="true"
-            android:exported="false">
-        </receiver>
+            android:exported="false"></receiver>
     </application>
 
 </manifest>

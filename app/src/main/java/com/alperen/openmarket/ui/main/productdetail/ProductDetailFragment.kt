@@ -12,7 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -68,22 +67,22 @@ class ProductDetailFragment : Fragment() {
             if (args.product.productType == PRODUCT_TYPE.SELL) {
                 layoutAuction.visibility = View.GONE
                 btnPurchase.text = "Satın al"
+            } else {
+                // Picker values
+                for (i in 1..10) {
+                    val singleValue = (args.product.increment_multiplier!! * i).toString()
+                    pickerValues.add(singleValue)
+                }
+                pickerIncrement.apply {
+                    minValue = 1
+                    maxValue = 10
+                    displayedValues = pickerValues.toTypedArray()
+                }
             }
 
             if (args.product.purchased) {
                 btnPurchase.isEnabled = false
                 tvProductIsPurchased.text = "Bu ürün satıldı"
-            }
-
-            // Picker values
-            for (i in 1..10) {
-                val singleValue = (args.product.increment_multiplier!! * i).toString()
-                pickerValues.add(singleValue)
-            }
-            pickerIncrement.apply {
-                minValue = 1
-                maxValue = 10
-                displayedValues = pickerValues.toTypedArray()
             }
 
             return root
@@ -125,71 +124,43 @@ class ProductDetailFragment : Fragment() {
                         }
                     }
                     else -> {
-                        // TODO: input error null geçmemeli
-                        val incrementValue = etIncrement.text.toString().toInt()
-                        if (tvProductPrice.text.toString().toInt() < incrementValue) {
-                            if (incrementValue % args.product.increment_multiplier!! == 0) {
-                                loading.show(childFragmentManager, "loaderAuction")
-                                viewModel.makeOffer(args.product, incrementValue, viewLifecycleOwner)
-                                    .observe(viewLifecycleOwner) {
-                                        when (it) {
-                                            Constants.OFFER_MADE -> {
-                                                loading.dismissAllowingStateLoss()
-
-                                                // TODO: background service test
-                                                val alarmIntent =
-                                                    Intent(requireContext(), AuctionAlarmService::class.java)
-
-                                                alarmIntent.putExtra("productId", args.product.id)
-                                                alarmIntent.putExtra("expDate", args.product.expiration_date.toString())
-                                                alarmIntent.putExtra("incrementValue", incrementValue)
-
-                                                val pendingIntent =
-                                                    PendingIntent.getBroadcast(
-                                                        requireContext(),
-                                                        0,
-                                                        alarmIntent,
-                                                        0
-                                                    )
-
-                                                val alarmManager: AlarmManager =
-                                                    requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-                                                val remainingTime = args.product.expiration_date!!.toLong() - System.currentTimeMillis()
-                                                val calendar = Calendar.getInstance()
-                                                calendar.timeInMillis = calendar.timeInMillis + remainingTime
-                                                alarmManager.setExactAndAllowWhileIdle(
-                                                    AlarmManager.RTC_WAKEUP,
-                                                    calendar.timeInMillis,
-                                                    pendingIntent
-                                                )
-
-                                                Log.d("auctionService", "Alarm invoked first time. remaining: ${calendar.timeInMillis}")
-                                                Log.d("auctionService", "Alarm intent ${alarmIntent.extras.toString()}")
-
-                                                AlertDialog.Builder(context)
-                                                    .setMessage(it)
-                                                    .setPositiveButton(Constants.OK) { _, _ -> }.show()
-                                            }
-                                            else -> {
-                                                loading.dismissAllowingStateLoss()
-                                                AlertDialog.Builder(context)
-                                                    .setMessage(it)
-                                                    .setPositiveButton(Constants.OK) { _, _ -> }.show()
+                        if (etIncrement.text?.isNotEmpty() == true) {
+                            // TODO: input error null geçmemeli
+                            val incrementValue = etIncrement.text.toString().toInt()
+                            if (args.product.price < incrementValue) {
+                                if (incrementValue % args.product.increment_multiplier!! == 0) {
+                                    loading.show(childFragmentManager, "loaderAuction")
+                                    viewModel.makeOffer(args.product, incrementValue, viewLifecycleOwner)
+                                        .observe(viewLifecycleOwner) {
+                                            when (it) {
+                                                Constants.OFFER_MADE -> {
+                                                    loading.dismissAllowingStateLoss()
+                                                    setOffer(incrementValue)
+                                                    AlertDialog.Builder(context)
+                                                        .setMessage(it)
+                                                        .setPositiveButton(Constants.OK) { _, _ -> }.show()
+                                                }
+                                                else -> {
+                                                    loading.dismissAllowingStateLoss()
+                                                    AlertDialog.Builder(context)
+                                                        .setMessage(it)
+                                                        .setPositiveButton(Constants.OK) { _, _ -> }.show()
+                                                }
                                             }
                                         }
+                                } else {
+                                    textInputLayoutIncrement.apply {
+                                        isErrorEnabled = true
+                                        error = "Artırma miktarı ${args.product.increment_multiplier} katlarında olmalıdır"
                                     }
+                                }
                             } else {
                                 textInputLayoutIncrement.apply {
                                     isErrorEnabled = true
-                                    error = "Artırma miktarı ${args.product.increment_multiplier} katlarında olmalıdır"
+                                    error = Constants.SMALL_OFFER
                                 }
                             }
-                        } else {
-                            textInputLayoutIncrement.apply {
-                                isErrorEnabled = true
-                                error = Constants.SMALL_OFFER
-                            }
+
                         }
                     }
                 }
@@ -214,11 +185,46 @@ class ProductDetailFragment : Fragment() {
             viewModel.observeOffers(args.product).observeForever {
                 recyclerLastOffers.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 recyclerLastOffers.adapter = LastOffersAdapter(it)
-                if (it.isNotEmpty())
+                if (it.isNotEmpty()) {
                     tvProductPrice.text = it[0].increment.toString()
+                    args.product.price = it[0].increment
+                }
                 notifyChange()
             }
         }
+    }
+
+    private fun setOffer(incrementValue: Int) {
+        // TODO: background service test
+        val alarmIntent =
+            Intent(requireContext(), AuctionAlarmService::class.java)
+
+        alarmIntent.putExtra("productId", args.product.id)
+        alarmIntent.putExtra("expDate", args.product.expiration_date.toString())
+        alarmIntent.putExtra("incrementValue", incrementValue)
+
+        val pendingIntent =
+            PendingIntent.getBroadcast(
+                requireContext(),
+                0,
+                alarmIntent,
+                0
+            )
+
+        val alarmManager: AlarmManager =
+            requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val remainingTime = args.product.expiration_date!!.toLong() - System.currentTimeMillis()
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = calendar.timeInMillis + remainingTime
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
+
+        Log.d("auctionService", "Alarm invoked first time. remaining: ${calendar.timeInMillis}")
+        Log.d("auctionService", "Alarm intent ${alarmIntent.extras.toString()}")
     }
 
     fun updateText() {

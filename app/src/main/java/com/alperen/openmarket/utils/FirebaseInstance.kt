@@ -788,14 +788,31 @@ object FirebaseInstance {
                 )
 
                 product.price = increment
-                product.last_offers?.add(offer)
+                // product.last_offers?.add(offer)
 
                 dbRef.reference
                     .child("products")
                     .child(product.id)
-                    .setValue(product)
-                    .addOnSuccessListener { result.value = Constants.OFFER_MADE }
-                    .addOnFailureListener { result.value = it.localizedMessage }
+                    .child("last_offers")
+                    .get()
+                    .addOnSuccessListener { offers ->
+                        val offerList = arrayListOf<OfferModel>()
+                        offers.children.forEach { singleOffer ->
+                            offerList.add(singleOffer.getValue(OfferModel::class.java)!!)
+                        }
+                        Log.d("offers", offerList.toString())
+                        // offerList.reverse()
+
+                        offerList.add(offer)
+                        product.last_offers = offerList
+
+                        dbRef.reference
+                            .child("products")
+                            .child(product.id)
+                            .setValue(product)
+                            .addOnSuccessListener { result.value = Constants.OFFER_MADE }
+                            .addOnFailureListener { result.value = it.localizedMessage }
+                    }
             }
         return result
     }

@@ -159,6 +159,7 @@ class ProductRecyclerViewAdapter(private val list: ArrayList<Product>, private v
             }
             else -> {
                 val holderAuction = holder as AuctionViewHolder
+                handler = Handler(Looper.getMainLooper())
                 with(holderAuction) {
                     fun getDate(milliSeconds: Long): String {
                         val days = TimeUnit.MILLISECONDS.toDays(milliSeconds)
@@ -182,11 +183,12 @@ class ProductRecyclerViewAdapter(private val list: ArrayList<Product>, private v
                         }
                     }
 
-                    handler = Handler(Looper.getMainLooper())
                     val updateTask = object : Runnable {
                         override fun run() {
-                            updateText(list[holderAuction.layoutPosition].expiration_date)
-                            handler.postDelayed(this, 1000)
+                            if (holderAuction.layoutPosition != RecyclerView.NO_POSITION) {
+                                updateText(list[holderAuction.layoutPosition].expiration_date)
+                                handler.postDelayed(this, 1000)
+                            }
                         }
                     }
                     handler.post(updateTask)

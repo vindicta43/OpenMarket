@@ -95,7 +95,7 @@ class HomepageFragment : Fragment() {
                 val sponsoredProducts = arrayListOf<Product>()
                 if (it.size >= 3) {
                     sponsoredProducts.ensureCapacity(3)
-                    for (i in 0..3) {
+                    for (i in 0..2) {
                         sponsoredProducts.add(it.random())
                     }
                 } else {
