@@ -107,19 +107,6 @@ class HomepageFragment : Fragment() {
                     }
                 }
                 productSponsoredPager.adapter = HomepageViewPagerAdapter(sponsoredProducts)
-
-//                if (!it["recently"].isNullOrEmpty()) {
-//                    productSponsoredPager.apply {
-//                        adapter = HomepageViewPagerAdapter(it["recently"]!!)
-//                        layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-//                    }
-//                } else {
-//
-//                }
-//
-//                if (!it["products"].isNullOrEmpty()) {
-//
-//                }
             }
         }
     }

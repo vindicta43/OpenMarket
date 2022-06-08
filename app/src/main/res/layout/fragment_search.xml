@@ -13,7 +13,6 @@
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_above="@id/recyclerSearch"
             android:layout_margin="8dp"
             android:elevation="4dp"
             app:iconifiedByDefault="false"

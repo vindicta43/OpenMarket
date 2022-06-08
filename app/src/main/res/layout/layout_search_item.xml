@@ -1,29 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tvSearchItemResult"
+        android:id="@+id/tvSearchResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="result"
-        android:padding="8dp"
-        android:textSize="20sp"
         android:fontFamily="@font/roboto_medium"
+        android:padding="8dp"
+        android:text="result"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSearchCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:padding="8dp"
+        android:text="category"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ibSearchText"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageButton
+        android:id="@+id/ibSearchText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_search_arrow"
         android:background="@android:color/transparent"
+        android:contentDescription="@string/app_name"
         android:padding="12dp"
+        android:src="@drawable/ic_search_arrow"
+        app:layout_constraintBottom_toBottomOf="@id/tvSearchResult"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvSearchItemResult"
-        app:layout_constraintBottom_toBottomOf="@id/tvSearchItemResult"/>
+        app:layout_constraintTop_toTopOf="@id/tvSearchResult" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
