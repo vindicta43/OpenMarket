@@ -9,45 +9,61 @@
         android:orientation="vertical"
         tools:context=".ui.search.SearchFragment">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_margin="8dp"
-            android:elevation="4dp"
-            app:iconifiedByDefault="false"
-            android:touchscreenBlocksFocus="true"
-            app:queryHint="Ayakakbı, Çanta..." />
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="8dp"
+                android:layout_weight="2"
+                android:elevation="4dp"
+                android:touchscreenBlocksFocus="true"
+                app:iconifiedByDefault="false"
+                app:queryHint="Ayakakbı, Çanta..." />
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:fontFamily="@font/roboto_medium"
-                android:text="Son Aramalar"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/spnSearchCategory"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_margin="8dp"
+                android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/tvRecentlyShownClear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:fontFamily="@font/roboto_medium"
-                android:text="@string/homepage_clear"
-                android:textColor="@android:color/holo_blue_dark"
-                app:layout_constraintBottom_toBottomOf="@id/textView1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/textView1" />
+        </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content">-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/textView1"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginHorizontal="12dp"-->
+        <!--                android:fontFamily="@font/roboto_medium"-->
+        <!--                android:text="Son Aramalar"-->
+        <!--                android:textSize="24sp"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintStart_toStartOf="parent"-->
+        <!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/tvRecentlyShownClear"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_marginHorizontal="16dp"-->
+        <!--                android:fontFamily="@font/roboto_medium"-->
+        <!--                android:text="@string/homepage_clear"-->
+        <!--                android:textColor="@android:color/holo_blue_dark"-->
+        <!--                app:layout_constraintBottom_toBottomOf="@id/textView1"-->
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintTop_toTopOf="@id/textView1" />-->
+
+        <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerSearch"

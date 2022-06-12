@@ -71,10 +71,6 @@ class HomepageFragment : Fragment() {
                 root.findNavController().navigate(R.id.action_homepageFragment_to_searchFragment)
             }
 
-            ibNotifications.setOnClickListener {
-                root.findNavController().navigate(R.id.action_homepageFragment_to_notificationsFragment)
-            }
-
             rootLayout.setOnRefreshListener {
                 startRefresh()
             }

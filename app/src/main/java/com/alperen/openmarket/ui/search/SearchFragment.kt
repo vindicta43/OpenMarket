@@ -1,9 +1,12 @@
 package com.alperen.openmarket.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.SavedStateViewModelFactory
@@ -30,11 +33,28 @@ class SearchFragment : Fragment() {
         initLateinitVariables(inflater)
 
         with(binding) {
-            val productNames = arrayListOf<Product>()
+            val baseProductNames = arrayListOf<Product>()
+            var productNames = arrayListOf<Product>()
+            val productCategories = mutableSetOf<String>()
+
             viewModel.getHomePage(viewLifecycleOwner).observe(viewLifecycleOwner) { productsResult ->
                 productsResult.forEach {
-                    productNames.add(it)
+                    baseProductNames.add(it)
                 }
+                // First initialization
+                productNames = baseProductNames
+
+                productCategories.add("Tüm Kategoriler")
+                for (i in baseProductNames) {
+                    productCategories.add(i.category)
+                }
+
+                val arrayAdapter =
+                    ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, productCategories.toList())
+                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+                spnSearchCategory.adapter = arrayAdapter
+
                 recyclerSearch.apply {
                     adapter = SearchRecyclerViewAdapter(productNames, object : FragmentCommunication {
                         override fun respond(product: Product) {
@@ -64,11 +84,34 @@ class SearchFragment : Fragment() {
                 }
             })
 
+            spnSearchCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    // Log.d("spinner", "selected item pos: $position content: ${productCategories.toList()[position]}")
+
+                    if (position == 0) {
+                        productNames = baseProductNames
+                    } else {
+                        val category = productCategories.toList()[position]
+
+                        productNames = baseProductNames
+                        productNames = productNames.filter { s -> s.category == category }.toCollection(ArrayList())
+
+                        recyclerSearch.adapter =
+                            SearchRecyclerViewAdapter(productNames, object : FragmentCommunication {
+                                override fun respond(product: Product) {
+                                    searchView.setQuery(product.name, false)
+                                }
+                            })
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
             recyclerSearch.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
             }
-
             return root
         }
     }

@@ -13,9 +13,6 @@
             android:id="@+id/action_homepageFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
         <action
-            android:id="@+id/action_homepageFragment_to_notificationsFragment"
-            app:destination="@id/notificationsFragment" />
-        <action
             android:id="@+id/action_homepageFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
         <action
@@ -52,11 +49,6 @@
             android:id="@+id/action_profileFragment_to_purchasedProductsFragment"
             app:destination="@id/purchasedProductsFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/notificationsFragment"
-        android:name="com.alperen.openmarket.ui.notifications.NotificationsFragment"
-        android:label="fragment_notifications"
-        tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.alperen.openmarket.ui.search.SearchFragment"

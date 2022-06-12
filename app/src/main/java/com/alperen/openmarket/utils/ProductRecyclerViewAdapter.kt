@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.alperen.openmarket.R
@@ -167,7 +168,7 @@ class ProductRecyclerViewAdapter(private val list: ArrayList<Product>, private v
                         val minutes = TimeUnit.MILLISECONDS.toMinutes(milliSeconds) % 60
                         val seconds = TimeUnit.MILLISECONDS.toSeconds(milliSeconds) % 60
 
-                        return "${days}g ${hours}s ${minutes}d $seconds saniye"
+                        return "${days}g ${hours}s ${minutes}d ${seconds}sn"
                     }
 
                     fun updateText(expDate: String?) {
@@ -192,6 +193,14 @@ class ProductRecyclerViewAdapter(private val list: ArrayList<Product>, private v
                         }
                     }
                     handler.post(updateTask)
+
+                    // TODO: farklı cihazla fiyat değişiyor mu test et
+                    FirebaseInstance.observeOffers(list[position])
+                        .observeForever {
+                            if (it.size != 0) {
+                                tvProductPriceAuction.text = it[0].increment.toString()
+                            }
+                        }
 
                     val storageRef = FirebaseStorage.getInstance().reference.child(list[position].image[0])
                     GlideApp.with(holder.itemView.context).load(storageRef).into(ivProductAuction)
